@@ -4,37 +4,13 @@
 Social media has been a rapidly growing industry in the 21st century, with the social network Facebook worth just under \$315 billion dollars as of May 2016 despite only being founded in 2004 \cite{Forbes:Facebook}. However, with the popularity of Facebook and other social networks such as Twitter and Instagram, numerous social issues have arisen which are yet to be fully addressed. Fidelis is an alternative to these networks, which attempts to address these issues. This specification discusses the requirements of the social network Fidelis, as well as the strategies which will be used to design, develop and then test the system.
 
 \section{Problem Statement}
-\label{sec:problemstatement}
+\label{Sec:ProblemStatement}
 
 \section{Project Aims}
 Abuse detection, provision of user-specific content and reputation scoring are three key features which can be implemented to ensure that a social network is trustworthy. Therefore, the aim of this project is to build a new social network called Fidelis, which will demonstrate the methods of implementing these features and to evaluate how effective these methods are in solving the issues which established social networks currently face in their attempt to earn and retain the trust of their users.
 
-\subsection{Abuse Detection}
-As discussed in section \ref{sec:problemstatement}, abuse has played a large role in users losing trust in social networks. Therefore, Fidelis should be able to detect abusive content, which can then be hidden from the user. This will allow Fidelis to provide a platform for open discussion and debate without the threat of abuse and intimidation. However, what is perceived as abusive is dependent on the individual user, therefore how strict the detection algorithm is at identifying abuse must be flexible. In addition, traditional methods of handling abuse such as blocking users and reporting posts must still be implemented so that no abuse goes undetected. On the other hand, the user should also have the option to view content which has been flagged as abuse by the algorithm, so that the network does not enforce censorship on content which is posted. An exception is when the content posted is deemed illegal and therefore should be removed from the platform completely.
-
-\subsection{Content Recommendation and Filtering}
-Content which is provided to each user by a social network should be engaging. Therefore, Fidelis should be able to recommend content which is known to interest the user. This does not necessarily mean that the posts/users provided agree with a user's point of view, because it is important the platform is able to stimulate debate so that it is representative of the real world. In order for the system to ascertain which topics a particular user is interested in, it should be able to detect the topics of the user's posts as well as the topics of posts which the user interacts with. In addition to recommending content, the user should be able to easily access new content. Therefore, Fidelis must provide feeds which are filtered based on their topics and provide post tagging, which allows users to explore posts addressing more specific topics.
-
-\subsection{Reputation Scoring}
-By determining the reputation of users, Fidelis should be able to determine the reliability of content and then tailor how visible it is on the platform, so that the user is provided with high quality content from trustworthy sources. This requires a score to be calculated for each user, which represents how reputable they are and therefore how worthwhile it would be to follow them. This score can then be used to determine which users should be recommended to others. The features which determine the user reputation are:
-
-\begin{itemize}
-\item Number of followers. If a user has a large number of followers, they would have a higher reputation score because it suggests that their content is worth following.
-\item Number of votes. A user which receives a large number of votes posts more engaging content and is therefore more reputable.
-\item Number of positive votes vs. number of negative votes. A user which posts more positively received content is more likely to be reputable.
-\item Number of comments on their posts. As with the votes, the number of comments on a post can be used to determine how engaging the content is. Therefore users which receive more responses to their content have a higher reputation.
-\end{itemize}
-
-As well as scoring the reputation of each user, Fidelis should score the reputation of each post. This is because a reputable user may not always post content of the same quality. Therefore, the following features of a post are used to determine its reputation score:
-
-\begin{itemize}
-\item Number of votes.
-\item Number of positive votes vs. number of negative votes.
-\item Number of comments.
-\end{itemize}
-
 \section{Project Motivation}
-As mentioned previously, the popular social networks of today have given rise to numerous social issues. One of these such issues is `trolling', with `The Guardian' reporting that ``one in four teenagers suffered hate incidents online last year'' \cite{Gani:Trolling}. 
+As mentioned in \ref{Sec:ProblemStatement}, the popular social networks of today have given rise to numerous social issues. One of these such issues is `trolling', with `The Guardian' reporting that ``one in four teenagers suffered hate incidents online last year'' \cite{Gani:Trolling}. 
 
 The social networks' current failure to find an effective solution to these pitfalls of social media therefore offers the question of whether a network could be created, which tailors the content users see based on what that particular user would prefer to see. This does not only include filtering any abusive posts, but also not offering them content which is not of interest to them, either based on the theme of the content or who posted it.
 
