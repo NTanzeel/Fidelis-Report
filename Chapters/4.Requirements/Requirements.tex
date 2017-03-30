@@ -147,3 +147,35 @@ In order for the system to be successful and used, it is essential that it is av
 \end{enumerate}
 
 \section{Limitations and Constraints}
+As with all systems, there exist constraints which will limit the capability and the performance of the system. The development server, which the system is currently being developed and tested on, is hosted on a local machine as resources and performance are not a significant issue for development purposes. The production version of the system is being deployed on a Virtual Private Server (VPS) provided by DigitalOcean \cite{DigitalOcean:Home}. The VPS has limited resources and in turn, very minimal performance. The details of the local and deployed production server are listed in table \ref{table:ServerSpec} below.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}ll@{}}
+		\toprule
+		\multicolumn{2}{c}{Local Server}       	\\ \midrule
+		Resource         & Availability 			\\ \midrule
+		CPU              & 2            			\\
+		RAM              & 8 GB       			\\
+		Disk Space (SSD) & 256 GB        		\\
+		Bandwidth        & Unlimited      		\\
+		Operating System & OSX     				\\ \bottomrule
+	\end{tabular}
+	\quad
+	\begin{tabular}{@{}ll@{}}
+		\toprule
+		\multicolumn{2}{c}{Production Server}	\\ \midrule
+		Resource         & Availability 			\\ \midrule
+		CPU              & 1            			\\
+		RAM              & 512 MB       			\\
+		Disk Space (SSD) & 20 GB        			\\
+		Bandwidth        & 1000 GB      			\\
+		Operating System & Cent OS      			\\ \bottomrule
+	\end{tabular}
+	\caption{Local and Production Server Specifications}
+	\label{table:ServerSpec}
+\end{table}
+
+As depicted by the table, the deployed VPS has very limited processing power, RAM and disk space. When a web server is installed, the processing power will limit the load time of web pages as the web server will only be allowed a portion of the resources. Additionally, the system relies on disk space for both hosting the database and storing resources uploaded by the users. The disk space will limit the amount of resources that can be stored and the amount of data that may be stored in the database. Fortunately, the data stored in the database is all textual and hence requires very minimal storage space. The one thing that the server is not limited by is the bandwidth, which is a huge 1TB per month.
+
+The VPS currently runs CentOS, a Linux distribution that is stable, predictable, manageable and reproducible, derived from the sources of Red Hat Enterprise Linux (RHEL) \cite{CentOS:Home}. Although CentOS is a relatively light distribution, it will still consume a significant portion of the available resources and hence leaving even less for the system. As a result, this production server is just a starting base provided for demonstration purposes. It is likely that as the system expands, in terms of user base and functionality, maintenance and the hardware requirements will increase drastically and the server(s) will require upgrading. This level of upgrade is beyond the scope of this project but the system will be designed with this in mind.
