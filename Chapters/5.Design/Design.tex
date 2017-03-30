@@ -61,21 +61,21 @@ The following sections will look at each of the possible user sets for candidate
 \subsubsection{Friend-of-a-Friend Users}
 With this method, candidate recommendations for a user $A$ are all users $C$ where $A$ follows $B$ and $B$ follows $C$. This method uses like-minded users for recommendations, and exploits the transitive nature of the ``following'' relationship. It is a popular technique used by numerous social networks, including Facebook (Figure \ref{fig:fof-facebook}) and Linkedin (Figure \ref{fig:fof-linkedin}).
 
-\begin{figure}[h]
-\centering
-\begin{subfigure}[b]{.3\linewidth}
-\includegraphics[height=2in]{Images/Design/facebook}
-\caption{}
-\label{fig:fof-facebook}
-\end{subfigure}
-\begin{subfigure}[b]{.5\linewidth}
-\includegraphics[width=1\linewidth]{Images/Design/linkedin}
-\caption{}
-\label{fig:fof-linkedin}
-\end{subfigure}
-\caption{Friend-of-a-Friend recommendations from (a) Facebook and (b) Twitter}
-\label{fig:fof}
-\end{figure}
+%\begin{figure}[h]
+%	\centering
+%	\begin{subfigure}[b]{.3\linewidth}
+%		\includegraphics[height=2in]{Images/Design/facebook}
+%		\caption{}
+%		\label{fig:fof-facebook}
+%	\end{subfigure}
+%	\begin{subfigure}[b]{.5\linewidth}
+%		\includegraphics[width=1\linewidth]{Images/Design/linkedin}
+%		\caption{}
+%		\label{fig:fof-linkedin}
+%	\end{subfigure}
+%	\caption{Friend-of-a-Friend recommendations from (a) Facebook and (b) Twitter}
+%	\label{fig:fof}
+%\end{figure}
 
 This option will allow the user to generate ``safer'' recommendations by using the idea that ``if $A$ trusts $B$, and $B$ trusts $C$, $A$ will most likely also trust $C$''. This is not always the case, but mostly holds true. It is important to give users this choice as it provides them more control over who enters their trust circle. Although one of the project aims is to burst opinion bubbles through exposure to different and trusted views, users must still be provided with this option. The function in Algorithm \ref{alg:fof-users} provides a procedure for retrieving ``$C$'' users. 
 
