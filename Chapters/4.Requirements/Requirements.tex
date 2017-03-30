@@ -1,7 +1,10 @@
 \chapter{System Requirements}
 \label{Chapter:SystemRequirements}
+No system can be developed without a direction. The requirements for a project guide the developer through the development process and ensure that core functionality is provided. These requirements are split into functional and non-functional requirements. Additionally, the requirements allow for a thorough testing plan to be implemented which can then later be used to evaluate the final product. 
 
 \section{Requirement Refinement}
+``Any project’s requirements need to be well thought out, balanced and clearly understood by all involved, but perhaps of most importance is that they are not dropped or compromised halfway through the project'' \cite{ReQTest:Requirements}. As the design and development of the project progressed, it became clear that some of the existing requirements, as defined in the project specification, would have to be refined as they were not sufficient to provide clear guidelines for development. Additionally, some of the requirements laid out in the specification were either optimistic or redundant and hence also required modification. As a result of this, several requirements were altered throughout development, some of which were changed numerous times. Throughout the refinement process the stakeholders of the project were consulted before any of the requirements were altered, added or removed. Fortunately, due to previous research, the requirements were reasonably accurate and did not require any major changes. The changing requirements could easily be integrated due to the agile development methodology, which provides opportunities to assess the direction of a project throughout the development lifecycle and make any changes through prototyping \cite{Agile:Home}.
+
 
 \section{Functional Requirements}
 The functional requirements will guide the development of all aspects of the system. These requirements will ensure that the system provides the necessary functionality, the implementation details of which are entirely up to the developer and may change during the development process.
@@ -147,3 +150,35 @@ In order for the system to be successful and used, it is essential that it is av
 \end{enumerate}
 
 \section{Limitations and Constraints}
+As with all systems, there exist constraints which will limit the capability and the performance of the system. The development server, which the system is currently being developed and tested on, is hosted on a local machine as resources and performance are not a significant issue for development purposes. The production version of the system is being deployed on a Virtual Private Server (VPS) provided by DigitalOcean \cite{DigitalOcean:Home}. The VPS has limited resources and in turn, very minimal performance. The details of the local and deployed production server are listed in table \ref{table:ServerSpec} below.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}ll@{}}
+		\toprule
+		\multicolumn{2}{c}{Local Server}       	\\ \midrule
+		Resource         & Availability 			\\ \midrule
+		CPU              & 2            			\\
+		RAM              & 8 GB       			\\
+		Disk Space (SSD) & 256 GB        		\\
+		Bandwidth        & Unlimited      		\\
+		Operating System & OSX     				\\ \bottomrule
+	\end{tabular}
+	\quad
+	\begin{tabular}{@{}ll@{}}
+		\toprule
+		\multicolumn{2}{c}{Production Server}	\\ \midrule
+		Resource         & Availability 			\\ \midrule
+		CPU              & 1            			\\
+		RAM              & 512 MB       			\\
+		Disk Space (SSD) & 20 GB        			\\
+		Bandwidth        & 1000 GB      			\\
+		Operating System & Cent OS      			\\ \bottomrule
+	\end{tabular}
+	\caption{Local and Production Server Specifications}
+	\label{table:ServerSpec}
+\end{table}
+
+As depicted by the table, the deployed VPS has very limited processing power, RAM and disk space. When a web server is installed, the processing power will limit the load time of web pages as the web server will only be allowed a portion of the resources. Additionally, the system relies on disk space for both hosting the database and storing resources uploaded by the users. The disk space will limit the amount of resources that can be stored and the amount of data that may be stored in the database. Fortunately, the data stored in the database is all textual and hence requires very minimal storage space. The one thing that the server is not limited by is the bandwidth, which is a huge 1TB per month.
+
+The VPS currently runs CentOS, a Linux distribution that is stable, predictable, manageable and reproducible, derived from the sources of Red Hat Enterprise Linux (RHEL) \cite{CentOS:Home}. Although CentOS is a relatively light distribution, it will still consume a significant portion of the available resources and hence leaving even less for the system. As a result, this production server is just a starting base provided for demonstration purposes. It is likely that as the system expands, in terms of user base and functionality, maintenance and the hardware requirements will increase drastically and the server(s) will require upgrading. This level of upgrade is beyond the scope of this project but the system will be designed with this in mind.

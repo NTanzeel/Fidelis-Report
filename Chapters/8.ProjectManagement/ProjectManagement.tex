@@ -24,8 +24,107 @@ The proposed project timeline, composed during the project specification and vis
 \end{figure}
 
 \section{Tools and Techniques}
+A range of third-party tools and technologies were employed to successfully manage and develop the project. These tools have an immense amount of support and resources available online. As a result less time is spent `firefighting', solving issues, and `reinventing the wheel', hence allowing more time to be spent on developing the unique aspects of the projects. Using existing frameworks and tools also provides the added benefit that fundamental features and functionality is implemented by the third-party provider but can be taken advantage of by the developer. The tools employed were used for different tasks, either for developing the project or managing it to ensure a smooth operation, each of which are discussed in further detail below.
+
 \subsection{Development}
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[t]{0.2\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{Images/Generic/Icons/Laravel}
+		\caption{Laravel 5}\label{fig:Laravel}		
+	\end{subfigure}
+	\quad
+	\begin{subfigure}[t]{0.2\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{Images/Generic/Icons/HTML_5}
+		\caption{HTML 5}\label{fig:HTML_5}
+	\end{subfigure}
+    \quad
+	\begin{subfigure}[t]{0.2\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{Images/Generic/Icons/CSS_3}
+		\caption{CSS 3}\label{fig:CSS_3}
+	\end{subfigure}
+    \quad
+	\begin{subfigure}[t]{0.2\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{Images/Generic/Icons/JavaScript}
+		\caption{JavaScript}\label{fig:JavaScript}
+	\end{subfigure}
+    \quad
+	\begin{subfigure}[t]{0.2\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{Images/Generic/Icons/PHP_7}
+		\caption{PHP 7}\label{fig:PHP_7}
+	\end{subfigure}
+	\quad
+	\begin{subfigure}[t]{0.2\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{Images/Generic/Icons/MySQL}
+		\caption{MySQL}\label{fig:MySQL}		
+	\end{subfigure}
+	\quad
+	\begin{subfigure}[t]{0.2\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{Images/Generic/Icons/jQuery}
+		\caption{jQuery}\label{fig:jQuery}
+	\end{subfigure}
+    \quad
+	\begin{subfigure}[t]{0.2\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{Images/Generic/Icons/Apache}
+		\caption{Apache}\label{fig:Apache}
+	\end{subfigure}
+	\caption{Development Tools Employed}\label{fig:DevelopmentTools}
+\end{figure}
+
+A wide range of technologies were used for the development of the project, some of which are shown in figure \ref{fig:DevelopmentTools}. Research into each of these technologies along with their advantages and disadvantages is provided in section \ref{Section:Technologies}. Section \ref{Chapter:Implementation} further discusses some of the core technologies such as Laravel, PHP, MySQL, jQuery and provides reasons for their use \cite{Laravel:Home, PHP:Home, MySQL:Home, jQuery:Home}. In addition to these core technologies, several smaller tools and technologies were also used. The majority of the user interface was developed using HTHML 5, although some of this was generated using the Laravel Blade engine, and styled using Bootstrap or custom Cascading Style Sheets \cite{W3:HTML5, Bootstrap:Home, W3:CSS}. Majority of the backend development was carried out using the popular scripting language PHP but some of this was also automatically generated using syntax provided by the Laravel Blade engine \cite{PHP:Home, Laravel:Blade}. 
+
 \subsection{Management}
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[t]{0.15\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{Images/Generic/Icons/PHPStorm}
+		\caption{PhpStorm}\label{fig:PHPStorm}		
+	\end{subfigure}
+	\quad
+	\begin{subfigure}[t]{0.15\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{Images/Generic/Icons/Github}
+		\caption{Github}\label{fig:Github}
+	\end{subfigure}
+    \quad
+	\begin{subfigure}[t]{0.15\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{Images/Generic/Icons/DigitalOcean}
+		\caption{DigitalOcean}\label{fig:DigitalOcean}
+	\end{subfigure}
+    \quad
+	\begin{subfigure}[t]{0.15\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{Images/Generic/Icons/Wunderlist}
+		\caption{Wunderlist}\label{fig:Wunderlist}
+	\end{subfigure}
+    \quad
+	\begin{subfigure}[t]{0.15\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{Images/Generic/Icons/Trello}
+		\caption{Trello}\label{fig:Trello}
+	\end{subfigure}
+	\caption{Management Tools Employed}\label{fig:ManagementTools}
+\end{figure}
+
+All the code written throughout the development process was done using an IDE provided by JetBrains called PhpStorm \cite{JetBrains:PHPStorm}. PhpStorm provides syntax highlighting, code completion, and numerous other features for all major web development technologies. Optional plugins can be installed which provide support for even more technologies, as done for Laravel \cite{JetBrains:PHPStorm}. PhpStorm also provides integrated support for Git which was used to provide version control for all the code written. This allowed files to be added to Git as soon as they were created so they would not be omitted from commits, causing inconsistencies \cite{JetBrains:PHPStorm}. The use of Github allowed code to be backed up online, in case of a hardware failure, so it could be replicated onto another machine easily \cite{Github:Home}. This was particularly useful when deploying the code from the development server to the production server hosted by DigitalOcean\cite{DigitalOcean:Home}. As soon as a feature was fully implemented, it could be pushed up to the Github servers allowing for the changes to be fetched by the production server just by issuing a single command. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\textwidth]{Images/ProjectManagement/Trello}
+	\caption{Trello: Project Work Breakdown Structure} \label{fig:Trello_WBS}
+\end{figure}
+
+A number of desktop and web applications were used to keep track of the daily development progress and any remaining work that needed to be completed. Wunderlist was used to keep track of daily tasks that needed to be completed whereas Trello, was used to keep an overall development log of all the features that were to be implemented \cite{Wunderlist:Home, Trello:Home}. Figure \ref{fig:Trello_WBS} shows just one of the boards, namely development tasks, used to keep track of progress. These were strictly for the developer and hence to communicate this progress, emails and face to face meetings were used to update the project supervisor and stakeholders. All the tools discussed are illustrated in figure \ref{fig:ManagementTools}.
 
 \section{Risk Management}
 Undertaking a project of this length, with the given time-scale and the nature of any software development project it was imperative that proper risk management be conducted to minimise major risks affecting project completion. Risks affecting developers, software, hardware, data and third party services were considered and mitigated against.
