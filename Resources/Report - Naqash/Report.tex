@@ -1,0 +1,67 @@
+\documentclass[12pt]{article}
+\renewcommand{\baselinestretch}{1.5}
+
+\usepackage[top=1.5in, bottom=1.5in, left=1in, right=1in]{geometry}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage[Sonny]{fncychap}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{verbatim}
+\usepackage{pgfgantt}
+\usepackage{pdfpages}
+\usepackage[toc,page]{appendix}
+\usepackage{url}
+\usepackage{enumitem}
+\usepackage[more]{tasks}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{longtable}
+
+\usepackage{titlesec}
+\titleformat{\paragraph}{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+
+\usepackage{listings}
+\lstset{
+    breaklines=true,
+    postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}}
+}
+
+\NewTasks[style=enumerate]{enumeratecols}[\item](2)
+
+\definecolor{PassGreen}{rgb}{0.0, 0.42, 0.24}
+
+\begin{document}
+
+\include{preamble/Cover}
+\include{preamble/Contents}
+\include{preamble/SectionMods}
+
+\input{sections/Introduction}
+\input{sections/Research}
+\input{sections/Issues}
+\input{sections/Requirements}
+\input{sections/Design}
+\input{sections/Implementation}
+\input{sections/Testing}
+\input{sections/ProjectManagement}
+\input{sections/Evaluation}
+\input{sections/Conclusion}
+
+\include{referencing/Bibliography}
+
+\include{appendix/appendix}
+
+\end{document}
