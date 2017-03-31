@@ -2,16 +2,19 @@
 \label{Chapter:Testing}
 
 \section{Unit Testing}
+Unit testing is a software development process in which the smallest testable parts of an application, called units, are individually and independently scrutinised for proper operation \cite{TechTarget:UnitTesting}. Through unit testing, the developer can test each aspect of the system at a micro level before each component is integrated into the system. These unit tests were mostly dictated by the functional and non-functional requirements of the system to ensure that the component satisfied all the requirements. Throughout this process, white-box testing has been used along with some black-box testing to ensure expected behaviour is provided by the system. Table \textbf{TABLE} below discusses the tests carried out as part of unit testing by stating the expected behaviour and the actual behaviour.
 
 \section{Integration Testing}
+Integration testing is a logical extension of unit testing. In its simplest form, two units that have already been tested are combined into a component and the interface between them is tested \cite{MSDN:IntegrationTesting}. As the major functionality of each component was completed, the component could now be integrated into the system so that it may work along the other components. Once integrated, integration testing could be carried out to ensure that each individual component functioned alongside other components, that it may have relied on, without resulting in errors. Integration testing prevents errors from propagating into the subsequently implemented components. Every time a component was integrated, all the unit tests for that components were run again to verify its functionality. Any errors that occurred were fixed and the tests were rerun before moving onto the next component.
 
 \section{System Testing}
+System testing is most often the final test to verify that the system to be delivered meets the specification and its purpose \cite{ISTQB:SystemTesting}. In system testing the behaviour of whole system is tested as defined by the scope of the development project or product \cite{ISTQB:SystemTesting}. However, system testing was carried out for the project as the system was developed as well as at the end - This means that as each component was developed and integrated, thorough testing was done on the component integrated, any other components it affected as well as the general functionality of the system. In comparison to unit and integration testing which verify that functional requirements are met, system testing verifies both functional and non-functional requirements of the system. Additionally, at the end of the development process, a comprehensive and thorough system test was carried out using multiple user accounts. These tests followed the same convention and produced the same results as the unit tests. Any errors that occurred were patched on the go and the testing was done all over again.
+
 \subsection{Validation Testing}
 \subsection{Permission Testing}
 
 \section{User Acceptance Testing}
 \subsection{User Feedback}
 \subsection{Testimonials}
-
 
 \section{System Tuning and Assessment}
