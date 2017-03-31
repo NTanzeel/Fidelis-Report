@@ -1,0 +1,227 @@
+\section{System Requirements} \label{Section:Requirements}
+No system can be developed without a direction. The requirements for a project guide the developer through the development process and ensure that core functionality is provided. These requirements are split into functional and non-functional requirements. Additionally, the requirements allow for a thorough testing plan to be implemented which can then later be used to evaluate the final product. 
+
+\subsection{Requirement Refinement} ``Any project’s requirements need to be well thought out, balanced and clearly understood by all involved, but perhaps of most importance is that they are not dropped or compromised halfway through the project'' \cite{ReQTest:Requirements}. As the design and development of the project progressed, it became clear that some of the existing requirements, as defined in the project specification, would have to be refined as they were not sufficient to provide clear guidelines for development. Additionally, some of the requirements laid out in the specification were either optimistic or redundant and hence also required modification. As a result of this, several requirements were altered throughout development, some of which were changed numerous times. Throughout the refinement process the stakeholders of the project were consulted before any of the requirements were altered, added or removed. Fortunately, due to previous research, the requirements were reasonably accurate and did not require any major changes. The changing requirements could easily be integrated due to the agile development methodology, which provides opportunities to assess the direction of a project throughout the development lifecycle and make any changes through prototyping\cite{Agile:Home}.
+
+\subsection{Functional Requirements} \label{Section:Functional_Requirements}
+The official definition of ‘a functional requirement’ is that it essentially specifies something the system should do \cite{ReQTest:Requirements}. The functional requirements will guide the development of the main aspects of the system. These requirements will ensure that the system provides the necessary functionality, the implementation details of which are entirely up to the developer and may change during the development process.
+
+\begin{enumerate}[label=\textbf{F\arabic*}]
+\item The system must be able to handle 3rd party data returned by the police API.
+	\begin{enumerate}
+		\item The data from the api will be used along side the data from the system to provide a crime map on the homepage.
+	\end{enumerate}
+\item The system must allow users to register and create a profile.
+	\begin{enumerate}[leftmargin=0.75in]
+		\item Each user must be uniquely identifiable and only allowed a single account.
+		\item Users must be able to recover their account in case of forgotten passwords.
+	\end{enumerate}
+\item A user may register one or more location to their profile.
+	\begin{enumerate}[leftmargin=0.75in]
+		\item The user may register a location using the following methods.
+		\begin{enumeratecols}
+			\item Postcode
+			\item Current Location
+		\end{enumeratecols}
+		\item A location may only be associated with one user and must be uniquely identifiable.
+	\end{enumerate}
+\item A user may remove a location from their profile.
+	\begin{enumerate}[leftmargin=0.75in]
+		\item The location must only be soft deleted and kept in the database due to relational dependencies.
+	\end{enumerate}
+\item Registered users must be able to add items to their profile.
+	\begin{enumerate}[leftmargin=0.75in]
+		\item The following details are required
+		\begin{enumeratecols}
+			\item Name
+			\item Description
+			\item Approximate Value
+			\item Serial Number/Unique Identifier
+			\item Photo/Image
+			\item Location
+		\end{enumeratecols}
+		\item The user may add additional meta-data or information about the item in the description.
+		\item All the details of the item will be private and only visible to the user.
+	\end{enumerate}
+\item The user may edit an item they have previously registered.
+\item The user may delete an item belonging to them and registered to their profile.
+	\begin{enumerate}[leftmargin=0.75in]
+		\item The item must only be soft deleted and kept in the database due to relational dependencies.
+		\item Once the item is deleted, any data associated with it, such as resources, must also become inaccessible.
+	\end{enumerate}
+\item An item can be reported as lost or stolen.
+	\begin{enumerate}[leftmargin=0.75in]
+		\item The location where the item was stolen from must be specified.
+		\item Specific details of the item immediately become available to the public through the various search features.
+	\end{enumerate}
+\item An item can be marked as recovered.
+	\begin{enumerate}[leftmargin=0.75in]
+		\item The item is automatically removed from the public search and users can no longer contact the owner regarding the item.	
+	\end{enumerate}
+\item The user may upload resources for an item.
+	\begin{enumerate}[leftmargin=0.75in]
+		\item These resources will be stored as private so only the uploader can view them by default.
+		\item The uploader may toggle an image between public and private but all other filetypes will remain public.	
+		\item There must be at least one public image which can be used as the cover image.
+	\end{enumerate}
+\item The user may edit an existing resource.
+	\begin{enumerate}[leftmargin=0.75in]
+		\item The user can edit the alias of a resource.
+		\item The user can toggle the item between public and private but there must be at least one public image.
+	\end{enumerate}
+	
+\item The user may delete a resource.
+	\begin{enumerate}[leftmargin=0.75in]
+		\item The resource must only be soft deleted and kept in the database due to relational dependencies. The files must also be stored and not deleted.
+		\item If the resource is public and it is the only public resource then it cannot be deleted.
+	\end{enumerate}
+\item Any user of the system, registered or not, can search for items reported as lost or stolen.
+	\begin{enumerate}[leftmargin=0.75in]
+		\item The search feature must support searching through various attributes.
+		\begin{enumeratecols}
+			\item Name
+			\item Serial Number/Unique Identifier
+		\end{enumeratecols}
+	\end{enumerate}
+\item Any users of the system, registered or not, can explore their local area for items reported as lost or stolen.
+	\begin{enumerate}[leftmargin=0.75in]
+		\item Any items within a 20km distance must be listed.
+		\item The search results will be displayed using two methods.
+		\begin{enumeratecols}
+			\item Grid View
+			\item Map Marker View
+		\end{enumeratecols}
+		\item For the grid view, the results will be sorted by distance ascending. The user may additionally sort by a different method.
+		\begin{enumeratecols}
+			\item Distance, Ascending
+			\item Distance, Descending
+			\item Name, Ascending
+			\item Name, Descending
+		\end{enumeratecols}
+		\item On mobile and smaller devices, the map view will be hidden and only the grid view will be visible.	 
+	\end{enumerate}
+\item A user may view more details about an item reported as lost or stolen.
+	\begin{enumerate}[leftmargin=0.75in]
+		\item Clicking an item will bring up a popup containing details about the item, any images made public and details about the owner.
+		\item The details must be loaded asynchronously, without having to redirect the user.
+		\item The popup must have a link to contact the owner through the in-built messaging system.
+		\begin{enumerate}
+			\item The link may only be used by registered users, unregistered users will be prompted to signup or login.
+		\end{enumerate}
+	\end{enumerate}
+\item Registered users can message the owner of an item on the public search through an inbuilt messaging system.
+\item The system must support an in-built messaging system so personal details do not need to be exchanged.
+	\begin{enumerate}[leftmargin=0.75in]
+		\item Messages are stored in an inbox format, in order to prevent small spam messages.
+	\end{enumerate}
+\item Recipients may reply to a message by clicking the reply button.
+	\begin{enumerate}
+		\item Once the user opens the message to reply to it, it is automatically marked as read.
+	\end{enumerate}
+\item The sender or recipient may delete a sent or received message.
+	\begin{enumerate}[leftmargin=0.75in]
+		\item The message is not deleted but instead hidden, only for the user that requested the delete.
+	\end{enumerate}
+\item Any data stored in the system must be identifiable as belonging to an individual.
+	\begin{enumerate}[leftmargin=0.75in]
+		\item A piece of data may only be associated with a single individual.
+		\item Not all individuals may be associated with a piece of data.
+	\end{enumerate}	
+\end{enumerate}
+
+\subsection{Non-Function Requirements}
+A non-functional requirement essentially specifies how the system should behave, it is a constraint upon the systems behaviour \cite{ReQTest:Requirements}. In order for the system to be successful and used, it is essential that it is available on demand, regardless of time and place. This means that the system must support a range of devices varying from desktop to small hand-held smartphones. The non-functional requirements for this project will not only help to ensure that the systems operates smoothly and provides a responsive user experience, but also ensure that the development of the system is up to a high standard.
+
+\begin{enumerate}[label=\textbf{NF\arabic*}]
+\item \textit{Comaptibility}: The system must be cross browser compatible and support all devices with a modern browser.
+	\begin{enumerate}[leftmargin=0.75in]
+		\item A responsive design and structure must be used to ensure the system is compatible with all devices.
+		\item The following categories of devices must be well supported.
+		\begin{enumeratecols}
+			\item Mobile
+			\item Tablet
+			\item Desktop
+		\end{enumeratecols}
+		\item Functionality should not be limited or restricted on any of the given devices but may be implemented differently
+	\end{enumerate}
+\item \textit{Usability}: The system must be intuitive and user friendly.
+	\begin{enumerate}[leftmargin=0.75in]
+		\item The system must be intuitive and easy to navigate. Users must be able to access pages without any guidance.
+		\item The user experience across all pages must be consistent in terms of design and functionality.
+		\item The user must never encounter errors, but if the system encounters an error then an appropriate output should be produced.
+		\item Appropriate user feedback must be given when interacting with the system.
+		\item The pages must have an appropriate load time across all pages.
+		\begin{enumerate}
+			\item Studies have shown that nearly half of the users consider abandoning a site if it takes longer than 3 seconds to load \cite{Kissmetrics:Speed}.
+		\end{enumerate}
+	\end{enumerate}
+\item \textit{Security}: The system and the data held must be secure.
+	\begin{enumerate}[leftmargin=0.75in]
+		\item The users details and credentials, such as email and password must be appropriately secured.
+		\item Any data added by the user or associated to the user must only be available the user unless explicitly made available to the public.
+		\item Users may not have access to personal information about other users, such as email address and location data.
+		\item Any resources uploaded by the user must not be browsable by other users, unless made public by the user.
+	\end{enumerate}
+\item \textit{Scalability}: The system must be scalable and respond well to growth.
+	\begin{enumerate}[leftmargin=0.75in]
+		\item Data storage and processing decisions must be made whilst taking growth and expansion into considering.
+		\item Growth should not limit functionality and availability, the system must be able to cope with this.
+		\item As storage and processing can be costly, these must be considered when developing the system so efficient use is made of both of these resources.
+	\end{enumerate}
+\item \textit{Extensibility}: The system must be extensible and support further development.
+	\begin{enumerate}[leftmargin=0.75in]
+		\item The system must be designed modularly, regardless of whether it may need changing or not.
+		\item Design decisions must be made with extensibility and growth in mind and as a result, any component or part of the system must be easily replaceable with an upgrade.
+		\item Each of these component must be independent and operate independently.
+	\end{enumerate}
+\item \textit{Maintainability}: The system must be maintainable.
+	\begin{enumerate}[leftmargin=0.75in]
+		\item Standard and good code practices should be adhered to whilst developing the system.
+		\item A version control system should be used to make regular checkpoints.
+		\item The system and any external resources or technologies should always be kept up-to-date to avoid any issues.
+		\item Any hardware decision made must take maintainability into consideration.
+	\end{enumerate}
+\item \textit{Readability}: The system must be well documented
+	\begin{enumerate}[leftmargin=0.75in]
+		\item The codebase must be thoroughly documented using any standard commenting conventions and guidelines for the specific language.
+		\item Any progress logs must provide a clear outline of the progress and changes made.
+		\item Version control commits must details the changes made, any addition or removal of features must be clearly stated.
+		\item A clear outline of the system and its functionality must be provided.
+	\end{enumerate}
+\end{enumerate}
+
+\subsection{Limitations and Constraints}
+As with all systems, there exist constraints which will limit the capability and the performance of the system. The development server, which the system is currently being developed and tested on, is hosted on a local machine as resources and performance are not a significant issue for development purposes. The production version of the system is being deployed on a Virtual Private Server (VPS) provided by DigitalOcean \cite{DigitalOcean:Home}. The VPS has limited resources and in turn, very minimal performance. The details of the local and deployed production server are listed in table \ref{table:server_spec} below.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}ll@{}}
+		\toprule
+		\multicolumn{2}{c}{Local Server}       	\\ \midrule
+		Resource         & Availability 			\\ \midrule
+		CPU              & 2            			\\
+		RAM              & 8 GB       			\\
+		Disk Space (SSD) & 256 GB        		\\
+		Bandwidth        & Unlimited      		\\
+		Operating System & OSX     				\\ \bottomrule
+	\end{tabular}
+	\quad
+	\begin{tabular}{@{}ll@{}}
+		\toprule
+		\multicolumn{2}{c}{Production Server}	\\ \midrule
+		Resource         & Availability 			\\ \midrule
+		CPU              & 1            			\\
+		RAM              & 512 MB       			\\
+		Disk Space (SSD) & 20 GB        			\\
+		Bandwidth        & 1000 GB      			\\
+		Operating System & Cent OS      			\\ \bottomrule
+	\end{tabular}
+	\caption{Local and Production Server Specifications}
+	\label{table:server_spec}
+\end{table}
+
+As depicted by the table, the deployed VPS has very limited processing power, RAM and disk space. When a web server is installed, the processing power will limit the load time of web pages as the web server will only be allowed a portion of the resources. Additionally, the system relies on disk space for both hosting the database and storing resources uploaded by the users. The disk space will limit the amount of resources that can be stored and the amount of data that may be stored in the database. Fortunately, the data stored in the database is all textual and hence requires very minimal storage space. The one thing that the server is not limited by is the bandwidth, which is a huge 1TB per month.
+
+The VPS currently runs CentOS, a Linux distribution that is stable, predictable, manageable and reproducible, derived from the sources of Red Hat Enterprise Linux (RHEL) \cite{CentOS:Home}. Although CentOS is a relatively light distribution, it will still consume a significant portion of the available resources and hence leaving even less for the system. As a result, this production server is just a starting base provided for demonstration purposes. It is likely that as the system expands, in terms of user base and functionality, maintenance and the hardware requirements will increase drastically and the server(s) will require upgrading. This level of upgrade is beyond the scope of this project but the system will be designed with this in mind.
+
+\newpage
