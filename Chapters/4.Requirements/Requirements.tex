@@ -3,7 +3,7 @@
 No system can be developed without a direction. The requirements for a project guide the developer through the development process and ensure that core functionality is provided. These requirements are split into functional and non-functional requirements. Additionally, the requirements allow for a thorough testing plan to be implemented which can then later be used to evaluate the final product. 
 
 \section{Requirement Refinement}
-``Any project‚Äôs requirements need to be well thought out, balanced and clearly understood by all involved, but perhaps of most importance is that they are not dropped or compromised halfway through the project'' \cite{ReQTest:Requirements}. As the design and development of the project progressed, it became clear that some of the existing requirements, as defined in the project specification, would have to be refined as they were not sufficient to provide clear guidelines for development. Additionally, some of the requirements laid out in the specification were either optimistic or redundant and hence also required modification. As a result of this, several requirements were altered throughout development, some of which were changed numerous times. Throughout the refinement process the stakeholders of the project were consulted before any of the requirements were altered, added or removed. Fortunately, due to previous research, the requirements were reasonably accurate and did not require any major changes. The changing requirements could easily be integrated due to the agile development methodology, which provides opportunities to assess the direction of a project throughout the development lifecycle and make any changes through prototyping \cite{Agile:Home}.
+``Any project requirements need to be well thought out, balanced and clearly understood by all involved, but perhaps of most importance is that they are not dropped or compromised halfway through the project'' \cite{ReQTest:Requirements}. As the design and development of the project progressed, it became clear that some of the existing requirements, as defined in the project specification, would have to be refined as they were not sufficient to provide clear guidelines for development. Additionally, some of the requirements laid out in the specification were either optimistic or redundant and hence also required modification. As a result of this, several requirements were altered throughout development, some of which were changed numerous times. Throughout the refinement process the stakeholders of the project were consulted before any of the requirements were altered, added or removed. Fortunately, due to previous research, the requirements were reasonably accurate and did not require any major changes. The changing requirements could easily be integrated due to the agile development methodology, which provides opportunities to assess the direction of a project throughout the development lifecycle and make any changes through prototyping \cite{Agile:Home}.
 
 
 \section{Functional Requirements}
@@ -15,7 +15,7 @@ The functional requirements will guide the development of all aspects of the sys
 		\end{enumerate}
 	\item Users must be able to register and log into the system.
 	\begin{enumerate}
-		\item Registration may be done through manually entering all the required details or by using a third party which provide oAuth 2.0 services, such as but not limited to Facebook and Twitter.
+		\item Registration may be done through manually entering all the required details or by using a third party service which provides oAuth 2.0 capabilities, such as but not limited to Facebook and Twitter.
 		\item These credentials should be stored, in an encrypted format, so that they can later be used for authentication.
 		\item Users should be able to recover their account in the case that they have forgotten their password or their account has been compromised.
 		\item A user maintains the right to be able to delete their account publicly, however this data may still be retained privately.
@@ -27,24 +27,24 @@ The functional requirements will guide the development of all aspects of the sys
 	\item A user may block another user.
 		\begin{enumerate}
 			\item If the blocked user is already following the blocking user, then they automatically unfollow the user.
-			\item Once a user has been blocked, the blocked user should not be able to find the blocking users profile through search or otherwise.
+			\item Once a user has been blocked, the blocked user should not be able to find the blocking users' profile through search or otherwise.
 			\item If a user has blocked a user then they may also unblock the user. This will not restore any previous following relationships.
 		\end{enumerate}
-	\item In order to see content, users should be able to add other users to their Äútrust circleÄù.
+	\item In order to see content, users should be able to add other users to their ``trust circle''.
 		\begin{enumerate}
-			\item This is identified as a one way relationship in which Äúuser A follows user BÄù implies that Äúuser A trust user BÄù.
+			\item This is identified as a one way relationship in which user A following user B implies that user A trusts user B.
 			\item Similarly, if users no longer wish to see content from specific users then they may unfollow a user they are already following.
 		\end{enumerate}
 	\item The system will overcome the cold-start problem, under which a user will not see anything on their timeline upon registration, by providing a set of predefined categories which can be used to explore.
 		\begin{enumerate}
-			\item Users are able to access a customised `Discover' feed by subscribing to categories, sub categories or topics.
+			\item Users are able to access a customised `Discover' feed by subscribing to categories, sub-categories or topics.
 			\item The `Discover' feed will then be generated by pulling content from the various subscriptions allowing the user to explore topics based on their interest, discover new content as well as new users who they may follow.
 		\end{enumerate}
 	\item The system will provide a personal feed where the user is able to view content from the people they trust, prioritised by the reputation of the people they follow as well as the reputation of the content itself.
 		\begin{enumerate}
-			\item The user may hide content from their personal feed which they find offensive, or just uninteresting. This should be used to learn and adapt the recommendation system by modifying the posters reputation.
+			\item The user may hide content from their personal feed which they find offensive, or uninteresting. Content hidden by a user should be identified and used to learn and adapt the recommendation system by modifying the posters reputation.
 		\end{enumerate}
-	\item A user must be able to post new content onto the system.
+	\item A user must be able to post new content to the system.
 		\begin{enumerate}
 			\item A post may include text, images or videos. Additionally an image or video post may also contain text.
 			\item When posting content, users may optionally tag the post or leave it untagged.
@@ -65,7 +65,7 @@ The functional requirements will guide the development of all aspects of the sys
 		\end{enumerate}
 	\item The system will automatically calculate a reputation score for users which symbolises the trustworthiness of the user and the content they post.
 		\begin{enumerate}
-			\item This score will be impacted by a range of factors. For example, a user'Äôs trustworthiness increases as their number of followers (people who trust the user) goes up. Similarly, this reputation can also decrease if the users content is disliked.
+			\item This score will be impacted by a range of factors. For example, a user's trustworthiness increases as their number of followers (people who trust the user) goes up. Similarly, this reputation can also decrease if the users' content is disliked.
 			\item This will be used, along with other factors such as mutual connections, to recommend other users the user may be interested in following.
 		\end{enumerate}
 	\item The system will also calculate a reputation for each user posted content to represent the quality of content.
@@ -90,9 +90,9 @@ The functional requirements will guide the development of all aspects of the sys
 \end{enumerate}
 
 \section{Non-Functional Requirements}
-In order for the system to be successful and used, it is essential that it is available on demand, regardless of time and place. This means that the system must support a range of devices varying from desktop to small hand-held smartphones. The non-functional requirements for this project will not only help to ensure that the systems operates smoothly and provides a responsive user experience, but also ensure that the development of the system is up to a high standard.
+In order for the system to be successful and used, it is essential that it is available on-demand, regardless of time and place. This means that the system must support a range of devices varying from desktop to small hand-held machines. The non-functional requirements for this project will not only help to ensure that the systems operates smoothly and provides a responsive and enjoyable user experience, but also ensure that the development of the system is up to a high standard.
 \begin{enumerate}[label=\textbf{NF\arabic*}]
-	\item \textit{Compatibility}: The system must be cross browser compatible and support all devices with a modern browser.
+	\item \textit{Compatibility}: The system must be cross-browser compatible and support all devices with a modern browser.
 		\begin{enumerate}
 			\item A responsive design and structure must be used to ensure the system is compatible with all devices.
 			\item The following categories of devices must be well supported.
@@ -116,8 +116,8 @@ In order for the system to be successful and used, it is essential that it is av
 		\end{enumerate}
 	\item \textit{Security}: The system and the data held must be secure.
 		\begin{enumerate}
-			\item The users details and credentials, such as email and password must be appropriately secured.
-			\item Any data added by the user or associated to the user must only be available to the user unless explicitly made available to the public.
+			\item User details and credentials, such as email and password must be appropriately secured.
+			\item Any data added by the user or associated with the user must only be available to the user unless explicitly made available to the public.
 			\item Users may not have access to personal information about other users, such as email address and location data.
 			\item Any resources uploaded by the user must not be browsable by other users, unless made public by the user.
 		\end{enumerate}
@@ -150,7 +150,7 @@ In order for the system to be successful and used, it is essential that it is av
 \end{enumerate}
 
 \section{Limitations and Constraints}
-As with all systems, there exist constraints which will limit the capability and the performance of the system. The development server, which the system is currently being developed and tested on, is hosted on a local machine as resources and performance are not a significant issue for development purposes. The production version of the system is being deployed on a Virtual Private Server (VPS) provided by DigitalOcean \cite{DigitalOcean:Home}. The VPS has limited resources and in turn, very minimal performance. The details of the local and deployed production server are listed in table \ref{table:ServerSpec} below.
+As with all systems, there exist constraints which will limit the capability and the performance of the system. The development server, currently being used to develop and test the system, is hosted on a local machine as resources and performance are not a significant issue for development purposes. The production version of the system is to be deployed on a Virtual Private Server (VPS) provided by DigitalOcean \cite{DigitalOcean:Home}. The VPS has limited resources and in turn, very minimal performance. The details of the local and deployed production server are listed in table \ref{table:ServerSpec} below.
 
 \begin{table}[H]
 	\centering
