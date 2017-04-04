@@ -14,13 +14,15 @@
 \subsection{Abuse Detection}
 \subsection{Content Filtering}
 \subsection{Recommendations}
-Recommendations are a key component to Fidelis, and this section will look at the design of the algorithms for this purpose. Collaborative-based filtering was chosen as the filtering technique for recommendations. JustIfication for this is apparent in the technique itself; collaborative-filtering focuses on using the opinions of like-minded users, coupled with items rated by the user in the past. This sets up recommendations for success as they are much more likely to be greeted positively by the user. Given the nature of Fidelis as social network, resources in terms of previously rated items (through votes on posts) and like-minded users will be available in abundance to generate strong recommendations. It is important to provide the user with choice for how they would like to receive recommendations. To this end, the user will be provided with the option to choose how their recommendations should be provided. The following sections will look at the algorithm that will be used to generate recommendations for users, and will also discuss three different recommendation flavours that will be offered to the user, giving them final say on how their recommendations are generated. The algorithms discussed in the following sections only deal with user recommendations, but the same approaches are applied to generate content recommendations as well.
+Recommendations are a key component to Fidelis, and this section will look at the design of the algorithms for this purpose. Collaborative-based filtering was chosen as the filtering technique for recommendations. JustIfication for this is apparent in the technique itself; collaborative-filtering focuses on using the opinions of like-minded users, coupled with items rated by the user in the past. This sets up recommendations for success as they are much more likely to be greeted positively by the user. Given the nature of Fidelis as social network, resources in terms of previously rated items (through votes on posts) and like-minded users will be available in abundance to generate strong recommendations. It is important to provide the user with choice for how they would like to receive recommendations. To this end, the user will be provided with the option to choose how their recommendations should be provided. The following sections will look at the algorithm that will be used to generate recommendations for users, and will also discuss three different recommendation flavours that will be offered to the user, giving them final say on how their recommendations are generated. 
 
-Users are likely to interact with recommendations they receive on a daily basis. As such, algorithms generating recommendations should run on a daily basis. To generate recommendations, we must therefore first look at the number of recommendations already generated for each user. A user may choose not to interact with provided recommendations, so new recommendations should be made only when a user has approved or rejected their current recommendations. For each user, their item vector should be retrieved. The item vector will correspond to the features discussed in Chapter \ref{Chapter:Research}. The set of candidate recommendations for the user will be determined by what recommendation method they have chosen. In the event that there are no candidate users, a default set of recommendations will be provided for the user. Using the retrieved collection of candidate recommendations, each user in this collection will be assessed to determine whether the similarity between them and the user is sufficiently large. Suitability between users will be determined using a threshold value. We are only interested in similarities that are at least as large as this value, as similarities less than the threshold value would mean that the two users in question are not similar. Only those users with a similarity greater than the threshold value should be provided as a recommendation. Algorithm \ref{alg:recommendations} provides pseudocode for this process. Values for $similarityThreshold$ and $val$ should be set by the user.
+\subsubsection{User Recommendations}
+\label{sec:user-recommendations}
+Users are likely to interact with recommendations they receive on a daily basis. As such, algorithms generating recommendations should run on a daily basis. To generate recommendations, we must therefore first look at the number of recommendations already generated for each user. A user may choose not to interact with provided recommendations, so new recommendations should be made only when a user has approved or rejected their current recommendations. For each user, their item vector should be retrieved. The item vector will correspond to the features discussed in Chapter \ref{Chapter:Research}. The set of candidate recommendations for the user will be determined by what recommendation method they have chosen. Before checking for similarity between the user and the candidate recommendations, all users the user already follows, has blocked or has rejected as a recommendation should be removed from the candidate set. In the event that there are no candidate users, a default set of recommendations will be provided for the user. Using the retrieved collection of candidate recommendations, each user in this collection will be assessed to determine whether the similarity between them and the user is sufficiently large. Suitability between users will be determined using a threshold value. We are only interested in similarities that are at least as large as this value, as similarities less than the threshold value would mean that the two users in question are not similar. Only those users with a similarity greater than the threshold value should be provided as a recommendation. Algorithm \ref{alg:user-recommendations} provides pseudocode for this process. Values for $similarityThreshold$ and $val$ should be set by the user.
 
 \begin{algorithm}
-\caption{Recommendations algorithm}
-\label{alg:recommendations}
+\caption{User recommendations algorithm}
+\label{alg:user-recommendations}
 \begin{algorithmic}[1]
 \State $similarityThreshold\gets 0.7$
 \State $val\gets 5$
@@ -42,10 +44,12 @@ Users are likely to interact with recommendations they receive on a daily basis.
 		\EndIf
 		
 		\State $uFollowing\gets getFollowing(u)$
-		\State $users = users \setminus uFollowing$
+		\State $uBlocked\gets getBlockedUsers(u)$
+		\State $uRejected\gets getRejectedRecommendations(u)$
+		\State $users = users \setminus uFollowing \setminus uBlocked \setminus uRejected$
 		
 		\If{$\left\vert{users}\right\vert = 0$}
-			\State $getDefaultRecommendations$
+			\State $getDefaultUsers$
 		\Else
 			\For{$v$ in $users$}
 				\State $vVector\gets getItemVector(v)$
@@ -61,15 +65,12 @@ Users are likely to interact with recommendations they receive on a daily basis.
 \end{algorithmic}
 \end{algorithm}
 
-The following sections will look at each of the possible user sets for candidate recommendations. Each section provides a general overview of the method for user selection and includes a discussion on the method itself with regards to the wider system.
-
-\subsubsection{Friend-of-a-Friend Users}
-With this method, candidate recommendations for a user $A$ are all users $C$ where $A$ follows $B$ and $B$ follows $C$. This method uses like-minded users for recommendations, and exploits the transitive nature of the ``following'' relationship. It is a popular technique used by numerous social networks, including Facebook (Figure \ref{fig:fof-facebook}) and Linkedin (Figure \ref{fig:fof-linkedin}).
+We will now look at each of the possible user sets for candidate recommendations. In particular, we will observe a general overview of the method for user selection and involves ourselves with a discussion on the method itself with regards to the wider system.
 
 \begin{figure}[h]
 	\centering
 	\begin{subfigure}[b]{.3\linewidth}
-		\includegraphics[height=2in]{Images/Design/facebook}
+		\includegraphics[height=1.7in]{Images/Design/facebook}
 		\caption{}
 		\label{fig:fof-facebook}
 	\end{subfigure}
@@ -82,7 +83,8 @@ With this method, candidate recommendations for a user $A$ are all users $C$ whe
 	\label{fig:fof}
 \end{figure}
 
-This option will allow the user to generate ``safer'' recommendations by using the idea that ``if $A$ trusts $B$, and $B$ trusts $C$, $A$ will most likely also trust $C$''. This is not always the case, but mostly holds true. It is important to give users this choice as it provides them more control over who enters their trust circle. Although one of the project aims is to burst opinion bubbles through exposure to different and trusted views, users must still be provided with this option. The function in Algorithm \ref{alg:fof-users} provides a procedure for retrieving ``$C$'' users. 
+\paragraph{Friend-of-a-Friend Users}
+With this method, candidate recommendations for a user $A$ are all users $C$ where $A$ follows $B$ and $B$ follows $C$. This method uses like-minded users for recommendations, and exploits the transitive nature of the ``following'' relationship. It is a popular technique used by numerous social networks, including Facebook (Figure \ref{fig:fof-facebook}) and Linkedin (Figure \ref{fig:fof-linkedin}). This option will allow the user to generate ``safer'' recommendations by using the idea that ``if $A$ trusts $B$, and $B$ trusts $C$, $A$ will most likely also trust $C$''. This is not always the case, but mostly holds true. It is important to give users this choice as it provides them more control over who enters their trust circle. Although one of the project aims is to burst opinion bubbles through exposure to different and trusted views, users must still be provided with this option. The function in Algorithm \ref{alg:fof-users} provides a procedure for retrieving ``$C$'' users. 
 
 \begin{algorithm}
 \caption{Function for getting Friend-of-a-Friend users}
@@ -91,7 +93,7 @@ This option will allow the user to generate ``safer'' recommendations by using t
 \Function{getFOFUsers}{User u}
 	\State $users = \emptyset$
 	\State $uFollowing\gets getFollowing(u)$
-	\For{$f in uFollowing$}
+	\For{$f$ in $uFollowing$}
 		\State $fFollowing\gets getFollowing(f)$
 		\State Add $fFollowing$ to $users$
 	\EndFor
@@ -100,9 +102,8 @@ This option will allow the user to generate ``safer'' recommendations by using t
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Explorer Users}
-Fidelis aims to expose users to opinions and users they may not necessarily... 
-Candidate recommendations are found by finding users' favourite tags to post in and looking at other users who post in the same tag. This user collection method combines the users rated items and looks at like-minded users. By deviating from the users trust circle, we are more likely to generate recommendations that will broaden user opinions by finding other users who care about the same topics, but will naturally hold different views on them. This method seeks to expand a users trust circle beyond current opinions held by them. The function in Algorithm \ref{alg:explorer-users} shows the procedure for collecting Explorer users. $N$ is used to determine the number of tags that will be searched for candidate recommendations. The function in Algorithm \ref{alg:explorer-users} shows this procedure.
+\paragraph{Explorer Users}
+Fidelis aims to expose users to opinions and users they may not initially interact with. Explorer users are chosen for exactly this reason. Candidate recommendations are found by finding users' favourite tags to post in and looking at other users who post in the same tag. This user collection method combines the users rated items and looks at like-minded users. By deviating from the users trust circle, we are more likely to generate recommendations that will broaden user opinions by finding other users who care about the same topics, but will naturally hold different views on them. This method seeks to expand a users trust circle beyond current opinions held by them. The function in Algorithm \ref{alg:explorer-users} shows the procedure for collecting Explorer users. $N$ is used to determine the number of tags that will be searched for candidate recommendations. The function in Algorithm \ref{alg:explorer-users} shows this procedure.
 
 \begin{algorithm}
 \caption{Function for getting Explorer users}
@@ -123,8 +124,8 @@ Candidate recommendations are found by finding users' favourite tags to post in 
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Hybrid Users}
-Using this method aims to find the middle ground between the two aforementioned techniques. The difference between Explorer and Friend-of-a-Friend users is returned as the set of candidate recommendations. 
+\paragraph{Hybrid Users}
+Using this method aims to find the middle ground between the two aforementioned techniques. The intersection between Explorer and Friend-of-a-Friend users, as shown in Figure \ref{fig:hybrid}, is returned as the set of candidate recommendations. 
 
 \begin{figure}
 \centering
@@ -141,8 +142,7 @@ Using this method aims to find the middle ground between the two aforementioned 
 \label{fig:hybrid}
 \end{figure}
 
-
-\subsubsection{Default Recommendations}
+\paragraph{Default Recommendations}
 If all aforementioned methods fail to return a set of candidate recommendations, the system should revert to default candidate recommendations. This method will return either the $N$ most popular or reputable users on Fidelis. The function in Algorithm \ref{alg:default-users} shows this procedure for most popular users, but the same procedure can be re-used for getting the most reputable users.
 
 \begin{algorithm}
@@ -154,6 +154,108 @@ If all aforementioned methods fail to return a set of candidate recommendations,
 	\State $users\gets getMostPopularUsers$
 	\State $users\gets sortDescending(users)$
 	\State \Return{$N$ top users from $users$}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Content Recommendations}
+\label{sec:content-recommendations}
+Similarly to user recommendations, users will interact with content recommendations made for them daily and so new content recommendations should be generated for them daily also. Again, before any new recommendations are made we must look at how many recommendations the user currently has. By doing this, we limit any unnecessary computation. In the case of content recommendations, user item vectors will not be used. It was instead decided to use the reputation of a given post, rather than the similarity between the user recommendations are being generated for and the author of the post. The justification behind this is that user recommendations should focus on locating like-minded users, whereas content recommendations should avoid this to diversify the content made available to users. Providing recommendations in this manner again emphasises the desire for Fidelis to break the constraints of the ``echo chamber effect'' currently restricting most social media platforms. By letting the user pick a reputation threshold for recommendations generated for them, we can ensure that users trust their recommendations and can confidently interact with them knowing they are trustworthy. Algorithm \ref{alg:content-recommendations} provides the pseudocode for the procedure described above. 
+
+\begin{algorithm}
+\caption{Content recommendations algorithm}
+\label{alg:content-recommendations}
+\begin{algorithmic}[1]
+\State $val\gets 5$
+\State $reputationThreshold\gets 0.7$
+\ForAll{users $u$}
+	\State $method\gets getRecommendationMethod(u)$
+	\State $currentRecommendations\gets getNumberOfRecommendations(u)$
+	\If{$currentRecommendations < val$}
+		\If{$method = Friend$-$of$-$a$-$Friend$}
+			\State $posts\gets getFOFPosts(u)$
+		\EndIf
+		\If{$method = Explorer$}
+			\State $posts\gets getExplorerPosts(u)$
+		\EndIf
+		\If{$method = Hybrid$}
+			\State $fof\gets getFOFPosts(u)$
+			\State $explorer\gets getExplorerPosts(u)$
+			\State $posts\gets fof \cap explorers$
+		\EndIf
+		
+		\State $uVoted\gets getVotedPosts(u)$
+		\State $uBlocked\gets getBlockedPosts(u)$
+		\State $posts = posts \setminus uVoted \setminus uBlocked$
+		
+		\If{$\left\vert{posts}\right\vert = 0$}
+			\State $getDefaultContent$
+		\Else
+			\For{$p$ in $posts$}
+				\If{$getReputation(p) \geq reputationThreshold$}
+					\State $storeRecommendation(p)$
+				\EndIf
+			\EndFor
+		\EndIf
+	\EndIf
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+We will again look at how each of the four recommendation techniques will generate candidate post sets. By providing the user with different ways recommendations can be generated for them will again ensure that users are in control of content they will interact with. 
+
+\paragraph{Friend-of-a-Friend content} Candidate recommendations using this method will build on the follows relationship mentioned earlier in Chapter \ref{sec:user-recommendations} by retrieving the posts from Friend-of-a-Friend users. Getting content in this manner will provide users with a selection of posts that are likely to agree with their own sentiments. 
+
+\begin{algorithm}
+\caption{Function for getting Friend-of-a-Friend content}
+\label{alg:fof-content}
+\begin{algorithmic}[1]
+\Function{getFOFUsers}{User u}
+	\State $posts\gets \emptyset$
+	\State $uFollowing\gets getFollowing(u)$
+	\For{$f$ in $uFollowing$}
+		\State $fFollowing\gets getFollowing(f)$
+		\For{$g$ in $fFollowing$}
+			\State $gPosts\gets getPosts(g)$
+			\State Add $gPosts$ to $posts$
+		\EndFor  
+	\EndFor
+	\State \Return{$posts$}		
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\paragraph{Explorer content} Explorer content recommendations stress the idea previously mentioned about removing the constraints of the ``echo chamber effect''. By considering other users who post in the same categories as the user recommendations are being generated for, we only consider posts that the user will be interested in. Without considering the similarity between the authors of these posts and the user themselves, we increase the likelihood of exposing users to content they would not normally interact with.
+
+\begin{algorithm}
+\caption{Function for getting Explorer content}
+\label{alg:explorer-content}
+\begin{algorithmic}[1]
+\Function{getExplorerPosts}{User u}
+	\State $posts\gets \emptyset$
+	\State $users\gets getExplorerUsers(u)$
+	\For{$u$ in $users$}
+		\State $uPosts\gets getPosts(u)$
+		\State Add $uPosts$ to $posts$
+	\EndFor
+	\State \Return{$posts$}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\paragraph{Hybrid content} Using this method aims to find the middle ground between the two aforementioned techniques. We take a similar approach as to before and return the intersection between Explorer and Friend-of-a-Friend content as the set of candidate recommendations.
+
+\paragraph{Default content} Default content recommendations will return the $N$ most popular or reputable posts made on Fidelis. . The function in Algorithm \ref{alg:default-content} shows the procedure for retrieving the most popular posts, but the same procedure can be re-used for getting the most reputable posts.
+
+\begin{algorithm}
+\caption{Function for getting default content}
+\label{alg:default-content}
+\begin{algorithmic}[1]
+\Function{getDefaultContent}{}
+	\State $posts\gets \emptyset$
+	\State $posts\gets getMostPopularPosts$
+	\State $posts\gets sortDescending(posts)$
+	\State \Return{$N$ top posts from $posts$}
 \EndFunction
 \end{algorithmic}
 \end{algorithm}
