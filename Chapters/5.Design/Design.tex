@@ -19,6 +19,8 @@ The diagram in figure \ref{fig:LayerArchitecture} shows a high level overview of
 \end{figure}
 
 \subsection{Overall System Architecture}
+The operation of the system is broken down into five stages: data collection, data processing, recommendation, content filtering and user interface. The functionality of each of these stages is implemented across multiple layer of the high level system design in figure \ref{fig:LayerArchitecture}. The data collection stage will primarily be responsible for collecting data about the user, such as their personal, as well as capturing the content, text or photos, posted by the user and storing this in the database so that it may be processed and visualised later. Additionally, the data collection process will also collect data such as tags, categories and possibly tweets from twitter and store this so that it may be used for training. This stage can be extended to collect data from other sources such as new feeds for better categorisation and trend plotting. 
+
 \begin{figure}[H]
   \centering
   \includegraphics[width=1.0\textwidth]{Images/Design/SystemArchitecture}
