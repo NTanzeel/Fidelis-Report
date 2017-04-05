@@ -45,8 +45,45 @@ Manually
 \section{Data Processing}
 \subsection{Abuse Detection}
 \subsection{Content Filtering}
+The filtering of content allows the users to receive tailored content, which is more likely to be of interest of them and therefore instils trust in the social network. The importance of the performance of this area of the system on the success of the overall project means that three different models will be designed and compared using the techniques discussed in section \ref{sec:research-content-filtering}: Na\"ive Bayes, SVMs and k-nearest neighbours. Once the models are able to successfully detect the category of a post, the post category can be updated in the database, which will allow filtered feeds to retrieve the relevant content to be displayed to the user. 
+
+This section will discuss the design decisions made for the content filtering throughout each stage of the process. This includes the preprocessing of the data and the training of the model as well as algorithms for testing the efficacy of the model and using it to predict new posts as they are made on Fidelis.
+
+\subsubsection{Preprocessing}
+Before being able to train the model, preprocessing must be carried out on the data. This is to remove any parts of the dataset which are not informative, thus reducing the size of the data, and also to construct new features which may aid in the building of the model. The algorithm \ref{alg:category-filter-preprocess} takes a single post and then returns a multiset $features$ containing each of the features in the post (the same feature may appear multiple times in a single post). 
+
+\begin{algorithm}
+\caption{Category filter preprocessing algorithm}
+\label{alg:category-filter-preprocess}
+\begin{algorithmic}[1]
+\Function{preprocess}{Post $post$}
+	\State $features\gets \emptyset$
+	\State $post\gets post\setminus nonAsciiChars(post)$ 
+	\State $post\gets post\setminus cleanTwitterEntities(post)$
+	\State $post\gets post\setminus removePunc(post)$
+	\For{\textbf{each} $word$ \textbf{in} $post$}
+		\State $word\gets lemmatize(word)$
+		\If{$word \in stopwords$} 
+			\State \textbf{break} 
+		\EndIf
+		\If{$len(word) < 3$} 
+			\State \textbf{break} 
+		\EndIf
+		\State Add $word$ to $features$
+	\EndFor
+	\State $features\gets features\cup bigrams(features)\cup trigrams(features)$
+	\State \Return{$features$}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Building the Models}
+
+
+\subsubsection{Predicting Categories}
+
 \subsection{Recommendations}
-Recommendations are a key component to Fidelis, and this section will look at the design of the algorithms for this purpose. Collaborative-based filtering was chosen as the filtering technique for recommendations. JustIfication for this is apparent in the technique itself; collaborative-filtering focuses on using the opinions of like-minded users, coupled with items rated by the user in the past. This sets up recommendations for success as they are much more likely to be greeted positively by the user. Given the nature of Fidelis as social network, resources in terms of previously rated items (through votes on posts) and like-minded users will be available in abundance to generate strong recommendations. It is important to provide the user with choice for how they would like to receive recommendations. To this end, the user will be provided with the option to choose how their recommendations should be provided. The following sections will look at the algorithm that will be used to generate recommendations for users, and will also discuss three different recommendation flavours that will be offered to the user, giving them final say on how their recommendations are generated. 
+Recommendations are a key component to Fidelis, and this section will look at the design of the algorithms for this purpose. Collaborative-based filtering was chosen as the filtering technique for recommendations. Justification for this is apparent in the technique itself; collaborative-filtering focuses on using the opinions of like-minded users, coupled with items rated by the user in the past. This sets up recommendations for success as they are much more likely to be greeted positively by the user. Given the nature of Fidelis as social network, resources in terms of previously rated items (through votes on posts) and like-minded users will be available in abundance to generate strong recommendations. It is important to provide the user with choice for how they would like to receive recommendations. To this end, the user will be provided with the option to choose how their recommendations should be provided. The following sections will look at the algorithm that will be used to generate recommendations for users, and will also discuss three different recommendation flavours that will be offered to the user, giving them final say on how their recommendations are generated. 
 
 \subsubsection{User Recommendations}
 \label{sec:user-recommendations}
