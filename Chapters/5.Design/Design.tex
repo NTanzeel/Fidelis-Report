@@ -43,7 +43,72 @@ Whereas the Kaggle have curated a clean dataset which can be readily used in tra
 Manually
 
 \section{Data Processing}
+Processing data in Fidelis plays a key role in meeting the requirements set by the stakeholders. Data processing will occur through abuse detection on posts to remove abusive and derogatory content from the site, content filtering to recognise trending topics and automatically categorise user-submitted posts, recommendations to provide users with fresh content to engage with, and finally reputation scoring to allow users to quantify content and user trustworthiness.
+
 \subsection{Abuse Detection}
+Abuse detection will be performed on Fidelis to filter out derogatory and abusive content from the users post feed. Performing abuse detection will provide users with confidence that they will not encounter content they deem offensive whilst on Fidelis. Different users will have varying levels of tolerance towards abuse, so users should be allowed to determine what abuse is filtered from their feed. To this end, users should be able toggle their `tolerance' level, which will determine what content is removed or included on their feed. The following sections will look at the various stages that need to be considered for abuse detection. Namely, data pre-processing, model building and data handling
+
+\subsubsection{Data Pre-Processing}
+As mentioned in Chapter \ref{Chapter:Research}, abuse detection is regularly achieved by building a classifier trained on features extracted from relevant texts. Before a classifier can be trained, the data must first be fetched and cleaned. Cleaning data is important before processing as `dirty' data can have an adverse effect on model performance. In the case of natural lanuage processing, data cleaning can involve \cite{han2011data}:
+\begin{itemize}
+\item Removing stop words such as ``the'' or ``a'', 
+\item Removing punctuation, although it should be noted that certain punctuation should be kept with the original text, especially when performing sentiment analysis
+\item Converting text to be all lower or upper-case
+\item Removing HTML mark-up
+\item Removing apostrophes
+\end{itemize}
+
+When building a model for text classification, the model is trained on significant features extracted from the text. These features are elements from the text, and common techniques used when extracting features during natural language processing are discussed in Chapter \ref{Chapter:Research}. As part of pre-processing, features must first be extracted from the data before the model is trained.
+
+\subsubsection{Model Building}
+Abuse detection is a classification problem; a piece of text is either abusive or not. A variety of machine learning classifiers can be used for this, but for our purposes the Support Vector Machine (SVM) and Logistic Regression (LR) models will be used. SVMs have been shown to be one of the best performing models for text classification \cite{joachims1998text}. This has also been shown for LR models \cite{genkin2007large}, with performance for these models being shown to be ``at least as effective as those produced by support vector machine classifiers''. Models will be built by training them on the set of features extracted from the data. To ensure that the produced classifier does not overfit the training data, and instead generalises well to the plethora of unseen data it will receive in the form of user posts cross-validation will be used. Cross-validation is a training technique that serves this purpose, and splits a dataset into separate training and testing sets \cite{scikit:cross-val}. Model performance is dependent on features extracted from data, and additionally on the parameters chosen for the model, which in turn are dependent on the data itself. To maximise model performance, parameters must be tuned to assess their suitability for the model and given data. Algorithm \ref{alg:abuse} provides a very high-level overview of the process of building a model for text classification.
+
+\begin{algorithm}
+\caption{Algorithm for training model}
+\label{alg:abuse}
+\begin{algorithmic}[1]
+\State $data\gets getTwitterData$
+\State $train\gets getTrainingData(data)$
+\State $test\gets getTestData(data)$
+\State $cleanData\gets cleanData(data)$
+\State $features\gets extractFeatures(data)$
+\State $classifier\gets trainModel(features)$
+\State Test $classifier$ using $test$
+\State Save $classifier$
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Handling Abusive Data}
+-On Facebook, 55 million status updates are made daily \cite{kissmetrics:fb-stats}, or $\tilde{636}$. It would therefore be infeasible to expect to categorise posts during real-time due to the sheer number of posts that can be encountered. To counteract this, the classifier should be run on posts daily at a chosen time. 
+Algorithm \ref{alg:abuse-classification} shows the procedure that will be used to classify user posts made on Fidelis, and algorithm \ref{}
+\begin{algorithm}
+\caption{Algorithm for post classification}
+\label{alg:abuse-classification}
+\begin{algorithmic}[1]
+\State $clf\gets loadClassifier$
+\State $posts\gets getAllUserPosts$
+\For{$post$ in $posts$}
+	\State Classify $post$ using $clf$
+	\If{$post$ is abusive}
+		\State $author\gets getPostAuthor(post)$
+		\State Update reputation score for $post$ and $author$
+	\EndIf
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Algorithm for post classification}
+\label{alg:abuse-retrain}
+\begin{algorithmic}[1]
+\State $clf\gets loadClassifier$
+\State $reports\gets getReportedPosts$
+\State $cleanReports\gets cleanData(reports)$
+\State $reportFeatures\gets extractFeatures(cleanReports)$
+\State Re-train $clf$ using $reportFeatures$
+\end{algorithmic}
+\end{algorithm}
+
 \subsection{Content Filtering}
 The filtering of content allows the users to receive tailored content, which is more likely to be of interest of them and therefore instils trust in the social network. The importance of the performance of this area of the system on the success of the overall project means that three different models will be designed and compared using the techniques discussed in section \ref{sec:research-content-filtering}: Na\"ive Bayes, SVMs and k-nearest neighbours. Once the models are able to successfully detect the category of a post, the post category can be updated in the database, which will allow filtered feeds to retrieve the relevant content to be displayed to the user. 
 
