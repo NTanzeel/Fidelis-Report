@@ -1,5 +1,14 @@
 **/.DS_Store
-**/.aux
+**/*.aux
+**/*.bak
+**/*.bbl
+**/*.blg
+**/*.lof
+**/*.log
+**/*.lot
+**/*.out
+**/*.gz
+**/*.toc
 
 .texpadtmp
 
