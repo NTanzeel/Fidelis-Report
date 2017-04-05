@@ -1,0 +1,14 @@
+\section{Data Collection}
+
+\subsection{Training Data}
+Both abuse detection and tag categorisation use supervised machine learning techniques in order to classify posts.  Therefore, data must be collected with which the machine learning models can be trained. Because the data will be immutable, storing the training data in Comma-Separated Values (CSV) files will be sufficient. In addition, this file format is easily compatible for reading into the Python scripts which will build the model.
+
+As part of their competition `Detecting Insults in Social Commentary', Kaggle provided CSV datasets containing sample messages alongside a boolean attribute, representing whether that post is determined to be abusive or not ~\cite{Kaggle:Dataset}. This data is publicly available and the messages are in the same format as Fidelis posts would be expected to be, making it suitable for use when training the model.
+
+Whereas the Kaggle have curated a clean dataset which can be readily used in training the abuse detection, a dataset containing sample posts alongside their category was not available. However, Zubiaga and Ji have published a dataset containing Tweet IDs with their corresponding topic tag ~\cite{Zubiaga:Tweets}. For this dataset to be usable in this project when predicting the category of posts on the social network, further data must be collected from the Twitter API so that the text of the Tweet can be determined, since it is the text which contains the features from which the model can learn.
+
+\subsection{Template Data}
+
+
+\subsection{User Authentication}
+Manually

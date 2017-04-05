@@ -1,0 +1,26 @@
+\subsection{Reputation Scoring}
+It seems clear that collaboration events are a popular method of assessing reputation in online systems. The Sporas and Histos algorithms demonstrate mechanisms for this scoring using collaboration events \cite{mcnally2013} \cite{zacharia2000}. Ultimately, however, these algorithms did not meet the requirements for reputation scoring. The Fidelis system would in theory serve a very complex network of users, which constrains the choice of reputation scoring algorithms. The proposed algorithm would need to run on the entire network each day (to score the reputation of both users and posts). Histos and Sporas would both be costly to run given the data stored in our database and so a similar, less complex method that adopts elements from Histos and Sporas was considered. This method involves simply performing a sum of each collaboration event, where each event type has a different weighting denoting the relative `importance' of the event in calculating reputation. The weighting functions are shown here for users and posts respectively
+
+\begin{equation}
+	\label{eq:rep_weight_user}
+		w(c_u) = \left\{\begin{matrix}
+			0.3 & if\ c\ is\ an\ upvote\ on\ a\ post\ by\ u\\ 
+			-0.3 & if\ c\ is\ a\ downvote\ on\ a\ post\ by\ u \\ 
+			0.1 & if\ c\ is\ an\ upvote\ on\ a\ comment\ by\ u \\ 
+			-0.1 & if\ c\ is\ a\ downvote\ on\ a\ comment\ by\ u \\ 
+			0.2 & if\ c\ is\ a\ comment\ on\ a\ post\ by\ u\\ 
+			0.5 & if\ c\ is\ another\ user\ following\ u
+		\end{matrix}\right.
+\end{equation}
+		
+\begin{equation}
+	\label{eq:rep_weight_post}
+	 w(c_p) = \left\{\begin{matrix}
+			0.1 & if\ c\ is\ an\ upvote\ on\ post\ p \\ 
+			-0.1 & if\ c\ is\ a\ downvote\ on\ post\ p \\ 
+			0.2 & if\ c\ is\ a\ comment\ on\ post\ p
+	\end{matrix}\right.
+\end{equation}
+
+\noindent
+, where the weighting function \(w\) gives the weighting of a collaboration event involving user \(u\): \(c_u\). The values of this function could, of course, be changed at any time in an attempt to produce more accurate reputation scoring. Once a reputation score has been calculated for each user, these scores will be scaled between 0 and 1.
