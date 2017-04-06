@@ -1,5 +1,5 @@
 \subsection{Abuse Detection}
-Abuse detection will be performed on Fidelis to filter out derogatory and abusive content from the users post feed. Performing abuse detection will provide users with confidence that they will not encounter content they deem offensive whilst on Fidelis. Different users will have varying levels of tolerance towards abuse, so users should be allowed to determine what abuse is filtered from their feed. To this end, users should be able toggle their `tolerance' level, which will determine what content is removed or included on their feed. The following sections will look at the various stages that need to be considered for abuse detection. Namely, data pre-processing, model building and data handling
+Abuse detection will be performed on Fidelis to filter out derogatory and abusive content from the users post feed. Performing abuse detection will provide users with confidence that they will not encounter content they deem offensive whilst on Fidelis. Different users will have varying levels of tolerance towards abuse, so users should be allowed to determine what abuse is filtered from their feed. To this end, users should be able toggle their `tolerance' level, which will determine what content is removed or included on their feed. Allowing toggling of abuse level means that we are not interested in a binary classification problem, and instead move towards the idea of how likely a user will find a piece of text offensive. Whereas with the original approach we had either 0 (post is not abusive) or 1 (post is abusive), introducing a probabilistic score will enable the user to select their own tolerance level. The following sections will look at the various stages that need to be considered for abuse detection. Namely, data pre-processing, model building and data handling
 
 \subsubsection{Data Pre-Processing}
 As mentioned in Chapter \ref{Chapter:Research}, abuse detection is regularly achieved by building a classifier trained on features extracted from relevant texts. Before a classifier can be trained, the data must first be fetched and cleaned. Cleaning data is important before processing as `dirty' data can have an adverse effect on model performance. In the case of natural lanuage processing, data cleaning can involve \cite{han2011data}:
@@ -32,8 +32,8 @@ Abuse detection is a classification problem; a piece of text is either abusive o
 \end{algorithm}
 
 \subsubsection{Handling Abusive Data}
--On Facebook, 55 million status updates are made daily \cite{kissmetrics:fb-stats}, or $\tilde{636}$. It would therefore be infeasible to expect to categorise posts during real-time due to the sheer number of posts that can be encountered. To counteract this, the classifier should be run on posts daily at a chosen time. 
-Algorithm \ref{alg:abuse-classification} shows the procedure that will be used to classify user posts made on Fidelis, and algorithm \ref{}
+On Facebook, 55 million status updates are made daily \cite{kissmetrics:fb-stats}. This equates to \textasciitilde 636 posts per second. It would therefore be infeasible to expect to categorise posts during real-time due to the sheer number of posts that can be encountered. To counteract this, the classifier should be run on posts daily at a chosen time. The results from classifying posts as abusive should not only be reflected in them being hidden from the users post feed - the reputation score of the abusive post and the user making the post should be updated accordingly. Algorithm \ref{alg:abuse-classification} shows the procedure that will be used to classify user posts made on Fidelis.
+
 \begin{algorithm}
 \caption{Algorithm for post classification}
 \label{alg:abuse-classification}
@@ -50,9 +50,11 @@ Algorithm \ref{alg:abuse-classification} shows the procedure that will be used t
 \end{algorithmic}
 \end{algorithm}
 
+The classifier built for abuse detection will not be perfect, and there is a chance that it will not be able to detect all types of abusive content posted to Fidelis. The classifier must therefore be re-trained with posts that are manually flagged by users as offensive. Using this new data, the accuracy of the classifier can improve over time. Algorithm \ref{alg:model-improvement} shows how posts that are flagged as abusive by the user will be retrieved and used to re-train the classifier.
+
 \begin{algorithm}
-\caption{Algorithm for post classification}
-\label{alg:abuse-retrain}
+\caption{Algorithm for re-training the classifier}
+\label{alg:model-improvement}
 \begin{algorithmic}[1]
 \State $clf\gets loadClassifier$
 \State $reports\gets getReportedPosts$
