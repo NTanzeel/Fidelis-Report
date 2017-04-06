@@ -24,3 +24,42 @@ It seems clear that collaboration events are a popular method of assessing reput
 
 \noindent
 , where the weighting function \(w\) gives the weighting of a collaboration event involving user \(u\): \(c_u\). The values of this function could, of course, be changed at any time in an attempt to produce more accurate reputation scoring. Once a reputation score has been calculated for each user, these scores will be scaled between 0 and 1.
+
+\newcommand{\myindent}[1]{
+\newline\makebox[#1cm]{}
+}
+
+\begin{algorithm}
+\caption{User reputation scoring algorithm}
+\label{alg:user-recommendations}
+\begin{algorithmic}[1]
+\State $users\gets getAllUsers()$
+\ForAll{users $u$}
+	
+	\State $post\_upvotes\gets w(post\_upvote)\cdot getPostUpvotes(u)$
+	\State $post\_downvotes\gets w(post\_downvote)\cdot getPostDownvotes(u)$
+	\State $comment\_upvotes\gets w(comment\_upvote)\cdot getCommentUpvotes(u)$
+	\State $comment\_downvotes\gets w(comment\_downvote)\cdot getCommentDownvotes(u)$
+	\State $comments\gets w(comment)\cdot commentsgetPostComments(u)$
+	\State $followers\gets w(follower)\cdot getFollowers(u)$
+	\State $reputation\gets post\_upvotes + post\_downvotes + comment\_upvotes + comment\_downvotes \myindent{2.6} + followers$
+	
+\EndFor
+\State $users\gets scaleReputation(users)$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Post reputation scoring algorithm}
+\label{alg:user-recommendations}
+\begin{algorithmic}[1]
+\State $posts\gets getAllPosts()$
+\ForAll{posts $p$}
+	\State $upvotes\gets w(upvotes)\cdot getPostUpvotes(p)$
+	\State $downvotes\gets w(downvotes)\cdot getPostDownvotes(p)$
+	\State $comments\gets w(comments)\cdot getPostComments(p)$
+	\State $reputation\gets upvotes + downvotes + comments$
+\EndFor
+\State $posts\gets scaleReputation(posts)$
+\end{algorithmic}
+\end{algorithm}
