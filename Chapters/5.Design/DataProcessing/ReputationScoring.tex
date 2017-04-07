@@ -1,5 +1,5 @@
 \subsection{Reputation Scoring}
-It seems clear that collaboration events are a popular method of assessing reputation in online systems. The Sporas and Histos algorithms demonstrate mechanisms for this scoring using collaboration events \cite{mcnally2013} \cite{zacharia2000}. Ultimately, however, these algorithms did not meet the requirements for reputation scoring. The Fidelis system would in theory serve a very complex network of users, which constrains the choice of reputation scoring algorithms. The proposed algorithm would need to run on the entire network each day (to score the reputation of both users and posts). Histos and Sporas would both be costly to run given the data stored in our database and so a similar, less complex method that adopts elements from Histos and Sporas was considered. This method involves simply performing a sum of each collaboration event, where each event type has a different weighting denoting the relative `importance' of the event in calculating reputation. The weighting functions are shown here for users and posts respectively
+It seems clear that collaboration events are a popular method of assessing reputation in online systems. The Sporas and Histos algorithms demonstrate mechanisms for this scoring using collaboration events \cite{mcnally2013} \cite{zacharia2000}. Ultimately, however, these algorithms did not meet the requirements for reputation scoring in this case. The Fidelis system would in theory serve a very large, complex network of users, which constrains the choice of reputation scoring algorithms. The proposed algorithm would need to run on the entire network each day (to score the reputation of both users and posts). Histos and Sporas would both be costly to run given the data stored in our database, therefore a similar, less complex method that adopts elements from Histos and Sporas was considered. This method involves simply performing a sum of each collaboration event, where each event type has a different weighting denoting the relative `importance' of the event in calculating reputation. The weighting functions are shown here for users and posts respectively
 
 \begin{equation}
 	\label{eq:rep_weight_user}
@@ -23,19 +23,18 @@ It seems clear that collaboration events are a popular method of assessing reput
 \end{equation}
 
 \noindent
-, where the weighting function \(w\) gives the weighting of a collaboration event involving user \(u\): \(c_u\). The values of this function could, of course, be changed at any time in an attempt to produce more accurate reputation scoring. Once a reputation score has been calculated for each user, these scores will be scaled between 0 and 1.
+where the weighting function \(w\) gives the weighting of a given collaboration event \(c\). The values of this function could, of course, be changed at any time in an attempt to produce more accurate reputation scoring. Once a reputation score has been calculated for each user, these scores will be normalised between 0 and 1. The pseudocode for this process is shown in algorithms \ref{alg:user-reputation} \ref{alg:post-reputation} for reputation scoring users and posts respectively.
 
 \newcommand{\myindent}[1]{
 \newline\makebox[#1cm]{}
 }
 
-\begin{algorithm}
+\begin{algorithm}[H]
 \caption{User reputation scoring algorithm}
-\label{alg:user-recommendations}
+\label{alg:user-reputation}
 \begin{algorithmic}[1]
 \State $users\gets getAllUsers()$
 \ForAll{users $u$}
-	
 	\State $post\_upvotes\gets w(post\_upvote)\cdot getPostUpvotes(u)$
 	\State $post\_downvotes\gets w(post\_downvote)\cdot getPostDownvotes(u)$
 	\State $comment\_upvotes\gets w(comment\_upvote)\cdot getCommentUpvotes(u)$
@@ -43,15 +42,14 @@ It seems clear that collaboration events are a popular method of assessing reput
 	\State $comments\gets w(comment)\cdot commentsgetPostComments(u)$
 	\State $followers\gets w(follower)\cdot getFollowers(u)$
 	\State $reputation\gets post\_upvotes + post\_downvotes + comment\_upvotes + comment\_downvotes \myindent{2.6} + followers$
-	
 \EndFor
 \State $users\gets scaleReputation(users)$
 \end{algorithmic}
 \end{algorithm}
 
-\begin{algorithm}
+\begin{algorithm}[H]
 \caption{Post reputation scoring algorithm}
-\label{alg:user-recommendations}
+\label{alg:post-reputation}
 \begin{algorithmic}[1]
 \State $posts\gets getAllPosts()$
 \ForAll{posts $p$}
@@ -63,3 +61,5 @@ It seems clear that collaboration events are a popular method of assessing reput
 \State $posts\gets scaleReputation(posts)$
 \end{algorithmic}
 \end{algorithm}
+
+
