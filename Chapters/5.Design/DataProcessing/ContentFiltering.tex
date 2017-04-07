@@ -1,14 +1,14 @@
 \subsection{Content Filtering}
 The filtering of content allows the users to receive tailored content, which is more likely to be of interest of them and therefore instils trust in the social network. The importance of the performance of this area of the system on the success of the overall project means that three different models will be designed and compared using the techniques: Na\"ive Bayes, SVMs and Stochastic Gradient Descent (SGD). Once the models are able to successfully detect the category of a post, the post category can be updated in the database, which will allow filtered feeds to retrieve the relevant content to be displayed to the user. 
 
-This section will discuss the design decisions made for the content filtering throughout each stage of the process. This includes the preprocessing of the data and the training of the model as well as algorithms for testing the efficacy of the model and using it to predict new posts as they are made on Fidelis.
+This section will discuss the design decisions made for the content filtering throughout each stage of the process. This includes the preprocessing of the data and the training of the model as well as algorithms for testing the efficacy of the model and using it to predict new posts as they are made on Fidelis. There are similarities between the processing performed in this section and section \ref{sec:abuse-detection}, because they are both machine learning techniques involving NLP, however there are significant differences in how the features are extracted and how the models are built.
 
 \subsubsection{Preprocessing}
-Before being able to train the model, preprocessing must be carried out on the data. This is made up of two parts: data cleaning and feature extraction. Algorithm \ref{alg:category-filter-cleaning} shows how data cleaning is performed, which removes any non-ASCII characters, Twitter entities (such as mentions and URLs), stop words and punctuation because they are not informative of the topic of the post. It also lemmatizes the words so that words with the same stem become the identical. If the overall number of characters in the cleaned post is less than 20, the empty set is returned instead of the cleaned post, because it is deemed to not be informative enough to be used in the training sample.
+Before being able to train the model, preprocessing must be carried out on the data. This is made up of two parts: data cleaning and feature extraction. Algorithm \ref{alg:content-filter-cleaning} shows how data cleaning is performed, which removes any non-ASCII characters, Twitter entities (such as mentions and URLs), stop words and punctuation because they are not informative of the topic of the post. It also lemmatizes the words so that words with the same stem become the identical. If the overall number of characters in the cleaned post is less than 20, the empty set is returned instead of the cleaned post, because it is deemed to not be informative enough to be used in the training sample.
 
 \begin{algorithm}
-\caption{Category filter cleaning algorithm}
-\label{alg:category-filter-cleaning}
+\caption{Content filter cleaning algorithm}
+\label{alg:content-filter-cleaning}
 \begin{algorithmic}[1]
 \Function{clean}{Post $post$}
 	\State $clean\gets \emptyset$
@@ -17,7 +17,7 @@ Before being able to train the model, preprocessing must be carried out on the d
 	\State $post\gets post\setminus removePunc(post)$
 	\ForAll{$word \in post$}
 		\State $word\gets lemmatize(word)$
-		\If{Words $word \in stopwords$} 
+		\If{Word $word \in stopwords$} 
 			\State \textbf{break} 
 		\EndIf
 		\If{$len(word) < 3$} 
@@ -34,22 +34,81 @@ Before being able to train the model, preprocessing must be carried out on the d
 \end{algorithmic}
 \end{algorithm}
 
-After cleaning the data, features need to be extracted from the cleaned posts, which act as attributes that the machine learning model can learn from. The algorithm for this stage is shown in \ref{alg:category-filter-features}, which takes the dataframe consisting of cleaned post/category pairs in the training set as input ($dataframe$) and outputs the new dataframe $tf\_idf$, which contains the tf-idf score of each uni- and bigram in the cleaned posts. Bigrams are used because two consecutive words within a cleaned post may be more representative of a topic than a single word in isolation. The functions $countVectorize()$ takes the dataframe containing ngrams and converts it such that each ngram is an attribute and the value of that attribute for each post is the number of times that particular ngram appears in the post. $tfidfTransform()$ then takes this dataframe and replaces the counts with the tf-idf score.
+After cleaning the data, features need to be extracted from the cleaned posts, which act as attributes that the machine learning model can learn from. The algorithm for this stage is shown in \ref{alg:content-filter-features}, which takes the dataframe consisting of cleaned post/category pairs in the training set as input ($dataset$) and outputs the new dataframe $tf\_idf$, which contains the tf-idf score of each uni- and bigram in the cleaned posts. Bigrams are used because two consecutive words within a cleaned post may be more representative of a topic than a single word in isolation. The functions $countVectorize()$ takes the dataframe containing ngrams and converts it such that each ngram is an attribute and the value of that attribute for each post is the number of times that particular ngram appears in the post. $tfidfTransform()$ then takes this dataframe and replaces the counts with the tf-idf score.
 
 \begin{algorithm}
-\caption{Category filter feature extraction}
-\label{alg:category-filter-features}
+\caption{Content filter feature extraction}
+\label{alg:content-filter-features}
 \begin{algorithmic}[1]
+\Function{featureExtraction}{$dataset$}
 \State $tf\_idf\gets \emptyset$
-\ForAll{Rows $row \in dataframe$}
+\ForAll{Row $row \in dataset$}
 	\State $row[clean\_post]\gets row[clean\_post]\cup getBigrams(row[clean\_post])$
 \EndFor
-\State $tf\_idf\gets countVectorize(dataframe)$
+\State $tf\_idf\gets countVectorize(dataset)$
 \State \Return{$tfidfTransform(tf\_idf)$}
+\EndFunction
 \end{algorithmic}
 \end{algorithm}
 
 \subsubsection{Model Building}
+Independent of the type of model being built, the pipeline in algorithm \ref{alg:content-filter-pipeline} demonstrates how the model is built. In the case where the model is being built for the Fidelis site, the entire training set is used initially, because no content exists on the site. However, the model can be retrained on newer posts when enough content exists in the Fidelis database.
 
+\begin{algorithm}
+\caption{Content filter model pipeline}
+\label{alg:content-filter-pipeline}
+\begin{algorithmic}[1]
+\State $data\gets getDataset()$
+\ForAll{Post $data[post]$}
+	\State $data[post]\gets clean(data[post])$
+\EndFor
+\State $data\gets FeatureExtraction(data)$
+\State $model \gets train(data)$
+\end{algorithmic}
+\end{algorithm}
+
+Although algorithm \ref{alg:content-filter-pipeline} is sufficient for building the model to be used in the site to predict the topic of new incoming posts, the algorithm needs to be adapted slightly so that the different models can be compared. This new algorithm incorporates cross-validation, where subsets of the training set are used for testing the model to determine how accurate it is. The algorithm used for building the models so that they can be evaluated is shown in \ref{alg:content-filter-cv}. The algorithm uses 10-fold cross-validation and then computes a score for the model based on the mean fraction of samples in the test set which is correctly predicted across each of the folds. The $randomSubsample(data,n)$ function splits the data into $n$ random subsamples, creating an array of test sets. The algorithm can then be repeated for each of the techniques and the scores can be compared.
+
+\begin{algorithm}
+\caption{Content filter model cross-validation}
+\label{alg:content-filter-cv}
+\begin{algorithmic}[1]
+\State $data\gets getDataset()$
+\ForAll{Post $data[post]$}
+	\State $data[post]\gets clean(data[post])$
+\EndFor
+\State $data\gets featureExtraction(data)$
+\State $testsets\gets randomSubsample(data, 10)$
+\State $score\gets 0$
+\ForAll{$test \in testsets$}
+	\State $training\gets data\setminus test$
+	\State $model\gets train(data)$
+	\State $score\gets score + model.predict(test).score$
+\EndFor
+\State $score\gets score/10$
+\end{algorithmic}
+\end{algorithm}
 
 \subsubsection{Predicting Categories}
+Once the model has been built, it can then be deployed to predict the categories of incoming posts. However, whether or not the prediction should be performed instantly or in the background depends on the speed the topic is able to be predicted. Ideally, the topic can be predicted instantly so that the UI can then offer the user the option to change the prediction immediately after the post is created. However, if the prediction is slow, the system will appear unresponsive whilst waiting for the prediction to made and therefore should be done in the background. This would then rely on the user to change the topic of any incorrectly predicted posts without prompt from the system, which may reduce the ability of the model to improve over time as the dataset becomes more unreliable. Therefore, the speed of prediction must be taken into account alongside the accuracy score of the model when selecting which model to use in the site.
+
+The algorithm \ref{alg:content-filter-predict} shows the process of predicting the category of the post, as well as how the system is updated with any alterations made by the user to the post topic. When storing the topic in the database, the tags in the post are given a category rather than the entire post. This is because the feeds are filtered based on tags rather than posts themselves.
+
+\begin{algorithm}
+\caption{Content filter prediction}
+\label{alg:content-filter-predict}
+\begin{algorithmic}[1]
+\Function{predict}{Model $model$}
+	\State $post\gets getNewPost()$
+	\State $topic\gets model.predict(post)$
+	\ForAll{Tag $tag \in post$}
+		\State Add $(tag,topic)$ to Category-Tag table
+	\EndFor
+	\If{$topic$ is changed}
+		\ForAll{Tag $tag \in post$}
+			\State Update $(tag,topic)$ in Category-Tag table
+		\EndFor
+	\EndIf
+\EndFunction
+\end{algorithmic}
+\end{algorithm}

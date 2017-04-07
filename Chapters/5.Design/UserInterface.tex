@@ -14,17 +14,94 @@ However, the Home page, which will contain a feed of posts followed by an author
 
 \begin{figure}
 \centering
-\includegraphics[height=3in]{Images/Design/sitemap}
-\label{fig:sitemap}
+\includegraphics[height=2.7in]{Images/Design/sitemap}
 \caption{Fidelis Sitemap}
+\label{fig:sitemap}
 \end{figure}
 
 \subsection{Navigation}
-\subsubsection{Logged In}
-\subsubsection{Logged Out}
+A navigation bar provides users with a quick way of accessing pages on a website. The navigation is usually located at the top of the page, and includes `quick-link' icons that enable the user to easily navigate to pages represented by the icon. Figure \ref{fig:navs} shows the navigation bars for Facebook and Twitter. In both we can see shared elements, such as the profile and home icons. In addition to the icons, the navigation bars also have search boxes. These search boxes enable users to explore content available on each site by providing keywords.
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{1\linewidth}
+	\includegraphics[width=1\linewidth]{Images/Design/fb-nav}
+	\caption{}
+	\label{fig:fb-nav}
+\end{subfigure}
+\begin{subfigure}{1\linewidth}
+	\includegraphics[width=1\linewidth]{Images/Design/twitter-nav}
+	\caption{}
+	\label{fig:twitter-nav}
+\end{subfigure}
+\caption{Navigation bar designs for (a) Facebook and (b) Twitter}
+\label{fig:navs}
+\end{figure}
+
+By studying existing navigation bar designs, concept designs for navigation on Fidelis were created. These designs can be seen in Figure \ref{fig:fidelis-navs}. There will be two navigation bars - one for unauthorised users and the other for authorised users. Both designs employ intuitive icons that will allow the user to identify the page they will be taken to when the icon is clicked on. To signify the page users are currently on, an orange underline will highlight the icon corresponding to the page the user has navigated to. In addition to this, the navigation bar will also include a search field which will allow the user to locate specific categories or users. The two navigation bars differ slightly in the pages they allow the user to navigate to. When a user is not logged in, they will be unable to view their notifications (signifed by the bell icon), or view their profile. However, they will still be able to view public posts in a category they search for, or view a public user profile.
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{1\linewidth}
+	\includegraphics[width=1\linewidth]{Images/Design/nav-unauthorised}
+	\caption{}
+	\label{fig:nav-unauth}
+\end{subfigure}
+\begin{subfigure}{1\linewidth}
+	\includegraphics[width=1\linewidth]{Images/Design/nav-authorised}
+	\caption{}
+	\label{fig:nav-auth}
+\end{subfigure}
+\caption{Fidelis navigation bar designs for (a) unauthorised and (b) authorised users}
+\label{fig:fidelis-navs}
+\end{figure}
+
 \subsection{Authentication}
+User authentication involves either collecting the credentials of a user to verify their identity and retrieve the relevant data for that user, or allowing a user to register a new account. These two processes for authentication are normally represented with log-in and registration pages. The following sections will look at the design for each of these.
+
 \subsubsection{Log In}
+The log-in page should allow an existing user to enter their log-in credentials. On most sites this is a combination of either email or user name, and a password. To be able to correctly verify user identity, both email (or username) and password must be required fields. Users are responsible for remembering the log-in credentials, but are also liable to forget them. To prevent user accounts from being inaccessible, the log-in page should include a link that allows users to recover a forgotten password. A user may accidentally navigate to the log-in page, when they actually intended to navigate to the registration. As such, a link must exist on the log-in page which will take users to the registration page. Figure \ref{fig:login-page} shows the concept design for the log-in page, encapsulated all aforementioned aspects.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=1.5in]{Images/Design/login-page}
+\caption{Design for log-in page}
+\label{fig:login-page}
+\end{figure}
+
 \subsubsection{Register}
+The registration page should enable new users to enter their details and create an account on Fidelis. Sites vary in the details they collect during registration. Figure \ref{fig:reg-pages} shows the registration pages for Facebook, Twitter and Reddit. Each of the three sites collects user email addresses and passwords. These two pieces of information are constan across almost all registration pages, regardless of the website. In addition to this, Reddit, as seen in Figure \ref{fig:reddit-reg} asks only for a username. Facebook and Twitter registration (Figures \ref{fig:fb-reg} and \ref{fig:twitter-reg}) do not require a username, and instead collect the users full name. Only Facebook requires a date of birth and gender during registration. 
+
+\begin{figure}
+\centering
+\begin{subfigure}[b]{.4\linewidth}
+	\includegraphics[height=1.5in]{Images/Design/fb-reg}
+	\caption{}
+	\label{fig:fb-reg}
+\end{subfigure}
+\begin{subfigure}[b]{.4\linewidth}
+	\includegraphics[height=1.5in]{Images/Design/twitter-reg}
+	\caption{}
+	\label{fig:twitter-reg}
+\end{subfigure}
+\begin{subfigure}[b]{.6\linewidth}
+	\includegraphics[height=1.5in]{Images/Design/reddit-reg}
+	\caption{}
+	\label{fig:reddit-reg}
+\end{subfigure}
+\caption{Registration pages for (a) Facebook (b) Twitter and (c) Reddit}
+\label{fig:reg-pages}
+\end{figure}
+
+Figure \ref{fig:register-page} shows the design for the Fidelis registration page. Users will be required to enter their name, email, username, date of birth and password. Although not entirely necessary initially, it was decided to retain user date of births as thought was put into future uses for it. As the system grows, it is inevitable that certain categories or tags will contain content unsuitable for younger audiences. Therefore, age can be used a tool to filter unsuitable content for younger users.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=2in]{Images/Design/register-page}
+\caption{Design for registration page}
+\label{fig:register-page}
+\end{figure}
+
 \subsection{Home}
 \subsubsection{Logged Out}
 \subsubsection{Home Page}
