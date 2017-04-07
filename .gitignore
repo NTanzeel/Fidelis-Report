@@ -9,6 +9,7 @@
 **/*.out
 **/*.gz
 **/*.toc
+**/*.sav
 
 .texpadtmp
 
