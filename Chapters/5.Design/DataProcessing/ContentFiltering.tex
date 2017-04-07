@@ -1,37 +1,55 @@
 \subsection{Content Filtering}
-The filtering of content allows the users to receive tailored content, which is more likely to be of interest of them and therefore instils trust in the social network. The importance of the performance of this area of the system on the success of the overall project means that three different models will be designed and compared using the techniques discussed in section \ref{sec:research-content-filtering}: Na\"ive Bayes, SVMs and k-nearest neighbours. Once the models are able to successfully detect the category of a post, the post category can be updated in the database, which will allow filtered feeds to retrieve the relevant content to be displayed to the user. 
+The filtering of content allows the users to receive tailored content, which is more likely to be of interest of them and therefore instils trust in the social network. The importance of the performance of this area of the system on the success of the overall project means that three different models will be designed and compared using the techniques: Na\"ive Bayes, SVMs and Stochastic Gradient Descent (SGD). Once the models are able to successfully detect the category of a post, the post category can be updated in the database, which will allow filtered feeds to retrieve the relevant content to be displayed to the user. 
 
 This section will discuss the design decisions made for the content filtering throughout each stage of the process. This includes the preprocessing of the data and the training of the model as well as algorithms for testing the efficacy of the model and using it to predict new posts as they are made on Fidelis.
 
 \subsubsection{Preprocessing}
-Before being able to train the model, preprocessing must be carried out on the data. This is to remove any parts of the dataset which are not informative, thus reducing the size of the data, and also to construct new features which may aid in the building of the model. The algorithm \ref{alg:category-filter-preprocess} takes a single post and then returns a multiset $features$ containing each of the features in the post (the same feature may appear multiple times in a single post). 
+Before being able to train the model, preprocessing must be carried out on the data. This is made up of two parts: data cleaning and feature extraction. Algorithm \ref{alg:category-filter-cleaning} shows how data cleaning is performed, which removes any non-ASCII characters, Twitter entities (such as mentions and URLs), stop words and punctuation because they are not informative of the topic of the post. It also lemmatizes the words so that words with the same stem become the identical. If the overall number of characters in the cleaned post is less than 20, the empty set is returned instead of the cleaned post, because it is deemed to not be informative enough to be used in the training sample.
 
 \begin{algorithm}
-\caption{Category filter preprocessing algorithm}
-\label{alg:category-filter-preprocess}
+\caption{Category filter cleaning algorithm}
+\label{alg:category-filter-cleaning}
 \begin{algorithmic}[1]
-\Function{preprocess}{Post $post$}
-	\State $features\gets \emptyset$
+\Function{clean}{Post $post$}
+	\State $clean\gets \emptyset$
 	\State $post\gets post\setminus nonAsciiChars(post)$ 
 	\State $post\gets post\setminus cleanTwitterEntities(post)$
 	\State $post\gets post\setminus removePunc(post)$
-	\For{\textbf{each} $word$ \textbf{in} $post$}
+	\ForAll{$word \in post$}
 		\State $word\gets lemmatize(word)$
-		\If{$word \in stopwords$} 
+		\If{Words $word \in stopwords$} 
 			\State \textbf{break} 
 		\EndIf
 		\If{$len(word) < 3$} 
 			\State \textbf{break} 
 		\EndIf
-		\State Add $word$ to $features$
+		\State Add $word$ to $clean$
 	\EndFor
-	\State $features\gets features\cup bigrams(features)\cup trigrams(features)$
-	\State \Return{$features$}
+	\If{$numChars(clean) < 20$}
+		\State \Return{$\emptyset$}
+	\Else
+		\State \Return{$clean$}
+	\EndIf
 \EndFunction
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Building the Models}
+After cleaning the data, features need to be extracted from the cleaned posts, which act as attributes that the machine learning model can learn from. The algorithm for this stage is shown in \ref{alg:category-filter-features}, which takes the dataframe consisting of cleaned post/category pairs in the training set as input ($dataframe$) and outputs the new dataframe $tf\_idf$, which contains the tf-idf score of each uni- and bigram in the cleaned posts. Bigrams are used because two consecutive words within a cleaned post may be more representative of a topic than a single word in isolation. The functions $countVectorize()$ takes the dataframe containing ngrams and converts it such that each ngram is an attribute and the value of that attribute for each post is the number of times that particular ngram appears in the post. $tfidfTransform()$ then takes this dataframe and replaces the counts with the tf-idf score.
+
+\begin{algorithm}
+\caption{Category filter feature extraction}
+\label{alg:category-filter-features}
+\begin{algorithmic}[1]
+\State $tf\_idf\gets \emptyset$
+\ForAll{Rows $row \in dataframe$}
+	\State $row[clean\_post]\gets row[clean\_post]\cup getBigrams(row[clean\_post])$
+\EndFor
+\State $tf\_idf\gets countVectorize(dataframe)$
+\State \Return{$tfidfTransform(tf\_idf)$}
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Model Building}
 
 
 \subsubsection{Predicting Categories}
