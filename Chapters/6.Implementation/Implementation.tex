@@ -1,24 +1,61 @@
 \chapter{Implementation}
 \label{Chapter:Implementation}
+Having provided detail on the design stage of the project, this chapter of the report begins to look moving from concepts to implementation. The web application being built will provide a way of delivering Fidelis to multiple users across multiple devices rather than creating a separate application tailored to each platform. The following sections will look at the technologies used to implement the application, along with detailed information on algorithm and UI implementation.
 
 \section{Technologies}
+Building Fidelis required collating a number of technologies. The technologies used for implementation can be categorised into storage, processing and visualisation technologies, each of which are discussed below.
+
 \subsection{Storage}
+MySQL is an open source database management system used for managing data held in a relational database management system \cite{MySQL:Home}. It is the world's most popular open source database, being used by some of the largest and fastest-growing organisations including Facebook, Google and Adobe. The reasons behind the use of MySQL database are vast but the key factor is the ease with which a MySQL database can be setup and migrated. MySQL databases have existed for many years which has led to gradual improvements over time, and as a result of these improvements MySQL databases now guarantee stability, scalability and security \cite{MySQL:Why}. The longevity of MySQL database systems is another appealing aspect, and has meant that a wide range of third-party party tools are available to the developer for working with and processing the data. 
+
 \subsection{Processing}
+Majority of the data processing will be done using PHP. All PHP scripts are executed on the server which may produce output that can be presented to the user. The language is used by millions of websites and has for some time been  a popular scripting language for dynamic web development. This wide adoption of the PHP scripting language has allowed extensive libraries and frameworks to be made available and used for rapid development of web applications. One such framework, Laravel, will be used to implement the MVC approach discussed in Chapter \ref{Chapter:Research}. PHP has shown to be scalable as it is powerful enough to be at the core of the biggest blogging system on the web, known as WordPress, but at the same time it is deep enough to run the largest social network, Facebook\cite{W3Schools:PHP_Intro, Wiki:WordPress, Fastcompany:Facebook_PHP}. This means that in the future if the system is to grow large enough, it can easily be scaled as done so over time by the aforementioned examples. 
+
+In addition to PHP, JavaScript will be used for some client-side data processing along with SQL which will be used to process data from the database before it is retrieved. Python will be used to process user data needed for content-filtering, abuse detection, recommendations and reputation scoring. Python was chosen not only for its popularity, but again like PHP it provides an extensive range of libraries that can be used during development. One such library, Scikit-Learn \cite{scikit:home}, provides a number of data mining and analysis tools. 
+
 \subsection{Visualisation}
+
+\subsection{Installation and Setup}
+Many of the technologies being employed are not included by default on an ordinary machine. Thus, before development could be initiated, it was necessary to install and configure the required technologies. This section details the configuration process for the technologies used, along with any prerequisites for them.
+
+\subsubsection{Initial Setup}
+\subsubsection{IDE and Laravel}
+
+\subsection{Routing and Middleware}
+Laravel allows the developer to define custom routes in contract to the normal approach where routes are determined by the URI of the page. In addition, Laravel allows for filtering of HTTP requests through the use of middleware. Both of these approaches, used for implementing user friendly URLs and security, are discussed in this section.
+
+\subsubsection{Routes}
+\subsubsection{Middleware}
 
 \section{Data Collection}
 
 \section{Data Processing}
-% We need to change the sub sections but basically this sections is about the algorithms and etc.
 \subsection{Abuse Detection}
 \subsection{Content Filtering}
 \subsection{Content Recommendation}
 \subsection{Reputation Scoring}
 
 \section{Database}
+The database is at the core of the application and thus care must be taken when setting up and configuring the database. A range of tools, provided by Laravel, were employed for configuring and interacting with the database. Details of the configuration and setup are discussed in detail.
 
-\section{Authentication}
+\subsubsection{Configuration}
+\subsubsection{Migrations}
+\subsubsection{Association}
+\subsubsection{Querying}
 
 \section{User Interface}
+\subsection{Navigation}
 
-%% A lot more sections needed.
+\subsection{Authentication}
+Without the contribution of data by the user the system would serve no purpose and be rendered completely useless. For users to be able to add content to the system an authentication system is required which ca be used to not only allow filtered access to members but also associate data with members. Two separate forms of authentication were provided, manual and socialite authentication using oAuth. In order to provide a consistent experience across the system, a user model has been created which encapsulates any information available about  a user and 
+
+\subsubsection{Registration}
+\subsubsection{Login}
+\subsubsection{Recover Account}
+\subsubsection{Authorised Access}
+
+\subsection{Home}
+\subsection{Discover}
+\subsection{Notifications}
+\subsection{Profile}
+\subsection{Settings}
