@@ -15,8 +15,10 @@ There are some consistent attributes across all the tables shown in the diagram.
 
 \subsection{Tables}
 \label{SubSection:Database_Tables}
+As mentioned previously, the database consists of many tables comprising many components of the systems. The design of each of the tables, categorised by components, is discussed in this section.
 
 \subsubsection{User and Authentication}
+The user is one of the core components of the system. A significant amount of the functionality provided by the system, including but not limited to the authentication system, is reliant upon the user table. This can be seen be the dependencies on the user table in figure \ref{fig:Database_ERD}. Despite the fact that the users details are stored in just one detail, the entire component is comprised of two tables due to the authentication mechanism. The main table which hold the user data is called `users'. Along with its primary key field, id, it also has a primary key on the email field and an alternate key on the email and api token field. This will allow for quick fetching of the user using the api token field when accessing the API. The second table comprising the authentication mechanism is the password resets table which stores recovery tokens when the user makes a forgotten password request. Unlike the other tables, this table does not have an id field but instead it has a foreign key, email, relating a recovery token to the user who requested it. This constraint is also the reason for the index on the email field in the users table.
 
 \subsubsection{Settings}
 
