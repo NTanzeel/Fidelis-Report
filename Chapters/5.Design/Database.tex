@@ -23,7 +23,7 @@ The user is one of the core components of the system. A significant amount of th
 \begin{figure}[H]
   \centering
   \includegraphics[width=1.0\textwidth]{Images/Design/Database/Users}
-  \caption{Database Schema Represented as an Entity Relationship Diagram (ERD).} \label{fig:ERD_Users}
+  \caption{Entity Relationship Diagram - Users and Authentication} \label{fig:ERD_Users}
 \end{figure}
 
 \subsubsection{Settings}
@@ -38,32 +38,105 @@ An alternative primary key index was added to the name field in the default sett
 \begin{figure}[H]
   \centering
   \includegraphics[width=1.0\textwidth]{Images/Design/Database/Settings}
-  \caption{Database Schema Represented as an Entity Relationship Diagram (ERD).} \label{fig:ERD_Settings}
+  \caption{Entity Relationship Diagram - User Settings} \label{fig:ERD_Settings}
 \end{figure}
 
 \subsubsection{Following and Blocking}
 
+For the social network to work and provide personalised content from familiar faces, users need the ability to follow one another. To provide this functionality, it is necessary to store the relationships between the various users. A followers table was created for exactly this purpose. The follower id field stores the user that is following and the following id contains the user that is being followed. Both these fields are foreign keys which reference the users table to indicate the users in a relationship. As a user may have a private and would like to control who follows them, an approved field was added which stores a boolean value. As development progressed, a mutual field was added to indicate a two way relationship.
+
+Often abusive users will spam the content posted by the users they follow. As there is no way to prevent a user from following you if your profile is public, an additional feature was required. This feature allows users to block other uses, preventing the blocked user from being able to see the blockers profile and preventing both users from seeing each others content on their feed. The blocked table, similar to the followers table, contains the id of the blocker and the person being blocked with both referencing the user table.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.0\textwidth]{Images/Design/Database/Followers}
+  \caption{Entity Relationship Diagram - Users Followers and Blocked} \label{fig:ERD_Followers}
+\end{figure}
+
 \subsubsection{Categories and Tags}
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.0\textwidth]{Images/Design/Database/Categories}
+  \caption{Entity Relationship Diagram - Categories and Tags} \label{fig:ERD_Categories}
+\end{figure}
 
 \subsubsection{Subscriptions}
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.0\textwidth]{Images/Design/Database/Subscriptions}
+  \caption{Entity Relationship Diagram - Users Subscribed Tags} \label{fig:ERD_Subscriptions}
+\end{figure}
+
 \subsubsection{Posts and Comments}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.0\textwidth]{Images/Design/Database/Categories}
+  \caption{Entity Relationship Diagram - Users Posts and Comments} \label{fig:ERD_Posts}
+\end{figure}
 
 \subsubsection{Voting}
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.0\textwidth]{Images/Design/Database/Votes}
+  \caption{Entity Relationship Diagram - Voting on Posts and Comments} \label{fig:ERD_Voting}
+\end{figure}
+
 \subsubsection{Reporting}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.0\textwidth]{Images/Design/Database/Reports}
+  \caption{Entity Relationship Diagram - Reporting Posts and Comments} \label{fig:ERD_Reporting}
+\end{figure}
 
 \subsubsection{Notifications}
 
-\subsubsection{Recommendation}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.0\textwidth]{Images/Design/Database/Notifications}
+  \caption{Entity Relationship Diagram - User Notifications} \label{fig:ERD_Notifications}
+\end{figure}
+
+\subsubsection{Recommendations}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.0\textwidth]{Images/Design/Database/Recommendations}
+  \caption{Entity Relationship Diagram - Personalised Recommendations} \label{fig:ERD_Recommendations}
+\end{figure}
 
 \subsubsection{Miscellaneous}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.0\textwidth]{Images/Design/Database/Miscellaneous}
+  \caption{Entity Relationship Diagram - Wallpapers and Quotes} \label{fig:ERD_Miscellaneous}
+\end{figure}
 
 \subsection{Normalisation and Redundancy}
 \label{SubSection:Database_Normalisation}
+``Normalisation is the process of efficiently organising data in a database. There are two goals of the normalisation process: eliminating redundant data and ensuring data dependencies make sense.'' \cite{Databases:NormalisationBasics}. There are various normal forms that a database can be normalised to, starting at first normal form. Each time a database is normalised further it usually results in data being split up into more table and more dependencies being created. The database for the system was normalised to third normal form as this removed all redundant data from the tables whilst providing dependencies that made sense.
 
-\subsection{Functional Dependencies and Relationship Constraints}
+%\begin{figure}[H]
+%	\centering
+%	\includegraphics[width=1.0\textwidth]{images/Database/3NF_Items}
+%	\caption{Items Table - Original vs Third Normal Form} \label{fig:3NF_Items}
+%\end{figure}
+
+Third normal form expects that the requirements for all the previous normal forms are met and any columns that are not dependent upon the primary key should be removed \cite{Databases:NormalisationBasics}.
+
+\subsection{Functional Dependencies and Constraints}
 \label{SubSection:Database_Constraints}
+In a large normalised database with several tables, it is often the case that information in one table relates to information in another table. SQL dependencies are the by-name references, that are used in SQL expressions, that make one entity reliant on another entity \cite{Microsoft:Dependencies}. An entity being referenced by another entity is known as a referenced entity whereas an entity referencing another entity is known as a referencing entity. There are two different types of dependencies that can be introduced into a database.
 
-\subsection{Security}
-\label{SubSection:Database_Security}
+\begin{itemize}
+	\item \textbf{Schema-bound dependency}: A schema-bound dependency is a relationship between two entities that prevents the referenced entity from being dropped or modified as long as the referencing entity exists \cite{Microsoft:Dependencies}.
+	\item \textbf{Non-schema-bound dependency}: A non-schema-bound dependency is a relationship between two entities that does not prevent the referenced entity from being dropped or modified \cite{Microsoft:Dependencies}.
+\end{itemize}
+
+Dependencies can be defined in an SQL schema when creating tables by using the references keyword which links an attribute in one entity to an attribute in another. This prevents data being inserted into the referencing entity if the exact value for the attribute does not exist in the referenced entity. This feature is known as referential integrity and prevents redundant data building up in the database. Additionally the administrator can specify the effects of a change in the referenced entity.
+
+In the database design, either directly or indirectly, dependencies were used to link all the entities to one another. This can be seen by the links between tables in figure \ref{fig:Database_ERD}. The relationships among these entities vary between a one-to-one relationship and a one-to-many relationship depending on the type of data being stored. For example, a user can have many posts so a one-to-many relationships exists between the users and posts table.
