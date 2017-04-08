@@ -20,9 +20,28 @@ As mentioned previously, the database consists of many tables comprising many co
 \subsubsection{User and Authentication}
 The user is one of the core components of the system. A significant amount of the functionality provided by the system, including but not limited to the authentication system, is reliant upon the user table. This can be seen be the dependencies on the user table in figure \ref{fig:Database_ERD}. Despite the fact that the users details are stored in just one detail, the entire component is comprised of two tables due to the authentication mechanism. The main table which hold the user data is called `users'. Along with its primary key field, id, it also has a primary key on the email field and an alternate key on the email and api token field. This will allow for quick fetching of the user using the api token field when accessing the API. The second table comprising the authentication mechanism is the password resets table which stores recovery tokens when the user makes a forgotten password request. Unlike the other tables, this table does not have an id field but instead it has a foreign key, email, relating a recovery token to the user who requested it. This constraint is also the reason for the index on the email field in the users table.
 
-\subsubsection{Settings}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.0\textwidth]{Images/Design/Database/Users}
+  \caption{Database Schema Represented as an Entity Relationship Diagram (ERD).} \label{fig:ERD_Users}
+\end{figure}
 
-\subsubsection{Following}
+\subsubsection{Settings}
+Each user will have various settings which they will tune to customise their social network and the way they see information. One way of storing these settings would be to add a new column in the user table for every setting. However this is not the best approach as it would mean continuously updating the users table and the code for inserting and fetching data from this table.
+
+Another approach for storing the settings for each user would be to create a settings table which acts like a dictionary with a key and value column, where the key is the name of the setting. Each row would then be mapped to a user indicating which settings belong to a specific user. The problem encountered with this approach is that when a new user registers, a record for every setting would have to be inserted in the settings table. Once again, this would complicate the process of adding new settings as they would have to be added via code. Additionally, a new record would have to be added for every existing user for this new setting.
+
+In the final design, the second approach along with an additional default settings table was created. This allowed the process of adding new settings to be simplified and reduced a significant amount of redundant data. Most users on the system will use the default browsing experience or only tweak a handful of settings making it unnecessary to replicate every setting for them. Using the default settings table meant that new settings could easily be created by simply adding a new row. Additionally, it also meant that for every user the default settings could be loaded and only settings they changed would be stored in the settings table and loaded to override the default settings.
+
+An alternative primary key index was added to the name field in the default settings table. This allowed for quick fetching of a default setting by name. A foreign key index on the name field in the settings table which referenced the name field in default settings ensured that only settings defined in the default settings table could exist in the users custom settings table.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.0\textwidth]{Images/Design/Database/Settings}
+  \caption{Database Schema Represented as an Entity Relationship Diagram (ERD).} \label{fig:ERD_Settings}
+\end{figure}
+
+\subsubsection{Following and Blocking}
 
 \subsubsection{Categories and Tags}
 
@@ -37,6 +56,8 @@ The user is one of the core components of the system. A significant amount of th
 \subsubsection{Notifications}
 
 \subsubsection{Recommendation}
+
+\subsubsection{Miscellaneous}
 
 \subsection{Normalisation and Redundancy}
 \label{SubSection:Database_Normalisation}
