@@ -13,29 +13,6 @@ Majority of the data processing will be done using PHP. All PHP scripts are exec
 
 In addition to PHP, JavaScript will be used for some client-side data processing along with SQL which will be used to process data from the database before it is retrieved. Python will be used to process user data needed for content-filtering, abuse detection, recommendations and reputation scoring. Like PHP, Python is also executed on the server-side, reducing the amount of processing and computation required on the client-side. Python was chosen not only for its popularity, but again like PHP it provides an extensive range of libraries that can be used during development. Examples of these include Scikit-Learn \cite{scikit:home}, which provides a number of data mining and analysis tools, and \emph{NumPy} and \emph{pandas}, which are useful for data manipulation.
 
-It was mentioned in Chapter \ref{Chapter:Design} that it would not be feasible to run the data processing algorithms in real-time, and as such these would need to be scheduled to run at set intervals. Cron is a unix- system utility that is used to execute tasks at designated times \cite{Ubuntu:Cron}. Tasks that are scheduled for execution are contained in a \textit{crontab} file. Entries in the file appear as:
-\begin{lstlisting}[language=bash]
-* * * * * cmd/to/run
-\end{lstlisting}
-
-\noindent Each asterix represents a time-and-date field, and from left to right these correspond to minute, hour, day, month and weekday \cite{Ubuntu:Cron}. 
-
-Laravel contains a task scheduler which simplifies the process of executing tasks at a given interval. With the scheduler, only the following entry needs to be added to the \textit{crontab} file:
-
-\begin{lstlisting}[language=bash]
-* * * * * php /path-to-your-project/artisan schedule:run >> /dev/null 2>&1
-\end{lstlisting}
-
-\noindent This entry calls the Laravel task scheduler every minute \cite{Laravel:Scheduling}. Laravel's task scheduler provides a number of schedule frequency options, including daily, weekly or even as a custom cron entry \cite{Laravel:Scheduling}. Tasks can be added to the \texttt{schedule()} method in \textit{app/Console/Kernel}. In the method, it is possible to schedule Artisan commands, which can be made by the user, or OS commands. Figure \ref{fig:FidelisSchedule} shows the tasks scheduled to run daily at midnight.
-
-\begin{figure}[H]
-\centering
-\includegraphics[height=1in]{Images/Implementation/FidelisSchedule}
-\caption{Scheduled tasks for Fidelis}
-\label{fig:FidelisSchedule}
-\end{figure}
-
-
 \subsection{Visualisation}
 HTML is coupled with CSS to define page structure, and design the components on the page \cite{W3:HTML5, W3:CSS}. In addition to this, the Laravel blade engine is being used to make the generation of pages easier by splitting content up into views that can be extended by or rendered inside other views \cite{Laravel:Blade}. This encourages good practices by abstracting the system and enforcing modularity throughout. Using the blade enginge supported the idea of using component-driven design, discussed in Chapter \ref{Chapter:ProjectManagement}. Building views in a modular fashion enables development in the future to easily integrate new components and replace master views seamlessly to change the overall system appearance. Bootstrap is also used as an additional framework to make the pages more dynamic by providing visual interaction.
 
@@ -78,10 +55,18 @@ It is possible to create custom middleware using the Artisan utility. The \texti
 \end{figure}
 
 \section{Data Collection}
+Although some of the data will be collected through manual inputs and downloading readily available resources from Kaggle, further data will be required to be collected using API services from social networks such as Twitter. In this section, the implementation of collecting the data from these API services is discussed, as well as how data from manual input is transferred to storage for use by Fidelis.
+
+\subsection{Training Data}
+
+
+\subsection{Template Data}
+
+
+\subsection{User Authentication}
 
 \section{Data Processing}
-As mentioned earlier, Python was chosen for data processing. Python has an established data analysis community, and as such provides a rich assortment of open-source libraries that can be used. With a such a community, documentation was abundant and meant that the implementation of the designs discussed in Chapter \ref{Chapter:Design} were accelerated greatly. Not only this, but existing solutions for problems encountered during development were 
-available, which again sped up the implementation process. 
+As mentioned earlier, Python was chosen for data processing. Python has an established data analysis community, and as such provides a rich assortment of open-source libraries that can be used. With a such a community, documentation was abundant and meant that the implementation of the designs discussed in Chapter \ref{Chapter:Design} were accelerated greatly. Not only this, but existing solutions for problems encountered during development were available, which again sped up the implementation process. 
 
 \subsection{Abuse Detection}
 \subsection{Content Filtering}
@@ -108,7 +93,7 @@ FOF candidate recommendations are retrieved by first getting all users followed 
 \paragraph{User} From this list, FOF user recommendations are chosen by converting the list to a Counter object and picking the most common elements. The counter object was used for this purpose as it enables quick tallying \cite{Python:Counter} the \texttt{most\_common()} method on Counter objects accepts a parameter value for the number of common elements to be returned. This ensures that only the number of required recommendations for the recommendee are returned. Use of the Counter object is given below:
 
 \begin{lstlisting}[language=python]
-fof_users = Counter(fof_users).most_common(num_recommendations)
+	fof_users = Counter(fof_users).most_common(num_recommendations)
 \end{lstlisting}
 
 Reasoning for not using cosine similarity between candidate recommendations and the recommendee are given in Chapter \ref{Chapter:Design}.
@@ -241,7 +226,7 @@ Laravel makes running queries extremely simple using either raw SQL statements, 
 With Laravel, raw SQL statements can be executed using the provided built-in classes. This removes the need to open a database connection, create SQL statements and bind parameters to these statements as this is all done automatically. For example, as shown in the example below, the user can run an SQL query to retrieve a user with a specific ID of 1 just by using the \emph{DB::select} method:
 
 \begin{lstlisting}[language=php]
-$users = DB::select('SELECT * FROM users WHERE id = ?', [1]);
+	$users = DB::select('SELECT * FROM users WHERE id = ?', [1]);
 \end{lstlisting}
 
 \noindent The above query will return an array of objects modelling the user entity in the database. Using this array, it is possible to loop through the array and access the properties of each user as \emph{\$user-$>$property}, where property may be any attribute such as username or email.
@@ -250,7 +235,7 @@ $users = DB::select('SELECT * FROM users WHERE id = ?', [1]);
 The database query builder provides a convenient, fluent, and easy-to-use interface for creating and executing database queries \cite{Laravel:QueryBuilder}. The query builder can perform most operations supported by the database driver. One of the main advantages of using the query builder is that it uses PDO parameter bindings to prevent SQL injections, which means there is no need to sanitise user input. Using the query builder, one could retrieve the user with ID 1 by executing the following statement:
 
 \begin{lstlisting}[language=php]
-$user = DB::table('users')->where('id', 1)->first();
+	$user = DB::table('users')->where('id', 1)->first();
 \end{lstlisting}
 
 \noindent The above query would fetch the result where the user ID matches the provided parameter and retrieve the first result. Once again, the result is returned as an object modelling the user entity and the properties can be accessed again as \emph{\$user-$>$property}.
@@ -259,13 +244,13 @@ $user = DB::table('users')->where('id', 1)->first();
 The Eloquent ORM included with Laravel provides an simple and elegant active record implementation for working with the database \cite{Laravel:Eloquent}. "Object-relational mapping (ORM) is a mechanism that makes it possible to address, access and manipulate objects without having to consider how those objects relate to their data sources" \cite{TechTarget:ORM}. Each database table has a corresponding "model" associated with it that is used database interactions and more specifically the table corresponding to a given model. Models allow the developer to query, insert, update, and delete records in the corresponding table as well as more complex operations such as joining tables. When querying the database using a model, Eloquent automatically instantiates and maps a model for each row in the result allowing the developer to utilise the models behaviour.
 
 \begin{lstlisting}[language=bash]
-$ php artisan make:model Models/User
+	$ php artisan make:model Models/User
 \end{lstlisting}
 
 \noindent Creating a model is made simple again thanks to the Artisan utility. The command above will generate a User model in the \emph{app/Models} directory. Each Eloquent models extends the \emph{Illuminate/Database/Eloquent/Model} class which utilises the query builder for all interactions \cite{Laravel:Eloquent}. By default, Eloquent assumes that each table has a primary key field named \emph{id} and the \emph{created\_at} and \emph{updated\_at} timestamps but these can all be changed by toggling optional properties in the model. In order to use a model, the developer simply needs to import the model in the controller where it will be used. The user can simple execute the following command in order to retrieve the user with ID=1.
 
 \begin{lstlisting}[language=php]
-$user = User::find(1);
+	$user = User::find(1);
 \end{lstlisting}
 
 \noindent The line of code above will return the \emph{User} model. It is again possible to access the model properties as \emph{\$user-$>$property}. The main change to be noticed here is that the user can actually update the properties and save the changes made by executing the following: \emph{\$user-$>$save()} \cite{Laravel:Eloquent}.  The image in figure \ref{fig:UserModel} shows the code for the \emph{User} model. As visible in the image, it is possible to add custom methods to the model which may be called when the model is returned as a result.
