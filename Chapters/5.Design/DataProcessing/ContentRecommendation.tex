@@ -148,13 +148,13 @@ If all aforementioned methods fail to return a set of candidate recommendations,
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Content Recommendations}
-\label{sec:content-recommendations}
-Similarly to user recommendations, users will interact with content recommendations made for them daily and so new content recommendations should be generated for them daily also. Again, before any new recommendations are made we must look at how many recommendations the user currently has. By doing this, we limit any unnecessary computation. In the case of content recommendations, user item vectors will not be used. It was instead decided to use the reputation of a given post, rather than the similarity between the user recommendations are being generated for and the author of the post. The justification behind this is that user recommendations should focus on locating like-minded users, whereas content recommendations should avoid this to diversify the content made available to users. Providing recommendations in this manner again emphasises the desire for Fidelis to break the constraints of the ``echo chamber effect'' currently restricting most social media platforms. By letting the user pick a reputation threshold for recommendations generated for them, we can ensure that users trust their recommendations and can confidently interact with them knowing they are trustworthy. Algorithm \ref{alg:content-recommendations} provides the pseudocode for the procedure described above. 
+\subsubsection{Post Recommendations}
+\label{sec:post-recommendations}
+Similarly to user recommendations, users will interact with content recommendations made for them daily and so new post recommendations should be generated for them daily also. Again, before any new recommendations are made we must look at how many recommendations the user currently has. By doing this, we limit any unnecessary computation. In the case of content recommendations, user item vectors will not be used. It was instead decided to use the reputation of a given post, rather than the similarity between the user recommendations are being generated for and the author of the post. The justification behind this is that user recommendations should focus on locating like-minded users, whereas content recommendations should avoid this to diversify the content made available to users. Providing recommendations in this manner again emphasises the desire for Fidelis to break the constraints of the ``echo chamber effect'' currently restricting most social media platforms. By letting the user pick a reputation threshold for recommendations generated for them, we can ensure that users trust their recommendations and can confidently interact with them knowing they are trustworthy. Algorithm \ref{alg:post-recommendations} provides the pseudocode for the procedure described above. 
 
 \begin{algorithm}
-\caption{Content recommendations algorithm}
-\label{alg:content-recommendations}
+\caption{Post recommendations algorithm}
+\label{alg:post-recommendations}
 \begin{algorithmic}[1]
 \State $val\gets 5$
 \State $reputationThreshold\gets 0.7$
@@ -179,7 +179,7 @@ Similarly to user recommendations, users will interact with content recommendati
 		\State $posts = posts \setminus uVoted \setminus uBlocked$
 		
 		\If{$\left\vert{posts}\right\vert = 0$}
-			\State $getDefaultContent$
+			\State $getDefaultPosts$
 		\Else
 			\For{$p$ in $posts$}
 				\If{$getReputation(p) \geq reputationThreshold$}
@@ -194,10 +194,10 @@ Similarly to user recommendations, users will interact with content recommendati
 
 We will again look at how each of the four recommendation techniques will generate candidate post sets. By providing the user with different ways recommendations can be generated for them will again ensure that users are in control of content they will interact with. 
 
-\paragraph{Friend-of-a-Friend content} Candidate recommendations using this method will build on the follows relationship mentioned earlier in Chapter \ref{sec:user-recommendations} by retrieving the posts from Friend-of-a-Friend users. Getting content in this manner will provide users with a selection of posts that are likely to agree with their own sentiments. 
+\paragraph{Friend-of-a-Friend posts} Candidate recommendations using this method will build on the follows relationship mentioned earlier in Chapter \ref{sec:user-recommendations} by retrieving the posts from Friend-of-a-Friend users. Getting content in this manner will provide users with a selection of posts that are likely to agree with their own sentiments. 
 
 \begin{algorithm}
-\caption{Function for getting Friend-of-a-Friend content}
+\caption{Function for getting Friend-of-a-Friend posts}
 \label{alg:fof-content}
 \begin{algorithmic}[1]
 \Function{getFOFUsers}{User u}
@@ -215,10 +215,10 @@ We will again look at how each of the four recommendation techniques will genera
 \end{algorithmic}
 \end{algorithm}
 
-\paragraph{Explorer content} Explorer content recommendations stress the idea previously mentioned about removing the constraints of the ``echo chamber effect''. By considering other users who post in the same categories as the user recommendations are being generated for, we only consider posts that the user will be interested in. Without considering the similarity between the authors of these posts and the user themselves, we increase the likelihood of exposing users to content they would not normally interact with.
+\paragraph{Explorer posts} Explorer post recommendations stress the idea previously mentioned about removing the constraints of the ``echo chamber effect''. By considering other users who post in the same categories as the user recommendations are being generated for, we only consider posts that the user will be interested in. Without considering the similarity between the authors of these posts and the user themselves, we increase the likelihood of exposing users to content they would not normally interact with.
 
 \begin{algorithm}
-\caption{Function for getting Explorer content}
+\caption{Function for getting Explorer posts}
 \label{alg:explorer-content}
 \begin{algorithmic}[1]
 \Function{getExplorerPosts}{User u}
@@ -233,15 +233,15 @@ We will again look at how each of the four recommendation techniques will genera
 \end{algorithmic}
 \end{algorithm}
 
-\paragraph{Hybrid content} Using this method aims to find the middle ground between the two aforementioned techniques. We take a similar approach as to before and return the intersection between Explorer and Friend-of-a-Friend content as the set of candidate recommendations.
+\paragraph{Hybrid posts} Using this method aims to find the middle ground between the two aforementioned techniques. We take a similar approach as to before and return the intersection between Explorer and Friend-of-a-Friend posts as the set of candidate recommendations.
 
-\paragraph{Default content} Default content recommendations will return the $N$ most popular or reputable posts made on Fidelis. . The function in Algorithm \ref{alg:default-content} shows the procedure for retrieving the most popular posts, but the same procedure can be re-used for getting the most reputable posts.
+\paragraph{Default posts} Default post recommendations will return the $N$ most popular or reputable posts made on Fidelis. . The function in Algorithm \ref{alg:default-posts} shows the procedure for retrieving the most popular posts, but the same procedure can be re-used for getting the most reputable posts.
 
 \begin{algorithm}[H]
-\caption{Function for getting default content}
-\label{alg:default-content}
+\caption{Function for getting default posts}
+\label{alg:default-posts}
 \begin{algorithmic}[1]
-\Function{getDefaultContent}{}
+\Function{getDefaultPosts}{}
 	\State $posts\gets \emptyset$
 	\State $posts\gets getMostPopularPosts$
 	\State $posts\gets sortDescending(posts)$
