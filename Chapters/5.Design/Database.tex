@@ -87,7 +87,7 @@ In order to provide the comment functionality, an additional comments table was 
 
 Posts also have additional features which comments do not have. For example, posts can have images and can be categorised using tags. This is the primary reason that the post table was not removed entirely. An images table was created which mapped the path of the uploaded image(s) to the post which the images belong to. Similarly, a post tag table maps all the tags which have been applied in the post text to the post.
 
-Figure \ref{fig:ERD_Posts} shows the proposed table structure and how the posts and comments table were broken down.
+Figure \ref{fig:ERD_Posts} shows the proposed table structure and how the posts and comments table were broken down. An additional reputation field was added to the posts table to maintain the reputation score computed based on all the interactions with the post and its comments.
 
 \begin{figure}[H]
   \centering
@@ -96,7 +96,7 @@ Figure \ref{fig:ERD_Posts} shows the proposed table structure and how the posts 
 \end{figure}
 
 \subsubsection{Voting}
-
+The functionality for voting will be maintained by just one table. The votes table is very minimal, containing just the user id, comment id and the type of vote. The user id and comment id have a one to many relation to the users and comments table respectively as a user many vote on multiple posts and multiple users may vote on one post. The type field can either hold a positive value or a negative value, indicating likes and dislikes respectively.
 
 \begin{figure}[H]
   \centering
@@ -105,6 +105,7 @@ Figure \ref{fig:ERD_Posts} shows the proposed table structure and how the posts 
 \end{figure}
 
 \subsubsection{Reporting}
+Reporting a post is the next step to voting. Ideally, if a user finds a post irrelevant or offensive, they will dislike it which will recommend less of similar content. However, if a user finds something extremely abusive then, they can report the content to be removed or hidden. This functionality is also provided by just one table. The table, like votes, contains a user id and comment id which have a one to many relation to the users and comments table respectively as a user many report multiple posts and multiple users may report one post. Additionally, a processed boolean field is used to indicate the status of a report. 
 
 \begin{figure}[H]
   \centering
@@ -113,6 +114,7 @@ Figure \ref{fig:ERD_Posts} shows the proposed table structure and how the posts 
 \end{figure}
 
 \subsubsection{Notifications}
+Designing a table for the notification system was particularly tricky. A notification will always be intended for a specific person but it may be regarding various types of interactions. For example, a notification could be about a new follower in which case it is regarding a user or it could be about a vote in which case it is regarding a comment. This made it difficult to store the content which the notification is about with an index to the corresponding table. As a result, the notifications table contained a type field indicating the type of notification, e.g. 'comment' or 'vote'. The notifiable id field has a one to many relationship from the users table as a user may receive many receive many notifications. The notifiable type field stores the model which the notification is for, which for the moment will always be a user but in the future may be a guest or other values. The data field contains the notification data which is comprised of the text and the id of the content it concerns. The downside of this approach is that an index cannot be added on the id of the content to ensure integrity and consistency but the generic advantages outweigh the cons.
 
 \begin{figure}[H]
   \centering
@@ -144,13 +146,13 @@ Some tables just store the static data required for the functionality of some pa
 \label{SubSection:Database_Normalisation}
 ``Normalisation is the process of efficiently organising data in a database. There are two goals of the normalisation process: eliminating redundant data and ensuring data dependencies make sense.'' \cite{Databases:NormalisationBasics}. There are various normal forms that a database can be normalised to, starting at first normal form. Each time a database is normalised further it usually results in data being split up into more table and more dependencies being created. The database for the system was normalised to third normal form as this removed all redundant data from the tables whilst providing dependencies that made sense.
 
-%\begin{figure}[H]
-%	\centering
-%	\includegraphics[width=1.0\textwidth]{images/Database/3NF_Items}
-%	\caption{Items Table - Original vs Third Normal Form} \label{fig:3NF_Items}
-%\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\textwidth]{Images/Design/Database/3NF_Tags}
+	\caption{Tags Table - Original vs Third Normal Form} \label{fig:3NF_Tags}
+\end{figure}
 
-Third normal form expects that the requirements for all the previous normal forms are met and any columns that are not dependent upon the primary key should be removed \cite{Databases:NormalisationBasics}.
+Third normal form expects that the requirements for all the previous normal forms are met and any columns that are not dependent upon the primary key should be removed \cite{Databases:NormalisationBasics}. Figure \ref{fig:3NF_Tags} shows the original tags table and the same table in third normal form which resulted in three different tables. In this scenario, the category field in the tags table was moved into its own table to reduce redundant information storage and a pivot table was introduced to map tags to categories.
 
 \subsection{Functional Dependencies and Constraints}
 \label{SubSection:Database_Constraints}
