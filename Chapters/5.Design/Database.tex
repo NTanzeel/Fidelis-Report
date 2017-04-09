@@ -121,6 +121,8 @@ Figure \ref{fig:ERD_Posts} shows the proposed table structure and how the posts 
 \end{figure}
 
 \subsubsection{Recommendations}
+Recommendations will be used in Fidelis to generate new content for users to explore and interact with. To provide as much variety in recommendations as possible, two recommendation types will be generated (and therefore stored) for users: user and content recommendations. Both tables will need to store the user ID for the user receiving the recommendation, and will also need to store the ID of the recommendation itself (recommendee_id for users and post_id for content). When recommendations are generated, users will not interact with them instantaneously. To monitor recommendation interactions, both tables include a response field which will keep track of a users response to a recommendation (either unread, accepted or rejected). Additionally the content recommendation has a field for tag ID. This ID corresponds to the tag for the post recommendation. Storing this ID provides option for the future use of recommendations. With this field, it will be possible to learn tags users favour and focus on generating recommendations from these. This field could just as easily be used for the opposite reason, and instead aim to generate recommendations outside of the users preferred tags.
+
 \begin{figure}[H]
   \centering
   \includegraphics[width=1.0\textwidth]{Images/Design/Database/Recommendations}
