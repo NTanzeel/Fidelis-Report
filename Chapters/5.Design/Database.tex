@@ -1,5 +1,5 @@
 \section{Database}
-The successful operation of the system, proposed in figure \ref{fig:SystemArchitecture}, is entirely dependent on the database, which stores and provides most, if not all, of the content for the application. For a system so dependent on its data, it is crucial that care and appropriate measures are taken when designing the database. In order for the application to be efficient, both in terms of speed and storage, it is essential that the database is designed in a way that minimises storage space by finding an optimal balance of normalisation and redundancy. To ensure data consistency, various degrees of normalisation were used when designing and developing the database. Taking posts as an example, one could store the username and other details of the author along with every post to improve page loading speeds but this would lead to unnecessary redundancy and a significant increase in storage space. As a result of this, the data was split across multiple tables, based on attributes, which relied on each other through the use of functional dependencies and relationship constraints to ensure consistency and provide a complete dataset. An overview of the database is provided in section \ref{SubSection:Database_Schema} along with a breakdown of the tables based on components of the system in section \ref{SubSection:Database_Tables}. An explanation of the normalisation techniques, dependencies and security are also provided in sections \ref{SubSection:Database_Normalisation}, \ref{SubSection:Database_Constraints}, and \ref{SubSection:Database_Security} respectively.
+The successful operation of the system, proposed in figure \ref{fig:SystemArchitecture}, is entirely dependent on the database, which stores and provides most, if not all, of the content for the application. For a system so dependent on its data, it is crucial that care and appropriate measures are taken when designing the database. In order for the application to be efficient, both in terms of speed and storage, it is essential that the database is designed in a way that minimises storage space by finding an optimal balance of normalisation and redundancy. To ensure data consistency, various degrees of normalisation were used when designing and developing the database. Taking posts as an example, one could store the username and other details of the author along with every post to improve page loading speeds but this would lead to unnecessary redundancy and a significant increase in storage space. As a result of this, the data was split across multiple tables, based on attributes, which relied on each other through the use of functional dependencies and relationship constraints to ensure consistency and provide a complete dataset. An overview of the database is provided in section \ref{SubSection:Database_Schema} along with a breakdown of the tables based on components of the system in section \ref{SubSection:Database_Tables}. An explanation of the normalisation techniques and dependencies is also provided in sections \ref{SubSection:Database_Normalisation} and \ref{SubSection:Database_Constraints} respectively.
 
 \subsection{Schema}
 \label{SubSection:Database_Schema}
@@ -54,7 +54,16 @@ Often abusive users will spam the content posted by the users they follow. As th
 \end{figure}
 
 \subsubsection{Categories and Tags}
+Every post should ideally be categorised into a specific category or even a set of categories. Users can tag their posts manually or allow the categorisation algorithm to do it for them. The issue faced here is that categories are ever evolving and users define new tags every day. To make the process of creating categories easier and store all this tag data, three separate tables were designed. 
 
+\paragraph{Tags}
+The tags table is completely independent of every other table in the database. It simply stores the text that makes up a tag and indexes this field so that tags can quickly be received using their text value.
+
+\paragraph{Categories}
+As with the tags table, this table is completely independent of all others in the database. The difference with this table is that it will contain only a subset of tags which all other tags can be categorised into. Additionally, a description is also added for each tag in this table.
+
+\paragraph{Category Tag}
+This table is a kind of pivot table between categories and tags. The only purpose of this table is to link each tag to a category in the categories table. A tag may be linked to multiple categories hence the one to many relation from the tags to this pivot table. A root field is also added to this table which indicates that the tag has same the text value as the category name. For example, the tag `Politics' would be considered a root for the `Politics' category but it would also fall under the `News' category.
 
 \begin{figure}[H]
   \centering
@@ -63,6 +72,7 @@ Often abusive users will spam the content posted by the users they follow. As th
 \end{figure}
 
 \subsubsection{Subscriptions}
+The subscriptions table is responsible for storing the relationship between a user and a tag or many tags. For this reason, the subscriptions table simply stores a user id along with a tag id for each record. Each record indicates the user that is subscribed to a specific tag. As a user may subscribe to multiple tags and a tag may be subscribed to by multiple users, a one to many relationship is used from the users and tags table to the user id and tag id fields respectively.
 
 \begin{figure}[H]
   \centering
@@ -71,14 +81,22 @@ Often abusive users will spam the content posted by the users they follow. As th
 \end{figure}
 
 \subsubsection{Posts and Comments}
+Being able to efficiently store posts, comments, and images is one of the core features of any social network. In order to store posts in fidelis, a posts table was created which contained the user id, the post text, the number of comments, the number of up and down votes and the abuse score. These fields encapsulated all the required data to display a post to other users.
+
+In order to provide the comment functionality, an additional comments table was created. This table, much like the posts table, stored the user id, the comment text, the number of up and down votes and the abuse score along with the post id. At this point it became clear that there were too many similarities between the posts and comments table which added unnecessary complexity. To resolve this and make the design more efficient, duplicate attributes across the tables were removed from the post table. Now, instead of storing posts in the posts table, an empty post would be created along with a comment which stored the post text. As a result, a root field was introduced to indicate the root comment for a post.
+
+Posts also have additional features which comments do not have. For example, posts can have images and can be categorised using tags. This is the primary reason that the post table was not removed entirely. An images table was created which mapped the path of the uploaded image(s) to the post which the images belong to. Similarly, a post tag table maps all the tags which have been applied in the post text to the post.
+
+Figure \ref{fig:ERD_Posts} shows the proposed table structure and how the posts and comments table were broken down.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=1.0\textwidth]{Images/Design/Database/Categories}
+  \includegraphics[width=1.0\textwidth]{Images/Design/Database/Posts}
   \caption{Entity Relationship Diagram - Users Posts and Comments} \label{fig:ERD_Posts}
 \end{figure}
 
 \subsubsection{Voting}
+
 
 \begin{figure}[H]
   \centering
@@ -110,6 +128,12 @@ Often abusive users will spam the content posted by the users they follow. As th
 \end{figure}
 
 \subsubsection{Miscellaneous}
+Some tables just store the static data required for the functionality of some pages. These tables are not altered by any of the users. There are two such tables in the database.
+
+\paragraph{Quotes} The quotes table simply stores quotes. Each record is an individual quote and has a text attribute which hold the quote text and a by attribute which hold the authors name.
+
+\paragraph{Wallpapers} The wallpapers table only has one required attribute. The path attribute stores the path to various wallpaper images stored on the server. These can easily be fetched for dynamic background changes on the website.
+
 \begin{figure}[H]
   \centering
   \includegraphics[width=1.0\textwidth]{Images/Design/Database/Miscellaneous}
