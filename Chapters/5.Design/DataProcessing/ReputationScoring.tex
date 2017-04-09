@@ -75,9 +75,9 @@ Once a reputation has been calculated for each member of the \(posts\) set, thes
 \noindent
 Algorithm \ref{alg:user-reputation} begins with getting a set named users which contains every user in the database. For each one of these users we then carry out the following steps: for each type of collaboration event, find the number of the collaboration events of that type involving the user and weight this value using the weighting function. The collaboration events considered are: \(post\_upvote\), if the event is an upvote on any post made by user \(u\); \(post\_downvote\), if the event is a downvote on any post made by user \(u\); \(comment\_upvote\), if the event is an upvote on any comment made by user \(u\); \(comment\_downvote\), if the event is a downvote on any comment made by user \(u\); \(comment\), if the event is a comment on any post made by user \(u\) and \(follower\), if the event is another account following user \(u\). These values are then summed and stored as a variable named \(reputation\).
 
-Once a reputation has been calculated for each member of the \(users\) set, these reputation scores must be normalised between 0 and 1. The formula for this scaling is shown in equation \ref{eq:reputation_scale_user}, where \(user\) refers to a given post in the set \(userss\), \(max(x)\) is the maximum reputation score of any user in the set \(users\) and \(min(x)\) is the minimum reputation score of any user in the set \(users\).
+Once a reputation has been calculated for each member of the \(users\) set, these reputation scores must be normalised between 0 and 1. The formula for this scaling is shown in equation \ref{eq:reputation_scale_user}, where \(user\) refers to a given post in the set \(users\), \(max(x)\) is the maximum reputation score of any user in the set \(users\) and \(min(x)\) is the minimum reputation score of any user in the set \(users\).
 
 \begin{equation}
-	\label{eq:reputation_scale}
-	scaleReputation(post_i) = \frac{post_i - min(posts)}{max(posts) - min(posts)}
+	\label{eq:reputation_scale_user}
+	scaleReputation(user_i) = \frac{user_i - min(users)}{max(users) - min(users)}
 \end{equation}
