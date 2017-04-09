@@ -23,7 +23,7 @@ Many of the technologies being employed are not included by default on an ordina
 An Apache web server capable of interpreting PHP and rendering web pages was required for development. In addition to this, an SQL server was need to host the MySQL database. XAMPP, which provides an SQL and web server, was the solution chosen to handle both these cases. Both servers are automatically configured by the XAMPP package upon installation and are immediately ready to use out of the box. XAMPP provides an easy-to-use control panel from which servers can be started, and accessing through \textit{http://localhost/}. Any files can them be placed inside the \textit{htdocs} folder, created during the installation process.
 
 \subsubsection{IDE and Laravel}
-The Laravel framework was used to build Fidelis, but it is not readily available to download as an archive. Instead, composer - a package manager, was used for the installation of the framework. Using composer, new projects can be created using the \textit{laraval new project-name} command. Executing this command creates a new \textbf{project-name} directory with all the necessary files and project dependencies. Updates and additional packages may be installed using composer and the included \textit{packages.json} file.
+The Laravel framework was used to build Fidelis, but it is not readily available to download as an archive. Instead, composer - a package manager, was used for the installation of the framework. Using composer, new projects can be created using the \textit{laraval new project-name} command. Executing this command creates a new \textit{project-name} directory with all the necessary files and project dependencies. Updates and additional packages may be installed using composer and the included \textit{packages.json} file.
 
 The PHPStorm IDE, developed by JetBrains, was used throughout the project for all web-related development. PHPStorm is a dedicated PHP IDE, and has the capability to include plugins providing features that enable the use of frameworks like Laravel. The IDE also makes available a set of tools that made writing code more efficient and effective. 
 
@@ -57,9 +57,30 @@ It is possible to create custom middleware using the Artisan utility. The \texti
 \section{Data Collection}
 
 \section{Data Processing}
+As mentioned earlier, Python was chosen for data processing. Python has an established data analysis community, and as such provides a rich assortment of open-source libraries that can be used. With a such a community, documentation was abundant and meant that the implementation of the designs discussed in Chapter \ref{Chapter:Design} were accelerated greatly. Not only this, but existing solutions for problems encountered during development were 
+available, which again sped up the implementation process. 
+
 \subsection{Abuse Detection}
 \subsection{Content Filtering}
 \subsection{Content Recommendation}
+Content recommendations are generated from a single python script. It was decided to go with a single script as certain techniques are shared between user and post recommendations. The script is modularised by using functions that enable code blocks to be re-used.
+
+Before recommendations can be made, a database connection is established using the mysql.connector library, ``a Python driver for communicating with MySQL servers'' \cite{MySQL:MySQLConnector}. This library contains a number of useful functions for database interactions. Recommendation generation only occurs if the attempt to connect to the database is successful, otherwise an error message is logged. This prevents erroneous system behaviour. To begin recommendations, all users are first retrieved from the database. To tailor recommendations to a specific user, user settings for how they want their recommendations to be generated are retrieved. Default settings are set for new users but these can be changed on the settings page. The settings retrieved are for recommendation preference (FOF, Explorer or Hybrid recommendations), the number of recommendations to generate, recommendation threshold (for vector similarity) and recommendation reputation. Letting the use have control over this settings will allow them to fine-tune how they want to receive recommendations. The next two sections will look at how user and post recommendations are generated.
+
+\subsubsection{User Recommendations}
+User recommendations are generated using either FOF, Explorer or Hybrid users. The technique chosen for generation is dependent on the preference set by the user. we will now look at how each of these techniques are implemented.
+
+\paragraph{Friend-of-a-Friend User Recommendations}
+\paragraph{Explorer User Recommendations}
+\paragraph{Hybrid User Recommendations}
+
+\subsubsection{Post Recommendations}
+Like users, post recommendations also generated using FOF, Explorer or Hybrid  users. The following sections will detail how each of these techniques are implemented for post recommendations.
+
+\paragraph{Friend-of-a-Friend Post Recommendations}
+\paragraph{Explorer Post Recommendations}
+\paragraph{Hybrid Post Recommendations}
+
 \subsection{Reputation Scoring}
 
 \section{Database}
@@ -89,7 +110,6 @@ Figure \ref{fig:UserMigration} shows the migration for the users table, which is
 Majority of the foreign key constraints used in the database were setup with cascade delete and cascade update. This means that if a row in the referenced entity is removed or updated then any rows in the referencing entity which correspond to it are also updated or deleted \cite{TechOnTheNet:Cascading}. Some of the constraints followed the schema-bound dependencies by using the restrict keyword which prevents changes in the referenced entity if corresponding rows exist in the referencing entity. The use of all these techniques ensures that data is always kept consistent and no redundant data is introduced into the system.
 
 \subsection{Security}
-
 Security is of the upmost importance when it comes to a database which contains sensitive or personal information about individuals. For this reason, several measures should be taken into consideration to protect the database and the data in it from unauthorised access. The security threats and approaches taken to protect against them are discussed below.
 
 \subsubsection{Access}
@@ -147,7 +167,6 @@ The Eloquent ORM included with Laravel provides an simple and elegant active rec
 \subsubsection{Login}
 \subsubsection{Recover Account}
 \subsubsection{Authorised Access}
-
 \subsection{Home}
 \subsection{Discover}
 \subsection{Notifications}
