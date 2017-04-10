@@ -161,7 +161,7 @@ Once the access token and access token secret has been obtained, a Tweepy API ob
 Due to the size of the training set and the rate limits imposed by Twitter on their API, the amount of time it would take to process the entire original dataset to collect the Tweet text would be significant. To mitigate this, multiple access tokens can be used simultaneously on separate VPS's, by dividing the dataset amongst the servers and running the script remotely, since the rate limits are imposed on each access token rather than each application. For the purposes of this task, the CentOS Digital Ocean droplet can be used ~\cite{DigitalOcean:Home}. Although the amount of storage on the droplet means that the entire dataset can not be processed, even when dividing amongst 10 access tokens, it allows a large enough dataset to be produced within a reasonable time frame.
 
 \subsection{Template Data}
-The template data can be simply added to the Laravel database using the migration seeds. Figure \ref{fig:seed} shows the user seed file, which adds the template data for the user table to the database using the User model. Each attribute in the User model corresponds with a column on the users table. To add the seeds into the table, the Artisan command \textit{php artisan db:seed} is run.
+The template data can be simply added to the Laravel database using the migration seeds. Figure \ref{fig:seed} shows the user seed file, which adds the template data for the user table to the database through the User model. Each attribute in the User model corresponds with a column on the users table. To add the seeds into the table, the Artisan command \textit{php artisan db:seed} is run.
 
 \begin{figure}[H]
 	\centering
@@ -170,6 +170,13 @@ The template data can be simply added to the Laravel database using the migratio
 \end{figure}
 
 \subsection{User Authentication}
+The form shown in figure \ref{fig:register-page} is used to collect the data needed in order to authenticate access for the user, which includes the password fields and also the email address so that a password can be recovered in case it is forgotten by the user. When this form is submitted, the form data is passed to the RegisterController.php, which handles adding the user to the database via the User model. The function which performs this process is shown in figure \ref{fig:register-controller}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=1.5in]{Images/Implementation/register-controller}
+	\caption{Register Controller} \label{fig:register-controller}
+\end{figure}
 
 \section{Data Processing}
 As mentioned earlier, Python was chosen for data processing. Python has an established data analysis community, and as such provides a rich assortment of open-source libraries that can be used. With a such a community, documentation was abundant and meant that the implementation of the designs discussed in Chapter \ref{Chapter:Design} were accelerated greatly. Not only this, but existing solutions for problems encountered during development were available, which again sped up the implementation process. 
@@ -286,7 +293,7 @@ Once recommendations have been generated, they need to be cleaned. The first ste
 
 In the case of cleaning post recommendations, posts made by the recommendee are not removed as all queries involving candidate post recommendations omit posts made by the recommendee.
 
-Once recommendations have been cleaned, new recommendations are inserted into the relevant table. After storing the recommendations, changes made to the database must be commited using the \texttt{commit()} function on the connection object.
+Once recommendations have been cleaned, new recommendations are inserted into the relevant table. After storing the recommendations, changes made to the database must be committed using the \texttt{commit()} function on the connection object.
 
 \subsection{Reputation Scoring}
 
