@@ -89,7 +89,7 @@ Although algorithm \ref{alg:content-filter-pipeline} is sufficient for building 
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Predicting Categories}
+\subsubsection{Predicting Topics}
 Once the model has been built, it can then be deployed to predict the categories of incoming posts. However, whether or not the prediction should be performed instantly or in the background depends on the speed the topic is able to be predicted. Ideally, the topic can be predicted instantly so that the UI can then offer the user the option to change the prediction immediately after the post is created. However, if the prediction is slow, the system will appear unresponsive whilst waiting for the prediction to made and therefore should be done in the background. This would then rely on the user to change the topic of any incorrectly predicted posts without prompt from the system, which may reduce the ability of the model to improve over time as the dataset becomes more unreliable. Therefore, the speed of prediction must be taken into account alongside the accuracy score of the model when selecting which model to use in the site.
 
 The algorithm \ref{alg:content-filter-predict} shows the process of predicting the category of the post, as well as how the system is updated with any alterations made by the user to the post topic. When storing the topic in the database, the tags in the post are given a category rather than the entire post. This is because the feeds are filtered based on tags rather than posts themselves.
