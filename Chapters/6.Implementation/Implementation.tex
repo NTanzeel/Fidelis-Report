@@ -183,6 +183,15 @@ As mentioned earlier, Python was chosen for data processing. Python has an estab
 
 \subsection{Abuse Detection}
 \subsection{Content Filtering}
+The implementation of content filtering constitutes of Python scripts which handle all of the data preprocessing, training of the model and predicting of the post categories. As with abuse detection, this makes use of multiple Python libraries including Sci-kit learn \cite{scikit:home}, NLTK \cite{nltk}, Numpy \cite{Numpy} and Pandas \cite{Pandas}, which provide machine learning models and objects for processing datasets. The code is divided between three files, each of which handle a stage of the machine learning process: preprocess.py, training.py and predict.py.
+
+\subsubsection{Data Preprocessing}
+The file preprocess.py cleans the textual post so that it can be passed onto either the training or predicting processes.
+
+\subsubsection{Model Building}
+
+\subsubsection{Predicting Topics}
+
 \subsection{Content Recommendation}
 Content recommendations are generated from a single python script. It was decided to go with a single script as certain techniques are shared between user and post recommendations. The script is modularised by using functions that enable code blocks to be re-used. Python list comprehension provides a succinct way to generate lists \cite{Python:ListComprehension}, and this syntax is used throughout implementation.
 
