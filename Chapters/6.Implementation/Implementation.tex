@@ -186,7 +186,25 @@ As mentioned earlier, Python was chosen for data processing. Python has an estab
 The implementation of content filtering constitutes of Python scripts which handle all of the data preprocessing, training of the model and predicting of the post categories. As with abuse detection, this makes use of multiple Python libraries including Sci-kit learn \cite{scikit:home}, NLTK \cite{nltk}, Numpy \cite{Numpy} and Pandas \cite{Pandas}, which provide machine learning models and objects for processing datasets. The code is divided between three files, each of which handle a stage of the machine learning process: preprocess.py, training.py and predict.py.
 
 \subsubsection{Data Preprocessing}
-The file preprocess.py cleans the textual post so that it can be passed onto either the training or predicting processes.
+The file preprocess.py cleans the textual post so that it can be used in either the training or predicting processes. The implementation of the cleaning is shown in figure \ref{fig:content-clean}. The function carries out a list of commands sequentially, each of which remove aspects of the post which are unwanted. The package \textit{p}, whose $clean()$ function is used is the tweet-preprocessor package \cite{TweetPreprocessor}. This function removes any Twitter entities, except for the hashtags, from the post, including mentions, URLs and emoticons. Since Fidelis is using the same tagging system as Twitter, the same cleaning function can be applied to Fidelis posts. The $WordLemmatizer$ object is from the NLTK library, which processes lemmatizes each of the words in the post to reduce the noise created as a result of different forms of the same word. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=0.75in]{Images/Implementation/content-clean}
+\caption{Function that cleans a post}
+\label{fig:content-clean}
+\end{figure}
+
+The only part of the design algorithm \ref{alg:content-filter-cleaning} which is not performed by this function is the check that the length of the preprocessed string is less than 20. This is instead performed by both the training and prediction functions. Figure \ref{fig:content-preprocess} shows the preprocessing which occurs in the training file.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=0.5in]{Images/Implementation/content-preprocess}
+\caption{Preprocessing of content before training}
+\label{fig:content-preprocess}
+\end{figure}
+
+In addition, the extraction of features from the post is performed in the training and prediction files, because they are performed on the dataset as a whole rather than on each individual post. The count vectorization and tf-idf transformations are parsed into the pipeline shown in \textbf{fig:imp-content-train}, using the Sci-kit learn objects $CountVectorizer$ and $TfidfTransformer$. The $CountVectorizer$ also creates the uni- and bi-grams which are present in the dataset.
 
 \subsubsection{Model Building}
 
