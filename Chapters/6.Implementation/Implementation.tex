@@ -226,6 +226,9 @@ However, as well as building the model using the entire dataset, cross-validatio
 \end{figure}
 
 \subsubsection{Predicting Topics}
+The prediction algorithm \ref{alg:content-filter-predict} can be divided into two sections: predicting the initial topic of the post and updating the topic as a result of user input. To predict the initial topic, a request to the API is made to predict the category of the post. Using the $exec()$ PHP function, the predict script is run, which returns the topic of the post. The PostController PHP file which handles the API call then adds the tag-category pairs to the category\_tag table.
+
+The user is then able to amend the chosen topic of their posts. A bootstrap modal is opened when the user wishes to change the topic and another request to the API is made when the change is made, which updates the tag categories in the database.
 
 \subsection{Content Recommendation}
 Content recommendations are generated from a single python script. It was decided to go with a single script as certain techniques are shared between user and post recommendations. The script is modularised by using functions that enable code blocks to be re-used. Python list comprehension provides a succinct way to generate lists \cite{Python:ListComprehension}, and this syntax is used throughout implementation.
