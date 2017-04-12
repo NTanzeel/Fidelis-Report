@@ -10,7 +10,7 @@ sim(\mathbf{A},\mathbf{B}) = \frac{\mathbf{A} \cdot \mathbf{B}}{\parallel\mathbf
 \end{equation}
 Algorithm \ref{alg:user-recommendations} provides pseudocode for this process. Values for $similarityThreshold$ and $val$ should be set by the user.
 
-\begin{algorithm}
+\begin{algorithm}[H]
 \caption{User recommendations algorithm}
 \label{alg:user-recommendations}
 \begin{algorithmic}[1]
@@ -76,7 +76,7 @@ We will now look at each of the possible user sets for candidate recommendations
 \paragraph{Friend-of-a-Friend Users}
 With this method, candidate recommendations for a user $A$ are all users $C$ where $A$ follows $B$ and $B$ follows $C$. This method uses like-minded users for recommendations, and exploits the transitive nature of the ``following'' relationship. It is a popular technique used by numerous social networks, including Facebook (Figure \ref{fig:fof-facebook}) and Linkedin (Figure \ref{fig:fof-linkedin}). This option will allow the user to generate ``safer'' recommendations by using the idea that ``if $A$ trusts $B$, and $B$ trusts $C$, $A$ will most likely also trust $C$''. This is not always the case, but mostly holds true. It is important to give users this choice as it provides them more control over who enters their trust circle. Although one of the project aims is to burst opinion bubbles through exposure to different and trusted views, users must still be provided with this option. The function in Algorithm \ref{alg:fof-users} provides a procedure for retrieving ``$C$'' users. 
 
-\begin{algorithm}
+\begin{algorithm}[H]
 \caption{Function for getting Friend-of-a-Friend users}
 \label{alg:fof-users}
 \begin{algorithmic}[1]
@@ -95,7 +95,7 @@ With this method, candidate recommendations for a user $A$ are all users $C$ whe
 \paragraph{Explorer Users}
 Fidelis aims to expose users to opinions and users they may not initially interact with. Explorer users are chosen for exactly this reason. Candidate recommendations are found by finding users' favourite tags to post in and looking at other users who post in the same tag. This user collection method combines the users rated items and looks at like-minded users. By deviating from the users trust circle, we are more likely to generate recommendations that will broaden user opinions by finding other users who care about the same topics, but will naturally hold different views on them. This method seeks to expand a users trust circle beyond current opinions held by them. The function in Algorithm \ref{alg:explorer-users} shows the procedure for collecting Explorer users. $N$ is used to determine the number of tags that will be searched for candidate recommendations. The function in Algorithm \ref{alg:explorer-users} shows this procedure.
 
-\begin{algorithm}
+\begin{algorithm}[H]
 \caption{Function for getting Explorer users}
 \label{alg:explorer-users}
 \begin{algorithmic}[1]
@@ -135,7 +135,7 @@ Using this method aims to find the middle ground between the two aforementioned 
 \paragraph{Default Recommendations}
 If all aforementioned methods fail to return a set of candidate recommendations, the system should revert to default candidate recommendations. This method will return either the $N$ most popular or reputable users on Fidelis. The function in Algorithm \ref{alg:default-users} shows this procedure for most popular users, but the same procedure can be re-used for getting the most reputable users.
 
-\begin{algorithm}
+\begin{algorithm}[H]
 \caption{Function for getting default users}
 \label{alg:default-users}
 \begin{algorithmic}[1]
@@ -152,7 +152,7 @@ If all aforementioned methods fail to return a set of candidate recommendations,
 \label{sec:post-recommendations}
 Similarly to user recommendations, users will interact with content recommendations made for them daily and so new post recommendations should be generated for them daily also. Again, before any new recommendations are made we must look at how many recommendations the user currently has. By doing this, we limit any unnecessary computation. In the case of content recommendations, user item vectors will not be used. It was instead decided to use the reputation of a given post, rather than the similarity between the user recommendations are being generated for and the author of the post. The justification behind this is that user recommendations should focus on locating like-minded users, whereas content recommendations should avoid this to diversify the content made available to users. Providing recommendations in this manner again emphasises the desire for Fidelis to break the constraints of the ``echo chamber effect'' currently restricting most social media platforms. By letting the user pick a reputation threshold for recommendations generated for them, we can ensure that users trust their recommendations and can confidently interact with them knowing they are trustworthy. Algorithm \ref{alg:post-recommendations} provides the pseudocode for the procedure described above. 
 
-\begin{algorithm}
+\begin{algorithm}[H]
 \caption{Post recommendations algorithm}
 \label{alg:post-recommendations}
 \begin{algorithmic}[1]
@@ -196,7 +196,7 @@ We will again look at how each of the four recommendation techniques will genera
 
 \paragraph{Friend-of-a-Friend posts} Candidate recommendations using this method will build on the follows relationship mentioned earlier in Chapter \ref{sec:user-recommendations} by retrieving the posts from Friend-of-a-Friend users. Getting content in this manner will provide users with a selection of posts that are likely to agree with their own sentiments. 
 
-\begin{algorithm}
+\begin{algorithm}[H]
 \caption{Function for getting Friend-of-a-Friend posts}
 \label{alg:fof-content}
 \begin{algorithmic}[1]
@@ -217,7 +217,7 @@ We will again look at how each of the four recommendation techniques will genera
 
 \paragraph{Explorer posts} Explorer post recommendations stress the idea previously mentioned about removing the constraints of the ``echo chamber effect''. By considering other users who post in the same categories as the user recommendations are being generated for, we only consider posts that the user will be interested in. Without considering the similarity between the authors of these posts and the user themselves, we increase the likelihood of exposing users to content they would not normally interact with.
 
-\begin{algorithm}
+\begin{algorithm}[H]
 \caption{Function for getting Explorer posts}
 \label{alg:explorer-content}
 \begin{algorithmic}[1]

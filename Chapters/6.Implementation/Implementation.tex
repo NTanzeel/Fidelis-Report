@@ -343,6 +343,55 @@ In the case of cleaning post recommendations, posts made by the recommendee are 
 Once recommendations have been cleaned, new recommendations are inserted into the relevant table. After storing the recommendations, changes made to the database must be committed using the \texttt{commit()} function on the connection object.
 
 \subsection{Reputation Scoring}
+Reputation Scores are generated using two python scripts. One for reputation scoring posts and another for reputation scoring users. The scripts will each be scheduled to automatically run periodically and require no external intervention to execute. Each script will first establish a connection to the database using the mysql.connector library [39]. The library contains several functions to interact with the database. Once a connection is established, the database is queried and the results of those queries are used in the script to generate reputation scores for each post or user in the system (depending on the script). These scores are then normalised between 0 and 1 and then the database is updated with these newly calculated reputation scores using the database connection created earlier. The connection is then closed before the script terminates.
+
+\subsubsection{Reputation Scoring for Posts}
+Once a connection to the database has been established, the database must be queried to return a table with the values required to score the reputation of each post. These values are: The number of comments on the post, the number of upvotes on the post and the number of downvotes on the post. Figure \ref{fig:PostRepQuery} shows the query used to attain these values. The query selects 3 attributes from the comments table, grouped by the post id. The comments table is used because every post in the system is treated as a `root comment'. The first attribute, `comments' finds the number of entries in this table with the id of the post, subtracting 1 since the post itself must be discounted. The `upvotes' and 	`downvotes' attributes are found simply by finding those values from the comments table. Note that the query also performs the weighting needed for the summation of these attributes in the algorithm.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=1in]{Images/Implementation/PostRepQuery}
+\caption{Query for selecting values for reputation scoring of posts}
+\label{fig:PostRepQuery}
+\end{figure}
+
+Upon the conclusion of this query, the result will be a table similar to that shown in Figure \ref{fig:PostRepTable}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=1.5in]{Images/Implementation/PostRepTable}
+\caption{Table showing example values for reputation scoring of posts}
+\label{fig:PostRepTable}
+\end{figure}
+
+The python script will then iterate through each row of the result of this query. For each row, the script will perform the summation of the weighted values (comments, positive and negative) to get a reputation value. These values are all then inserted into a pandas dataframe \cite{Pandas} along with their respective post id's. This is shown in Figure \ref{fig:PostRepPython1}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=5in]{Images/Implementation/PostRepPython1}
+\caption{Python code for calculating post reputation scores}
+\label{fig:PostRepPython1}
+\end{figure}
+
+The script will now find the maximum and minimum reputation scores of all of the users as shown in Figure \ref{fig:PostRepPython1}. If this difference is 0, it must follow that every single post has the exact same reputation score (An unlikely scenario for the Fidelis system due to the large number of intended users). If this is the case, all of the posts will have their reputations scaled to 0. If this difference is not 0, a Python lambda function is used to normalise all reputation scores between 0 and 1. This lambda function is applied to the entire dataframe column, rather than iterating over each one individually.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=1.5in]{Images/Implementation/PostRepPython2}
+\caption{Python code for normalising post reputation scores}
+\label{fig:PostRepPython2}
+\end{figure}
+
+Finally, as shown in Figure \ref{fig:PostRepPython3}, the script runs through each row of the dataframe and updates the reputation score of each post using the final, normalised reputation score and the associated post id. This is done in the form of an SQL update query which is then commited to the database. Once each post has been assigned a new score, the database connection is terminated along with the script.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=5in]{Images/Implementation/PostRepPython3}
+\caption{Python code for inserting post reputation scores into the database}
+\label{fig:PostRepPython3}
+\end{figure}
+
+\subsubsection{Reputation Scoring for Users}
 
 \section{User Interface}
 \subsection{Navigation}
