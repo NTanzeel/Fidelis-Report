@@ -2,7 +2,31 @@
 \label{Chapter:Testing}
 
 \section{Unit Testing}
-Unit testing is a software development process in which the smallest testable parts of an application, called units, are individually and independently scrutinised for proper operation \cite{TechTarget:UnitTesting}. Through unit testing, the developer can test each aspect of the system at a micro level before each component is integrated into the system. These unit tests were mostly dictated by the functional and non-functional requirements of the system to ensure that the component satisfied all the requirements. Throughout this process, white-box testing has been used along with some black-box testing to ensure expected behaviour is provided by the system. Table \textbf{TABLE} below discusses the tests carried out as part of unit testing by stating the expected behaviour and the actual behaviour.
+Unit testing is a software development process in which the smallest testable parts of an application, called units, are individually and independently scrutinised for proper operation \cite{TechTarget:UnitTesting}. Through unit testing, the developer can test each aspect of the system at a micro level before each component is integrated into the system. These unit tests were mostly dictated by the functional and non-functional requirements of the system to ensure that the component satisfied all the requirements. Throughout this process, white-box testing has been used along with some black-box testing to ensure expected behaviour is provided by the system. Table \ref{tab:unit-testing} below discusses the tests carried out as part of unit testing by stating the expected behaviour and the actual behaviour.
+
+\begin{longtabu} to \textwidth {XXXX}
+\hline
+Requirement & Description & Comment & Result \\ 
+\hline
+\textbf{F2} & User can register & The registration form is filled in by the user & \textcolor{passgreen}{PASS} New account is added to the database and the user is redirected to the logged-in home page\\
+\textbf{F2} & Email is associated with more than one account & The registration form is filled in with a pre-existing email & \textcolor{passgreen}{PASS} The account is not added and the error is highlighted to the user on the registration page\\
+\textbf{F2} & Username is associated with more than one account & The registration form is filled in with a pre-existing username & \textcolor{passgreen}{PASS} The account is not added and the error is highlighted to the user on the registration page\\
+\textbf{F2} & All registration fields are filled & The registration form is filled with empty fields & \textcolor{passgreen}{PASS} The account is not added and the error is highlighted to the user on the registration page\\
+\textbf{F2} & Matching password and confirmation & A confirmation is entered which differs from the password & \textcolor{passgreen}{PASS} The account is not added and the error is highlighted to the user on the registration page\\
+\textbf{F2} & The password is at least 6 characters long & A password shorter than 5 is entered during registration & \textcolor{passgreen}{PASS} The account is not added and the error is highlighted to the user on the registration page\\
+\textbf{F2} & The user is at least 13 years old & The date of birth is set such that the user is younger than 13 years old & \textcolor{passgreen}{PASS} The account is not added and the error is highlighted to the user on the registration page\\
+\textbf{F2} & Reset password & User's email is entered on the forgotten password page & \textcolor{passgreen}{PASS} User receives an email with a link to reset their password and that password replaces the existing one for that account\\
+\textbf{F2} & Delete account & The `Delete Account' button is clicked on the Settings page & \textcolor{passgreen}{PASS} After confirming the user is sure about deleting their account, the account is soft deleted and their content is no longer visible to other users\\
+\textbf{F3} & Make a public account private & The `Private Account' option on the Profile Settings page is toggled on & \textcolor{passgreen}{PASS} User content becomes hidden to other users unless they are pre-existing followers\\
+\textbf{F3} & Make a private account public & The `Private Account' option on the Profile Settings page is toggled off & \textcolor{passgreen}{PASS} User content becomes visible to other users, even if they aren't followers\\
+\textbf{F3} & Following a private account & A user clicks `Follow' on a private account's profile & \textcolor{passgreen}{PASS} The private account receives a notification asking for permission for the user to follow them and, until the user is granted permission, the user can not view the private user's content\\
+\textbf{F4} & Blocking a user which is not a follower & A user clicks `Block' on a user's profile who is not a follower & \textcolor{passgreen}{PASS} The blocked user is added to the other's block list and the user's content is not longer visible to the blocked user, including the profile page\\
+\textbf{F4} & Blocking a user which is a follower & A user clicks `Block' on a follower's profile & \textcolor{passgreen}{PASS} The blocked user unfollows the other user, the blocked user is added to the other's block list and the user's content is not longer visible to the blocked user, including the profile page\\
+\textbf{F4} & Unblocking a user & A user clicks `Unblock' on a blocked user's profile & \textcolor{passgreen}{PASS} The newly unblocked user is able to view the other user's content\\
+
+\caption{Unit testing}
+\label{tab:unit-testing}
+\end{longtabu}
 
 \section{Integration Testing}
 Integration testing is a logical extension of unit testing. In its simplest form, two units that have already been tested are combined into a component and the interface between them is tested \cite{MSDN:IntegrationTesting}. As the major functionality of each component was completed, the component could now be integrated into the system so that it may work along the other components. Once integrated, integration testing could be carried out to ensure that each individual component functioned alongside other components, that it may have relied on, without resulting in errors. Integration testing prevents errors from propagating into the subsequently implemented components. Every time a component was integrated, all the unit tests for that components were run again to verify its functionality. Any errors that occurred were fixed and the tests were rerun before moving onto the next component.
@@ -52,7 +76,7 @@ In this section we look at some of the testimonials received from users. Testimo
 \begin{displayquote}
 	\enquote{\textit{It's really interesting how Fidelis is aiming to tackle the issues which exist in social networking. It is definitely a site I would be interested in using, although it will be difficult for it to replace the big names such as Facebook and Instagram in terms of marketing.}}
 	
-	- Mark Hurdley, University of Warwick MMORSE
+	- Elenya McCue, University of Warwick BEng
 \end{displayquote}
 
 \begin{displayquote}
