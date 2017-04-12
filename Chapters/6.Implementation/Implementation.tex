@@ -422,7 +422,63 @@ Finally, as shown in Figure \ref{fig:PostRepPython3}, the script runs through ea
 \subsubsection{Reputation Scoring for Users}
 
 \section{User Interface}
+This section will look at how each of the designed UI aspects were implemented. UI implementation made use of controllers, which were responsible for conducting database interactions and returning the relevant view, along with HTML, CSS and Javascript for page structure, design and usability. Implementation for different UI components was identical to the concept designs discussed in Chapter \ref{Chapter:Design}.
+
 \subsection{Navigation}
+Figure \ref{fig:NavImplementation} shows the implemented navigation bars for unauthorised and unauthorised users. Users are able to navigate to the pages represented by each of the icons on the navigation bar. 
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{1\linewidth}
+	\includegraphics[width=1\linewidth]{Images/Design/nav-unauthorised}
+	\caption{}
+	\label{fig:NavUnauth}
+\end{subfigure}
+\begin{subfigure}{1\linewidth}
+	\includegraphics[width=1\linewidth]{Images/Design/nav-authorised}
+	\caption{}
+	\label{fig:NavAuth}
+\end{subfigure}
+\caption{Fidelis navigation bar for (a) unauthorised and (b) authorised users}
+\label{fig:NavImplementation}
+\end{figure}
+
+\noindent Routes for each of the icons are populated using the \textit{LayoutComposer} class, which is a class method that is called whenever the Layout view is rendered \cite{Laravel:Views}. The navigation bar is rendered in the Layout view. Depending on whether the user is authorised or not, the composer returns the title, icon name, route and CSS properties of the relevant icon. Figure \ref{fig:LayoutComposerNav} shows the navigation options for user and application navigation.
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.45\linewidth}
+	\includegraphics[height=2.5in]{Images/Implementation/UserNavigation}
+	\caption{}
+	\label{fig:UserNavigation}
+\end{subfigure}
+\begin{subfigure}[b]{0.45\linewidth}
+	\includegraphics[height=2.5in]{Images/Implementation/AppNavigation}
+	\caption{}
+	\label{fig:AppNavigation}
+\end{subfigure}
+\caption{Rendering options for(a)user and (b) application navigation}
+\label{fig:LayoutComposerNav}
+\end{figure}
+
+\noindent The search bar allows users to enter a query term, and any user or tag matching this search term is retrieved. Using jQuery and JSON, it is possible to live-update the results from the supplied query term and display them to the user. Doing this removes the need to re-direct the user to a separate page which displays the search results to them. An API call to the \textit{SearchController} is made, in which all users and tags matching the query term are retrieved and returned to the view as a JSON object. Figure \ref{fig:SearchController} shows the retrieval of results that match the search term.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=4in]{Images/Implementation/SearchController}
+\caption{Processing of query term performed in \textit{SearchController}}
+\label{fig:SearchController}
+\end{figure}
+
+\noindent It is also possible to search only for a user or tag by preceding the query term with a \textbf{@} or \textbf{\#} respectively. Doing this restricts the results returns from the search to just users or tags. In Figure \ref{fig:SearchResults} we can see the implemented search bar, showing the results of providing ``H'' as a query term.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=2in]{Images/Implementation/SearchResults}
+\caption{Results from searching for the term ``H''}
+\label{fig:SearchResults}
+\end{figure}
+
 \subsection{Authentication}
 \subsubsection{Registration}
 \subsubsection{Login}
