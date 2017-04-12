@@ -59,16 +59,6 @@ By studying existing navigation bar designs, concept designs for navigation on F
 \subsection{Authentication}
 User authentication involves either collecting the credentials of a user to verify their identity and retrieve the relevant data for that user, or allowing a user to register a new account. These two processes for authentication are normally represented with log-in and registration pages. The following sections will look at the design for each of these.
 
-\subsubsection{Log In}
-The log-in page should allow an existing user to enter their log-in credentials. On most sites this is a combination of either email or user name, and a password. To be able to correctly verify user identity, both email (or username) and password must be required fields. Users are responsible for remembering the log-in credentials, but are also liable to forget them. To prevent user accounts from being inaccessible, the log-in page should include a link that allows users to recover a forgotten password. A user may accidentally navigate to the log-in page, when they actually intended to navigate to the registration. As such, a link must exist on the log-in page which will take users to the registration page. Figure \ref{fig:login-page} shows the concept design for the log-in page, encapsulated all aforementioned aspects.
-
-\begin{figure}[H]
-\centering
-\includegraphics[height=1.5in]{Images/Design/login-page}
-\caption{Design for log-in page}
-\label{fig:login-page}
-\end{figure}
-
 \subsubsection{Register}
 The registration page should enable new users to enter their details and create an account on Fidelis. Sites vary in the details they collect during registration. Figure \ref{fig:reg-pages} shows the registration pages for Facebook, Twitter and Reddit. Each of the three sites collects user email addresses and passwords. These two pieces of information are constan across almost all registration pages, regardless of the website. In addition to this, Reddit, as seen in Figure \ref{fig:reddit-reg} asks only for a username. Twitter registration (Figure \ref{fig:twitter-reg}) does not require a username, and instead collect the users full name. Facebook registration collects even more user data, requiring a date of birth and gender in addition to what is already collected by Twitter. 
 
@@ -96,6 +86,16 @@ Figure \ref{fig:register-page} shows the design for the Fidelis registration pag
 \includegraphics[height=2in]{Images/Design/register-page}
 \caption{Design for registration page}
 \label{fig:register-page}
+\end{figure}
+
+\subsubsection{Log In}
+The log-in page should allow an existing user to enter their log-in credentials. On most sites this is a combination of either email or user name, and a password. To be able to correctly verify user identity, both email (or username) and password must be required fields. Users are responsible for remembering the log-in credentials, but are also liable to forget them. To prevent user accounts from being inaccessible, the log-in page should include a link that allows users to recover a forgotten password. A user may accidentally navigate to the log-in page, when they actually intended to navigate to the registration. As such, a link must exist on the log-in page which will take users to the registration page. Figure \ref{fig:login-page} shows the concept design for the log-in page, encapsulated all aforementioned aspects.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=1.5in]{Images/Design/login-page}
+\caption{Design for log-in page}
+\label{fig:login-page}
 \end{figure}
 
 \subsection{Home}

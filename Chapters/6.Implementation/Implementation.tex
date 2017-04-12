@@ -13,6 +13,34 @@ Majority of the data processing will be done using PHP. All PHP scripts are exec
 
 In addition to PHP, JavaScript will be used for some client-side data processing along with SQL which will be used to process data from the database before it is retrieved. Python will be used to process user data needed for content-filtering, abuse detection, recommendations and reputation scoring. Like PHP, Python is also executed on the server-side, reducing the amount of processing and computation required on the client-side. Python was chosen not only for its popularity, but again like PHP it provides an extensive range of libraries that can be used during development. Examples of these include Scikit-Learn \cite{scikit:home}, which provides a number of data mining and analysis tools, and \emph{NumPy} and \emph{pandas}, which are useful for data manipulation.
 
+It was mentioned in Chapter \ref{Chapter:Design} that it would not be feasible to run the data processing algorithms in real-time, and as such these would need to be scheduled to run at set intervals. Cron is a unix- system utility that is used to execute tasks at designated times \cite{Ubuntu:Cron}. Tasks that are scheduled for execution are contained in a \textit{crontab} file. Entries in the file appear as:
+\begin{lstlisting}[language=bash]
+* * * * * command/to/run
+\end{lstlisting}
+
+\noindent Each asterix represents a time-and-date field, and from left to right these correspond to minute, hour, day, month and weekday \cite{Ubuntu:Cron}. 
+
+Laravel contains a task scheduler which simplifies the process of executing tasks at a given interval. With the scheduler, only the following entry needs to be added to the \textit{crontab} file:
+
+\begin{lstlisting}[language=bash]
+* * * * * php /path-to-your-project/artisan schedule:run >> /dev/null 2>&1
+\end{lstlisting}
+
+\noindent This entry calls the Laravel task scheduler every minute \cite{Laravel:Scheduling}. Laravel's task scheduler provides a number of schedule frequency options, including daily, weekly or even as a custom cron entry \cite{Laravel:Scheduling}. Tasks can be added to the \texttt{schedule()} method in \textit{app/Console/Kernel}. In the method, it is possible to schedule Artisan commands, which can be made by the user, or OS commands. Custom user commands can be defined using the following command:
+
+\begin{lstlisting}[language=bash]
+php artisan make:command CommandName --command=commandsignature
+\end{lstlisting}
+
+When this command is run, it created a command class whereby a custom command can be defined in the \texttt{handle()} function. Figure \ref{fig:FidelisSchedule} shows the tasks scheduled to run daily at midnight, and one task set to run weekly.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=1in]{Images/Implementation/FidelisSchedule}
+\caption{Scheduled tasks for Fidelis}
+\label{fig:FidelisSchedule}
+\end{figure}
+
 \subsection{Visualisation}
 HTML is coupled with CSS to define page structure, and design the components on the page \cite{W3:HTML5, W3:CSS}. In addition to this, the Laravel blade engine is being used to make the generation of pages easier by splitting content up into views that can be extended by or rendered inside other views \cite{Laravel:Blade}. This encourages good practices by abstracting the system and enforcing modularity throughout. Using the blade enginge supported the idea of using component-driven design, discussed in Chapter \ref{Chapter:ProjectManagement}. Building views in a modular fashion enables development in the future to easily integrate new components and replace master views seamlessly to change the overall system appearance. Bootstrap is also used as an additional framework to make the pages more dynamic by providing visual interaction.
 
@@ -394,12 +422,105 @@ Finally, as shown in Figure \ref{fig:PostRepPython3}, the script runs through ea
 \subsubsection{Reputation Scoring for Users}
 
 \section{User Interface}
+This section will look at how each of the designed UI aspects were implemented. UI implementation made use of controllers, which were responsible for conducting database interactions and returning the relevant view, along with HTML, CSS and Javascript for page structure, design and usability. Implementation for different UI components was identical to the concept designs discussed in Chapter \ref{Chapter:Design}.
+
 \subsection{Navigation}
+Figure \ref{fig:NavImplementation} shows the implemented navigation bars for unauthorised and unauthorised users. Users are able to navigate to the pages represented by each of the icons on the navigation bar. 
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{1\linewidth}
+	\includegraphics[width=1\linewidth]{Images/Design/nav-unauthorised}
+	\caption{}
+	\label{fig:NavUnauth}
+\end{subfigure}
+\begin{subfigure}{1\linewidth}
+	\includegraphics[width=1\linewidth]{Images/Design/nav-authorised}
+	\caption{}
+	\label{fig:NavAuth}
+\end{subfigure}
+\caption{Fidelis navigation bar for (a) unauthorised and (b) authorised users}
+\label{fig:NavImplementation}
+\end{figure}
+
+\noindent Routes for each of the icons are populated using the \textit{LayoutComposer} class, which is a class method that is called whenever the Layout view is rendered \cite{Laravel:Views}. The navigation bar is rendered in the Layout view. Depending on whether the user is authorised or not, the composer returns the title, icon name, route and CSS properties of the relevant icon. Figure \ref{fig:LayoutComposerNav} shows the navigation options for user and application navigation.
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.45\linewidth}
+	\includegraphics[height=2.5in]{Images/Implementation/UserNavigation}
+	\caption{}
+	\label{fig:UserNavigation}
+\end{subfigure}
+\begin{subfigure}[b]{0.45\linewidth}
+	\includegraphics[height=2.5in]{Images/Implementation/AppNavigation}
+	\caption{}
+	\label{fig:AppNavigation}
+\end{subfigure}
+\caption{Rendering options for (a)user and (b) application navigation}
+\label{fig:LayoutComposerNav}
+\end{figure}
+
+\noindent The search bar allows users to enter a query term, and any user or tag matching this search term is retrieved. Using jQuery and JSON, it is possible to live-update the results from the supplied query term and display them to the user. Doing this removes the need to re-direct the user to a separate page which displays the search results to them. An API call to the \textit{SearchController} is made, in which all users and tags matching the query term are retrieved and returned to the view as a JSON object. Figure \ref{fig:SearchController} shows the retrieval of results that match the search term.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=4in]{Images/Implementation/SearchController}
+\caption{Processing of query term performed in \textit{SearchController}}
+\label{fig:SearchController}
+\end{figure}
+
+\noindent It is also possible to search specifically for a user or tag by preceding the query term with a \textbf{@} or \textbf{\#} respectively. Doing this restricts the results returns from the search to just users or tags. In Figure \ref{fig:SearchResults} we can see the implemented search bar, showing the results of providing ``H'' as a query term.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=2in]{Images/Implementation/SearchResults}
+\caption{Results from searching for the term ``H''}
+\label{fig:SearchResults}
+\end{figure}
+
 \subsection{Authentication}
+Laravel provides built-in functionality for handling user authentication. With this, a number of controllers are available that manage authentication for user login, registration and password recovery \cite{Laravel:Authentication}. By executing the \texttt{php artisan make:auth} command, all views and controllers related to user authentication are generated. This command also generates the routes required to navigate to the views, and access controller functionality.
+
 \subsubsection{Registration}
+The registration page, shown in Figure \ref{fig:RegisterPage}, collects the users' name, email address, username, date of birth, password, and also asks the user to agree with the Fidelis terms of service. If the user provides all the required fields, they are re-directed to the home page. The post-authentication redirection location can be modified in the \textit{RegisterController}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=2in]{Images/Design/register-page}
+\caption{Registration page}
+\label{fig:RegisterPage}
+\end{figure}
+
+In addition to the redirection location, the \textit{RegisterController} contains \textit{validator()} and \textit{create()} functions. Before the user is redirected to the home page on successful authentication, the controller first applies a set of validation rules specified in the validator (Figure \ref{fig:RegValidation}) which must be verified before the user is authenticated. If validation is correct, the new user is created with the \texttt{create()} function and authenticated (Figure \ref{fig:register-controller}), leading to successful redirection.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=1.5in]{Images/Implementation/RegisterValidation}
+\caption{Validation rules applies to fields supplied by user on the Registration page}
+\label{fig:RegValidation}
+\end{figure}
+
 \subsubsection{Login}
-\subsubsection{Recover Account}
-\subsubsection{Authorised Access}
+The login page, shown in Figure \ref{fig:LoginPage}, requests the users' email address and password. Similary to registration, users who are successfully authenticated are redirected to the home page. All authentication functionality is handled by the pre-built \textit{LoginController}. If incorrect account credentials are provided, authentication is unsuccessful.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=1.5in]{Images/Design/login-page}
+\caption{Log-in page}
+\label{fig:LoginPage}
+\end{figure}
+
+\subsubsection{Password Reset}
+The password reset page, shown in Figure \ref{fig:PasswordReset} allows users to reset their passwords if they have forgotten their account credentials. By navigating to this page, users can submit a form containing their email addressing. Submission of this form will prompt the \textit{ResetController}, which handles password resetting using pre-built functionality, to send a password reset link to the provided email address if an account exists for that address.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=1in]{Images/Implementation/PasswordReset}
+\caption{Account recovery page}
+\label{fig:PasswordReset}
+\end{figure}
+
 \subsection{Home}
 \subsection{Discover}
 \subsection{Notifications}
