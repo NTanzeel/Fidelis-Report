@@ -13,6 +13,34 @@ Majority of the data processing will be done using PHP. All PHP scripts are exec
 
 In addition to PHP, JavaScript will be used for some client-side data processing along with SQL which will be used to process data from the database before it is retrieved. Python will be used to process user data needed for content-filtering, abuse detection, recommendations and reputation scoring. Like PHP, Python is also executed on the server-side, reducing the amount of processing and computation required on the client-side. Python was chosen not only for its popularity, but again like PHP it provides an extensive range of libraries that can be used during development. Examples of these include Scikit-Learn \cite{scikit:home}, which provides a number of data mining and analysis tools, and \emph{NumPy} and \emph{pandas}, which are useful for data manipulation.
 
+It was mentioned in Chapter \ref{Chapter:Design} that it would not be feasible to run the data processing algorithms in real-time, and as such these would need to be scheduled to run at set intervals. Cron is a unix- system utility that is used to execute tasks at designated times \cite{Ubuntu:Cron}. Tasks that are scheduled for execution are contained in a \textit{crontab} file. Entries in the file appear as:
+\begin{lstlisting}[language=bash]
+* * * * * command/to/run
+\end{lstlisting}
+
+\noindent Each asterix represents a time-and-date field, and from left to right these correspond to minute, hour, day, month and weekday \cite{Ubuntu:Cron}. 
+
+Laravel contains a task scheduler which simplifies the process of executing tasks at a given interval. With the scheduler, only the following entry needs to be added to the \textit{crontab} file:
+
+\begin{lstlisting}[language=bash]
+* * * * * php /path-to-your-project/artisan schedule:run >> /dev/null 2>&1
+\end{lstlisting}
+
+\noindent This entry calls the Laravel task scheduler every minute \cite{Laravel:Scheduling}. Laravel's task scheduler provides a number of schedule frequency options, including daily, weekly or even as a custom cron entry \cite{Laravel:Scheduling}. Tasks can be added to the \texttt{schedule()} method in \textit{app/Console/Kernel}. In the method, it is possible to schedule Artisan commands, which can be made by the user, or OS commands. Custom user commands can be defined using the following command:
+
+\begin{lstlisting}[language=bash]
+php artisan make:command CommandName --command=commandsignature
+\end{lstlisting}
+
+When this command is run, it created a command class whereby a custom command can be defined in the \texttt{handle()} function. Figure \ref{fig:FidelisSchedule} shows the tasks scheduled to run daily at midnight, and one task set to run weekly.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=1in]{Images/Implementation/FidelisSchedule}
+\caption{Scheduled tasks for Fidelis}
+\label{fig:FidelisSchedule}
+\end{figure}
+
 \subsection{Visualisation}
 HTML is coupled with CSS to define page structure, and design the components on the page \cite{W3:HTML5, W3:CSS}. In addition to this, the Laravel blade engine is being used to make the generation of pages easier by splitting content up into views that can be extended by or rendered inside other views \cite{Laravel:Blade}. This encourages good practices by abstracting the system and enforcing modularity throughout. Using the blade enginge supported the idea of using component-driven design, discussed in Chapter \ref{Chapter:ProjectManagement}. Building views in a modular fashion enables development in the future to easily integrate new components and replace master views seamlessly to change the overall system appearance. Bootstrap is also used as an additional framework to make the pages more dynamic by providing visual interaction.
 
