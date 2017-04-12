@@ -457,7 +457,7 @@ Figure \ref{fig:NavImplementation} shows the implemented navigation bars for una
 	\caption{}
 	\label{fig:AppNavigation}
 \end{subfigure}
-\caption{Rendering options for(a)user and (b) application navigation}
+\caption{Rendering options for (a)user and (b) application navigation}
 \label{fig:LayoutComposerNav}
 \end{figure}
 
@@ -470,7 +470,7 @@ Figure \ref{fig:NavImplementation} shows the implemented navigation bars for una
 \label{fig:SearchController}
 \end{figure}
 
-\noindent It is also possible to search only for a user or tag by preceding the query term with a \textbf{@} or \textbf{\#} respectively. Doing this restricts the results returns from the search to just users or tags. In Figure \ref{fig:SearchResults} we can see the implemented search bar, showing the results of providing ``H'' as a query term.
+\noindent It is also possible to search specifically for a user or tag by preceding the query term with a \textbf{@} or \textbf{\#} respectively. Doing this restricts the results returns from the search to just users or tags. In Figure \ref{fig:SearchResults} we can see the implemented search bar, showing the results of providing ``H'' as a query term.
 
 \begin{figure}[H]
 \centering
@@ -480,10 +480,47 @@ Figure \ref{fig:NavImplementation} shows the implemented navigation bars for una
 \end{figure}
 
 \subsection{Authentication}
+Laravel provides built-in functionality for handling user authentication. With this, a number of controllers are available that manage authentication for user login, registration and password recovery \cite{Laravel:Authentication}. By executing the \texttt{php artisan make:auth} command, all views and controllers related to user authentication are generated. This command also generates the routes required to navigate to the views, and access controller functionality.
+
 \subsubsection{Registration}
+The registration page, shown in Figure \ref{fig:RegisterPage}, collects the users' name, email address, username, date of birth, password, and also asks the user to agree with the Fidelis terms of service. If the user provides all the required fields, they are re-directed to the home page. The post-authentication redirection location can be modified in the \textit{RegisterController}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=2in]{Images/Design/register-page}
+\caption{Registration page}
+\label{fig:RegisterPage}
+\end{figure}
+
+In addition to the redirection location, the \textit{RegisterController} contains \textit{validator()} and \textit{create()} functions. Before the user is redirected to the home page on successful authentication, the controller first applies a set of validation rules specified in the validator (Figure \ref{fig:RegValidation}) which must be verified before the user is authenticated. If validation is correct, the new user is created with the \texttt{create()} function and authenticated (Figure \ref{fig:register-controller}), leading to successful redirection.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=1.5in]{Images/Implementation/RegisterValidation}
+\caption{Validation rules applies to fields supplied by user on the Registration page}
+\label{fig:RegValidation}
+\end{figure}
+
 \subsubsection{Login}
-\subsubsection{Recover Account}
-\subsubsection{Authorised Access}
+The login page, shown in Figure \ref{fig:LoginPage}, requests the users' email address and password. Similary to registration, users who are successfully authenticated are redirected to the home page. All authentication functionality is handled by the pre-built \textit{LoginController}. If incorrect account credentials are provided, authentication is unsuccessful.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=1.5in]{Images/Design/login-page}
+\caption{Log-in page}
+\label{fig:LoginPage}
+\end{figure}
+
+\subsubsection{Password Reset}
+The password reset page, shown in Figure \ref{fig:PasswordReset} allows users to reset their passwords if they have forgotten their account credentials. By navigating to this page, users can submit a form containing their email addressing. Submission of this form will prompt the \textit{ResetController}, which handles password resetting using pre-built functionality, to send a password reset link to the provided email address if an account exists for that address.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=1in]{Images/Implementation/PasswordReset}
+\caption{Account recovery page}
+\label{fig:PasswordReset}
+\end{figure}
+
 \subsection{Home}
 \subsection{Discover}
 \subsection{Notifications}
