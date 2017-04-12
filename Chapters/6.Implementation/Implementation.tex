@@ -209,7 +209,8 @@ The form shown in figure \ref{fig:register-page} is used to collect the data nee
 \section{Data Processing}
 As mentioned earlier, Python was chosen for data processing. Python has an established data analysis community, and as such provides a rich assortment of open-source libraries that can be used. With a such a community, documentation was abundant and meant that the implementation of the designs discussed in Chapter \ref{Chapter:Design} were accelerated greatly. Not only this, but existing solutions for problems encountered during development were available, which again sped up the implementation process. 
 
-\subsection{Abuse Detection}
+\input{Chapters/6.Implementation/DataProcessing/AbuseDetection}
+
 \subsection{Content Filtering}
 The implementation of content filtering constitutes of Python scripts which handle all of the data preprocessing, training of the model and predicting of the post categories. As with abuse detection, this makes use of multiple Python libraries including Sci-kit learn \cite{scikit:home}, NLTK \cite{nltk}, Numpy \cite{Numpy} and Pandas \cite{Pandas}, which provide machine learning models and objects for processing datasets. The code is divided between three files, each of which handle a stage of the machine learning process: preprocess.py, train.py and predict.py.
 

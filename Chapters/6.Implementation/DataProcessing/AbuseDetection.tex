@@ -1,0 +1,50 @@
+\subsection{Abuse Detection}
+This is a single-class classification problems. The challenge is to detect when a comment from a conversation would be considered insulting to another participant in the conversation. The idea is to create a generalisable single-class classifier which could operate in a near real-time mode. Classification is a form of supervised learning, it takes a set of data ${X, Y}$ where $X$ is a set of attributes and $Y$ is the target class. The goal is to model $Y$ as a function of $X$, $y = f(x)$, where $x \in X$ is a specific sample and $y \in Y$ is the corresponding class for that sample.
+
+Abuse detection is primarily implemented in python, consisting of multiple scripts. The script requires python version 2.7 or above to executes due to certain dependencies and functions used. The script makes use of multiple Python libraries including Sci-kit learn \cite{scikit:home}, NLTK \cite{nltk}, Numpy \cite{Numpy} and Pandas \cite{Pandas}, and others such as mysql, which provide machine learning models and objects for loading and processing the data. The code for this functionality has been modularised and is thus split across various files and classes. This allows modules to be included, instantiated, upgraded and reused whenever necessary.
+
+\subsubsection{Data Description}
+As mentioned previously, classification is a form of supervised learning. This means that a dataset is required to train the classifier which can then be used to make predictions on unseen instances, based on the training data. A suitable dataset was found online, provided by Impermium and hosted on the popular machine learning competitions site Kaggle \cite{Kaggle:Dataset}. The dataset was split into two files, train.csv and test.csv, and consisted of three attributes: Insult, Date, Comment. The training set contains 3,948 samples and would be used to train the models whereas the test set contains 2,648 samples and would be used to verify the accuracy of the model.
+
+
+\subsubsection{Data Preprocessing}
+As the data has been downloaded from a third-party, we must ensure that it is in the correct format. The data preprocessing stage will ensure that all the training and test data is consistent with the data we expect on the social network. This step is only carried during the training phase.
+
+ The dataset was loaded into memory as a table (DataFrame) using the Pandas library. The library provided a function to read csv files with headers as demonstrated in figure \ref{fig:AbuseDetection_LoadData}. A generic function was created for loading in the dataset as this functionality is required multiple times, for loading the test and training datasets separately.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{Images/Implementation/DataProcessing/AbuseDetection/LoadData}
+	\caption{Function that cleans a post}
+	\label{fig:AbuseDetection_LoadData}
+\end{figure}
+
+The raw dataset contains multiple errors which will effect the accuracy of the resulting model. As a result, before the data can be used, it needs to be processed and cleaned. For example, there are comments which contain several ascii characters that have been encoded. Similarly, there are several comments which contain underscores and new line characters that must be stripped so the ngrams can be generated correctly.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{Images/Implementation/DataProcessing/AbuseDetection/ProcessComments}
+	\caption{Function that cleans a post}
+	\label{fig:AbuseDetection-ProcessComments}
+\end{figure}
+
+The function in figure \ref{fig:AbuseDetection-ProcessComments} processes the entire DataFrame in one go, firstly stripping any white space on the edges, then replacing all the underscores with spaces. The resulting string is then first decoded using string\_escape, which produce a string that is suitable as string literal in Python source code and then decoded using unicode\_escape, which produce a string that is suitable as Unicode literal in Python source code \cite{Python:Codes}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{Images/Implementation/DataProcessing/AbuseDetection/Deduplicate}
+	\caption{Function that cleans a post}
+	\label{fig:AbuseDetection-Deduplicate}
+\end{figure}
+
+The next step involved cleansing the data by removing any duplicate comments in the training set. The function in figure \ref{fig:AbuseDetection-Deduplicate} takes a set of comments and their labels to filter out duplicated comments, returning only unique comments with their associated labels. The first part of this process computes the hash of every comment. This will result in the same hash for two comments that are identical, due to the nature of the hashing process. Next, we take the indices of all the unique hashes, which returns bins containing the indices corresponding to every hash value. As a result, if a hash appears twice then it will contains two indices in its bin. The indices of the hashes are then used to find the duplicates where the bin has more than indices in it. Given all the duplicates, we can generate a mask, lines 5-8, which only returns one instance of every duplicate comment. Finally, the mask is used to access all the unique comments and their associated labels.
+
+\subsubsection{Feature Engineering}
+In order to achieve a reasonable accuracy, the features of the dataset must be transformed into something meaningful.
+
+\subsubsection{Modelling}
+
+\subsubsection{}
+
+SVC Accuracy: 0.767661708092
+
