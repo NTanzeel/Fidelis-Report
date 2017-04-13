@@ -1,5 +1,5 @@
 \subsection{Abuse Detection}
-This is a single-class classification problems. The challenge is to detect when a comment from a conversation would be considered insulting to another participant in the conversation. The idea is to create a generalisable single-class classifier which could operate in a near real-time mode. Classification is a form of supervised learning, it takes a set of data ${X, Y}$ where $X$ is a set of attributes and $Y$ is the target class. The goal is to model $Y$ as a function of $X$, $y = f(x)$, where $x \in X$ is a specific sample and $y \in Y$ is the corresponding class for that sample.
+This is a single-class classification problemS. The challenge is to detect when a comment from a conversation would be considered insulting to another participant in the conversation. The idea is to create a generalisable single-class classifier which could operate in a near real-time mode. Classification is a form of supervised learning, it takes a set of data ${X, Y}$ where $X$ is a set of attributes and $Y$ is the target class. The goal is to model $Y$ as a function of $X$, $y = f(x)$, where $x \in X$ is a specific sample and $y \in Y$ is the corresponding class for that sample.
 
 Abuse detection is primarily implemented in python, consisting of multiple scripts. The script requires python version 2.7 or above to executes due to certain dependencies and functions used. The script makes use of multiple Python libraries including Sci-kit learn \cite{scikit:home}, NLTK \cite{nltk}, Numpy \cite{Numpy} and Pandas \cite{Pandas}, and others such as mysql, which provide machine learning models and objects for loading and processing the data. The code for this functionality has been modularised and is thus split across various files and classes. This allows modules to be included, instantiated, upgraded and reused whenever necessary.
 
@@ -15,7 +15,7 @@ As the data has been downloaded from a third-party, we must ensure that it is in
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth]{Images/Implementation/DataProcessing/AbuseDetection/LoadData}
-	\caption{Function that cleans a post}
+	\caption{Loading in CSV data files.}
 	\label{fig:AbuseDetection_LoadData}
 \end{figure}
 
@@ -24,7 +24,7 @@ The raw dataset contains multiple errors which will effect the accuracy of the r
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth]{Images/Implementation/DataProcessing/AbuseDetection/ProcessComments}
-	\caption{Function that cleans a post}
+	\caption{Function for processing comments and removing unnecessary characters.}
 	\label{fig:AbuseDetection-ProcessComments}
 \end{figure}
 
@@ -33,20 +33,20 @@ The function in figure \ref{fig:AbuseDetection-ProcessComments} processes the en
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth]{Images/Implementation/DataProcessing/AbuseDetection/Deduplicate}
-	\caption{Function that cleans a post}
+	\caption{Function for removing duplicate comments.}
 	\label{fig:AbuseDetection-Deduplicate}
 \end{figure}
 
 The next step involved cleansing the data by removing any duplicate comments in the training set. The function in figure \ref{fig:AbuseDetection-Deduplicate} takes a set of comments and their labels to filter out duplicated comments, returning only unique comments with their associated labels. The first part of this process computes the hash of every comment. This will result in the same hash for two comments that are identical, due to the nature of the hashing process. Next, we take the indices of all the unique hashes, which returns bins containing the indices corresponding to every hash value. As a result, if a hash appears twice then it will contains two indices in its bin. The indices of the hashes are then used to find the duplicates where the bin has more than indices in it. Given all the duplicates, we can generate a mask, lines 5-8, which only returns one instance of every duplicate comment. Finally, the mask is used to access all the unique comments and their associated labels.
 
 \subsubsection{Feature Engineering}
-The raw data, a sequence of symbols cannot be fed directly to the algorithms themselves as most of them expect numerical feature vectors with a fixed size rather than the raw text documents with variable length \cite{scikit:tfidf}. In order to achieve a reasonable accuracy, the features of the dataset must be transformed into something meaningful.
+The raw data, a sequence of symbols, cannot be fed directly to the algorithms themselves as most of them expect numerical feature vectors with a fixed size rather than the raw text documents with variable length \cite{scikit:tfidf}. In order to achieve a reasonable accuracy, the features of the dataset must be transformed into something meaningful.
 
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth]{Images/Implementation/DataProcessing/AbuseDetection/BadWordCounter}
-	\caption{Function that cleans a post}
+	\caption{Bad Word Counter feature engineering class.}
 	\label{fig:AbuseDetection-BadWordCounter}
 \end{figure}
 
@@ -54,7 +54,7 @@ The raw data, a sequence of symbols cannot be fed directly to the algorithms the
 
 The class starts by loading the Bad Words List (BWL), in the constructor, when the class is instantiated. The transform function accepts a list of documents (comments) and returns a two dimensional array with $|documents| \times |features|$ elements. Lines 27, 28, 29 compute the number of words, characters and uppercase words in each comment. Lines 31 and 32 then proceed to compute the length of the longest word and the average word length for each comment. These features are pretty generic and don't necessarily indicate any abusive comments but the model may find a pattern so we can include them for safety. The next features generated are the number of bad words based on the BWL and the number of exclamation marks in each comment. These two features are quite indicative of an abusive comment. Next we compute a few more generic features including the number of mentions (users) and the number of spaces. Lastly, we compute the caps to non-caps ratio and the bad to normal words ratio and represent them as floats to indicate the severity of post. Finally, we combine all these features and return a 2D matrix.
 
-\paragraph{TFIDF Vectoriser} This is the process of converting a collection of raw documents to a matrix of TF-IDF features. It is equivalent to using a CountVectorizer followed by TfidfTransformer \cite{ScikitLearn:TFIDFVectorizer}. 
+\paragraph{TFIDF Vectoriser} This is the process of converting a collection of raw documents to a matrix of TF-IDF features. It is equivalent to using a CountVectorizer followed by TfidfTransformer \cite{Scikit:TFIDFVectorizer}. 
 
 The CountVectorizer in the scikit-learn package generates features by tokenising strings giving an integer id for each possible token, counting the occurrences of tokens in each document, and then normalising and weighting with diminishing importance tokens that occur in the majority of samples/documents \cite{scikit:tfidf}. We call vectorisation the general process of turning a collection of text documents into numerical feature vectors. This specific strategy (tokenisation, counting and normalisation) is called the Bag of Words or ``Bag of n-grams'' representation. Documents are described by word occurrences while completely ignoring the relative position information of the words in the document \cite{scikit:tfidf}.
 
@@ -70,7 +70,7 @@ Two separate set of TF-IDF features were generated, one for words and one for fo
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth]{Images/Implementation/DataProcessing/AbuseDetection/TFIDF}
-	\caption{Function that cleans a post}
+	\caption{Generating character and word ngram frequencies.}
 	\label{fig:AbuseDetection-TFIDF}
 \end{figure}
 
@@ -79,23 +79,82 @@ Two separate set of TF-IDF features were generated, one for words and one for fo
 \subparagraph{Words} The word vectoriser uses the word \textit{analyser} which produces tokens on delimiters, such as white spaces and punctuation. Additionally, it uses an \textit{ngram\_range} of 1-3. The main difference here is that it uses the \textit{min\_df} value of 3, producing a vocabulary ignoring terms that have a document frequency strictly lower than the given threshold.
 
 \paragraph{Feature Stacking}
-asas
+As multiple feature engineering techniques were used, and each technique required the raw comments to generate the features, these techniques could not just simply be pipelined. Each of these techniques produced a different set of features as output, meaning that the output of one transformation could not be used as the input of another technique. In order to resolve this issue, a \textit{FeatureStacker} class was built to stack the output of multiple techniques. The class takes a list of estimators as inputs to produce a generic estimator. The \textit{FeatureStacker} implements the fit and transform methods from the base estimator. The fit method simply calls the same procedure on all estimators in the list, thus fitting each estimator to the raw comments. The transform method then applies each of the transformation, horizontally stacking the set of features returned by each transformer, returning the generated compressed sparse row matrix \cite{Scipy:ToCSR}.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth]{Images/Implementation/DataProcessing/AbuseDetection/FeatureStacker}
-	\caption{Function that cleans a post}
+	\caption{The Feature Stacker class for combining multiple features.}
 	\label{fig:AbuseDetection-FeatureStacker}
 \end{figure}
 
-\subsection{Feature Selection}
-
+\subsubsection{Feature Selection}
+Not all the features generated by the feature engineering techniques above are useful to the classifier. It's hard to tell by manual inspection which of these features will be good and which will bed bad. Univariate feature selection works by selecting the best features based on univariate statistical tests. It can be seen as a preprocessing step to an estimator \cite{Scikit:FeatureSelection}. The chi-squared test is one such statistical test, it measures dependence between stochastic variables. This score can be used to select the n\_features features with the highest values for the test chi-squared statistic from X, which must contain only non-negative features such as booleans or frequencies, relative to the classes. Using the \textit{SelectPercentile} package with the chi-squared scoring function we can ``weeds out'' the features that are the most likely to be independent of class and therefore irrelevant for classification \cite{Scikit:SelectPercentile, Scikit:ChiSquared}. After playing with various different parameters, the top 16\% of the features were kept, as demonstrated in figure \ref{fig:AbuseDetection-Modelling}.
 
 \subsubsection{Modelling}
+There are various different machine learning models available, ranging from regression to classifier to neural networks, each with their own advantages and disadvantages. In order to find the best solution, multiple models were used and tested before settling for one model. The three models generated were: Logistic Regression (LR), Supper Vector Machine (SVM), Stochastic Gradient Descent Classifier (SGD).
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{Images/Implementation/DataProcessing/AbuseDetection/Modelling}
+	\caption{Function that cleans a post}
+	\label{fig:AbuseDetection-Modelling}
+\end{figure}
+
+Besides the classifier used, the modelling process was essentially the same throughout all models. Figure \ref{fig:AbuseDetection-Modelling} shows the code for creating a Linear Regression model. The functionally simply creates a pipeline with the feature stacker containing all the feature transformers, the feature selection function using the chi-square test and the appropriate classifier. The process for training this classifier and find the best parameters is discussed further in this section.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{Images/Implementation/DataProcessing/AbuseDetection/ModelAccuracies}
+	\caption{Accuracies for 3 model across 10 different iterations.}
+	\label{fig:AbuseDetection-ModelAccuracies}
+\end{figure}
+
+The graph in figure \ref{fig:AbuseDetection-ModelAccuracies} shows the accuracies achieved by the three models across ten different iterations. As visible in the graph, the Logistic Regression performs significantly better than the other models. SVM performed lower than expected but this could be a result of the parameters used, as the accuracy of an SVM model is highly dependent on it's tuning parameter \textit{C}. Logistic Regression was used as the final model for predictions.
 
 \subsubsection{Training}
+Scikit-Learn provides a utility for exhaustively testing models with a list of values for each parameter. The \textit{GridSearchCV} package takes a \textit{BaseEstimator} as input along with a dictionary of parameters where the key represents the name of the parameter and the value is the list of values to test for that parameter \cite{Scikit:GridSearch}. When fitted, the package fits the estimator to the data with all possible combinations of parameters from the dictionary and evaluates the prediction using cross validation and a scoring method. Once it has finished executing, it returns the best set of parameters for the model (e.g. the highest scoring) which can be used to create a single instance of the estimator. This is demonstrated in figure \ref{fig:AbuseDetection-Training} where the SVM pipeline is used, along with the Area Under the Curve (AUC) scoring function, to tests different values of \textit{C} for two different kernels.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{Images/Implementation/DataProcessing/AbuseDetection/Training}
+	\caption{Function for testing an estimator and finding best parameters.}
+	\label{fig:AbuseDetection-Training}
+\end{figure}
+
+\subsubsection{Exporting}
+With the models trained and the best parameters discovered, a single instance of the model fitted to the entire training dataset can be created and saved to a file. This allows the model to be reloaded quickly, with the same settings and information, to make predictions. The function in figure \ref{fig:AbuseDetection-Exporting} generates an instance of the pipeline with a linear regression model. The pipeline is fitted to the training data, evaluated using the test data and the resulting estimator is stored to a file.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{Images/Implementation/DataProcessing/AbuseDetection/Exporting}
+	\caption{Function for exporting a Linear Regression model.}
+	\label{fig:AbuseDetection-Exporting}
+\end{figure}
 
 \subsubsection{Predicting}
+A separate script was created to make predictions on comments. It can be executed with an optional command line argument,\textit{reported}, once a model has been exported. The script firstly loads the exported model into memory and then proceeds to load the comments from the database. To interact with the database, a custom MySQL wrapper class created. The \textit{reported} parameter is used when deciding which comments to load for processing. If the parameter is set to false, the default value, then all comments made in the last 24 hours are loaded using the query in figure \ref{fig:AbuseDetection-DailyComments}. This is because the script is designed to be ran on a daily basis and hence any comments older than a day should already have been processed in the last iteration. If the parameter is set to true then only comments which have been reported but not yet processed are loaded using the query in figure \ref{fig:AbuseDetection-ReportedComments}. This option is supported so that reported comments can be processed more frequently.
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[t]{\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{Images/Implementation/DataProcessing/AbuseDetection/DailyCommentsQuery}
+		\caption{Comments made in the last 24 hours.}\label{fig:AbuseDetection-DailyComments}		
+	\end{subfigure}
+	\quad
+	\begin{subfigure}[t]{\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{Images/Implementation/DataProcessing/AbuseDetection/ReportedCommentsQuery}
+		\caption{Reported comments.}\label{fig:AbuseDetection-ReportedComments}
+	\end{subfigure}
+	\caption{Fetching unprocessed comments from the database.}\label{fig:AbuseDetection-LoadingComments}
+\end{figure}
 
-SVC Accuracy: 0.767661708092
+Once the comments are loaded, their class probabilities are predicted and multiplied by 100 to produce an abuse rating. The resulting predictions are then used to update the comments in the database with their abuse rating. If the reported comments have been loaded then all associated reports for the processed comments are marked as processed as well. Figure \ref{fig:AbuseDetection-UpdatePredictions} shows the function used to achieve this. After the queries have been ran, we can close the cursor and MySQL connection to reduce the load on the database.
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{Images/Implementation/DataProcessing/AbuseDetection/UpdatingScores}
+	\caption{Function for updating the abuse rating of comments in the database.}
+	\label{fig:AbuseDetection-UpdatePredictions}
+\end{figure}
