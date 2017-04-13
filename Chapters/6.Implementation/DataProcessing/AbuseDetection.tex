@@ -10,7 +10,7 @@ As mentioned previously, classification is a form of supervised learning. This m
 \subsubsection{Data Preprocessing}
 As the data has been downloaded from a third-party, we must ensure that it is in the correct format. The data preprocessing stage will ensure that all the training and test data is consistent with the data we expect on the social network. This step is only carried during the training phase.
 
- The dataset was loaded into memory as a table (DataFrame) using the Pandas library. The library provided a function to read csv files with headers as demonstrated in figure \ref{fig:AbuseDetection_LoadData}. A generic function was created for loading in the dataset as this functionality is required multiple times, for loading the test and training datasets separately.
+ The dataset was loaded into memory as a table (DataFrame) using the Pandas library. The library provided a function to read CSV files with headers as demonstrated in figure \ref{fig:AbuseDetection_LoadData}. A generic function was created for loading in the dataset as this functionality is required multiple times, for loading the test and training datasets separately.
 
 \begin{figure}[H]
 	\centering
@@ -40,7 +40,7 @@ The function in figure \ref{fig:AbuseDetection-ProcessComments} processes the en
 The next step involved cleansing the data by removing any duplicate comments in the training set. The function in figure \ref{fig:AbuseDetection-Deduplicate} takes a set of comments and their labels to filter out duplicated comments, returning only unique comments with their associated labels. The first part of this process computes the hash of every comment. This will result in the same hash for two comments that are identical, due to the nature of the hashing process. Next, we take the indices of all the unique hashes, which returns bins containing the indices corresponding to every hash value. As a result, if a hash appears twice then it will contains two indices in its bin. The indices of the hashes are then used to find the duplicates where the bin has more than indices in it. Given all the duplicates, we can generate a mask, lines 5-8, which only returns one instance of every duplicate comment. Finally, the mask is used to access all the unique comments and their associated labels.
 
 \subsubsection{Feature Engineering}
-In order to achieve a reasonable accuracy, the features of the dataset must be transformed into something meaningful. 
+The raw data, a sequence of symbols cannot be fed directly to the algorithms themselves as most of them expect numerical feature vectors with a fixed size rather than the raw text documents with variable length \cite{scikit:tfidf}. In order to achieve a reasonable accuracy, the features of the dataset must be transformed into something meaningful.
 
 
 \begin{figure}[H]
@@ -54,12 +54,46 @@ In order to achieve a reasonable accuracy, the features of the dataset must be t
 
 The class starts by loading the Bad Words List (BWL), in the constructor, when the class is instantiated. The transform function accepts a list of documents (comments) and returns a two dimensional array with $|documents| \times |features|$ elements. Lines 27, 28, 29 compute the number of words, characters and uppercase words in each comment. Lines 31 and 32 then proceed to compute the length of the longest word and the average word length for each comment. These features are pretty generic and don't necessarily indicate any abusive comments but the model may find a pattern so we can include them for safety. The next features generated are the number of bad words based on the BWL and the number of exclamation marks in each comment. These two features are quite indicative of an abusive comment. Next we compute a few more generic features including the number of mentions (users) and the number of spaces. Lastly, we compute the caps to non-caps ratio and the bad to normal words ratio and represent them as floats to indicate the severity of post. Finally, we combine all these features and return a 2D matrix.
 
-\paragraph{TFIDF Vectoriser}
+\paragraph{TFIDF Vectoriser} This is the process of converting a collection of raw documents to a matrix of TF-IDF features. It is equivalent to using a CountVectorizer followed by TfidfTransformer \cite{ScikitLearn:TFIDFVectorizer}. 
 
-\subparagraph{Words}
-\subparagraph{Characters}
+The CountVectorizer in the scikit-learn package generates features by tokenising strings giving an integer id for each possible token, counting the occurrences of tokens in each document, and then normalising and weighting with diminishing importance tokens that occur in the majority of samples/documents \cite{scikit:tfidf}. We call vectorisation the general process of turning a collection of text documents into numerical feature vectors. This specific strategy (tokenisation, counting and normalisation) is called the Bag of Words or ``Bag of n-grams'' representation. Documents are described by word occurrences while completely ignoring the relative position information of the words in the document \cite{scikit:tfidf}.
+
+In large comments, some words will appear very often (e.g. ``the'', ``a'', ``an'', etc). These words have very little meaning in terms of the classification process. Feeding these terms directly into the classifier would result in these very frequent meaningless overshadowing the less frequent meaningful terms. Tf means term-frequency while TF-IDF means term-frequency times inverse document-frequency \cite{scikit:tfidf}. The TFIDF transformer simply re-weights the count features into floating point values, suitable for usage by a classifier, by multiplying the term frequency with the IDF component. The IDF component can be computed using the equation \ref{equation:IDF}, where $n_{d}$ is the total number of documents, and $df(d,t)$ is the number of documents that contain term $t$. The resulting TF-IDF vectors are then normalised by the Euclidean norm.
+
+\begin{equation}
+	idf(t) = log\frac{1 + n_{d}}{1 + df(d, t)} + 1
+	\label{equation:IDF}
+\end{equation}
+
+Two separate set of TF-IDF features were generated, one for words and one for for characters. The \textit{analyser} can be tweaked which determines whether the feature should be made of word or character n-grams. The \textit{ngram\_range} parameter takes a lower and upper boundary of the range of n-values for different n-grams to be extracted. All values of n such that $min\_n <= n <= max\_n$ will be used. The \textit{binary} value of $False$ ensures that frequencies of zero are not normalised to one.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{Images/Implementation/DataProcessing/AbuseDetection/TFIDF}
+	\caption{Function that cleans a post}
+	\label{fig:AbuseDetection-TFIDF}
+\end{figure}
+
+\subparagraph{Characters} The character vectoriser uses the character analyser to generate ngrams for different combinations of characters in the comment. This vectoriser uses an \textit{ngram\_range} of 1-5, extracting character sequences at least one character long.
+
+\subparagraph{Words} The word vectoriser uses the word \textit{analyser} which produces tokens on delimiters, such as white spaces and punctuation. Additionally, it uses an \textit{ngram\_range} of 1-3. The main difference here is that it uses the \textit{min\_df} value of 3, producing a vocabulary ignoring terms that have a document frequency strictly lower than the given threshold.
+
+\paragraph{Feature Stacking}
+asas
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{Images/Implementation/DataProcessing/AbuseDetection/FeatureStacker}
+	\caption{Function that cleans a post}
+	\label{fig:AbuseDetection-FeatureStacker}
+\end{figure}
+
+\subsection{Feature Selection}
+
 
 \subsubsection{Modelling}
+
+\subsubsection{Training}
 
 \subsubsection{Predicting}
 
