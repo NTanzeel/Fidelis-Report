@@ -364,11 +364,11 @@ Upon the conclusion of this query, the result will be a table similar to that sh
 \label{fig:PostRepTable}
 \end{figure}
 
-The python script will then iterate through each row of the result of this query. For each row, the script will perform the summation of the weighted values (comments, positive and negative) to get a reputation value. These values are all then inserted into a pandas dataframe \cite{Pandas} along with their respective post id's. This is shown in Figure \ref{fig:PostRepPython1}.
+The python script will then iterate through each row of the result of this query. For each row, the script will perform the summation of the weighted values (comments, positive and negative) to get a reputation value. Note that the `negative' value for each post is subtracted instead of added to comply with the desired weightings. These values are all then inserted into a pandas dataframe \cite{Pandas} along with their respective post id. This is shown in Figure \ref{fig:PostRepPython1}.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=5in]{Images/Implementation/PostRepPython1}
+\includegraphics[width=6in]{Images/Implementation/PostRepPython1}
 \caption{Python code for calculating post reputation scores}
 \label{fig:PostRepPython1}
 \end{figure}
@@ -382,16 +382,52 @@ The script will now find the maximum and minimum reputation scores of all of the
 \label{fig:PostRepPython2}
 \end{figure}
 
-Finally, as shown in Figure \ref{fig:PostRepPython3}, the script runs through each row of the dataframe and updates the reputation score of each post using the final, normalised reputation score and the associated post id. This is done in the form of an SQL update query which is then commited to the database. Once each post has been assigned a new score, the database connection is terminated along with the script.
+Finally, as shown in Figure \ref{fig:PostRepPython3}, the script runs through each row of the dataframe and updates the reputation score of each post using the final, normalised reputation score and the associated post id. This is done in the form of an SQL update query which is then committed to the database. Once each post has been assigned a new score, the database connection is terminated along with the script.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=5in]{Images/Implementation/PostRepPython3}
+\includegraphics[width=6in]{Images/Implementation/PostRepPython3}
 \caption{Python code for inserting post reputation scores into the database}
 \label{fig:PostRepPython3}
 \end{figure}
 
 \subsubsection{Reputation Scoring for Users}
+Once a connection to the database has been established, the database must be queried to return a table with the values required to score the reputation of each user. These values are: the number of upvotes on all of the user's posts, the number of downvotes on all of the user's posts, the number of comments on all of the user's posts, the number of upvotes on all of the user's comments, the number of downvotes on all of the user's comments and the number of followers a user has. Figure \ref{fig:UserRepQuery} shows the query used to attain these values. The query selects 4 attributes from the various tables, using a number of joins. In total, the query joins together 3 separate subqueries. The first subquery finds the weighted number of upvotes on all of the user's comments and posts as well as the weighted number of downvotes on all of the user's comments. The next subquery will find the weighted number of comments on all of the users posts, where the comment isn't a `root comment' (i.e. a post) and the user id on the comment is not that of the user whose reputation is being scored. This avoids a user potentially creating many comments on their own posts simply to `boost' their reputation score.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=4in]{Images/Implementation/UserRepQuery}
+\caption{Query for selecting values for reputation scoring of users}
+\label{fig:UserRepQuery}
+\end{figure}
+
+Upon the conclusion of this query, the result will be a table similar to that shown in Figure \ref{fig:UserRepTable}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=1.5in]{Images/Implementation/UserRepTable}
+\caption{Table showing example values for reputation scoring of users}
+\label{fig:UserRepTable}
+\end{figure}
+
+The python script will then iterate through each row of the result of this query. For each row, the script will perform the summation of the weighted values (positive, negative, comments and followers) to get a reputation value. Note that the `negative' value for each user is subtracted instead of added to comply with the desired weightings. These values are all then inserted into a pandas dataframe \cite{Pandas} along with their respective user id. This is shown in Figure \ref{fig:UserRepPython1}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=6in]{Images/Implementation/UserRepPython1}
+\caption{Python code for calculating user reputation scores}
+\label{fig:UserRepPython1}
+\end{figure}
+
+The script will now find the maximum and minimum reputation scores of all of the users as shown in, using the same method demonstrated for normalising the reputation scores for posts. On completion of this normalisation, every reputation score will be between 0 and 1. Finally, as shown in Figure \ref{fig:UserRepPython2}, the script runs through each row of the dataframe and updates the reputation score of each user using the final, normalised reputation score and the associated user id. This is done in the form of an SQL update query which is then committed to the database. Once each user has been assigned a new score, the database connection is terminated along with the script.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=6in]{Images/Implementation/UserRepPython2}
+\caption{Python code for normalising user reputation scores}
+\label{fig:UserRepPython2}
+\end{figure}
+
 
 \section{User Interface}
 \subsection{Navigation}
