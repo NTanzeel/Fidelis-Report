@@ -20,7 +20,7 @@ Figure \ref{fig:NavImplementation} shows the implemented navigation bars for una
 \label{fig:NavImplementation}
 \end{figure}
 
-\noindent Routes for each of the icons are populated using the \textit{LayoutComposer} class, which is a class method that is called whenever the Layout view is rendered \cite{Laravel:Views}. The navigation bar is rendered in the Layout view. Depending on whether the user is authorised or not, the composer returns the title, icon name, route and CSS properties of the relevant icon. Figure \ref{fig:LayoutComposerNav} shows the navigation options for user and application navigation.
+Routes for each of the icons are populated using the \textit{LayoutComposer} class, which is a class method that is called whenever the Layout view is rendered \cite{Laravel:Views}. The navigation bar is rendered in the Layout view. Depending on whether the user is authorised or not, the composer returns the title, icon name, route and CSS properties of the relevant icon. Figure \ref{fig:LayoutComposerNav} shows the navigation options for user and application navigation.
 
 \begin{figure}[H]
 \centering
@@ -38,7 +38,7 @@ Figure \ref{fig:NavImplementation} shows the implemented navigation bars for una
 \label{fig:LayoutComposerNav}
 \end{figure}
 
-\noindent The search bar allows users to enter a query term, and any user or tag matching this search term is retrieved. Using jQuery and JSON, it is possible to live-update the results from the supplied query term and display them to the user. Doing this removes the need to re-direct the user to a separate page which displays the search results to them. An API call to the \textit{SearchController} is made, in which all users and tags matching the query term are retrieved and returned to the view as a JSON object. Figure \ref{fig:SearchController} shows the retrieval of results that match the search term.
+The search bar allows users to enter a query term, and any user or tag matching this search term is retrieved. Using jQuery and JSON, it is possible to live-update the results from the supplied query term and display them to the user. Doing this removes the need to re-direct the user to a separate page which displays the search results to them. An API call to the \textit{SearchController} is made, in which all users and tags matching the query term are retrieved and returned to the view as a JSON object. Figure \ref{fig:SearchController} shows the retrieval of results that match the search term.
 
 \begin{figure}[H]
 \centering
@@ -47,7 +47,7 @@ Figure \ref{fig:NavImplementation} shows the implemented navigation bars for una
 \label{fig:SearchController}
 \end{figure}
 
-\noindent It is also possible to search specifically for a user or tag by preceding the query term with a \textbf{@} or \textbf{\#} respectively. Doing this restricts the results returns from the search to just users or tags. In Figure \ref{fig:SearchResults} we can see the implemented search bar, showing the results of providing ``H'' as a query term.
+It is also possible to search specifically for a user or tag by preceding the query term with a \textbf{@} or \textbf{\#} respectively. Doing this restricts the results returns from the search to just users or tags. In Figure \ref{fig:SearchResults} we can see the implemented search bar, showing the results of providing ``H'' as a query term.
 
 \begin{figure}[H]
 \centering
@@ -57,7 +57,7 @@ Figure \ref{fig:NavImplementation} shows the implemented navigation bars for una
 \end{figure}
 
 \subsection{Authentication}
-Laravel provides built-in functionality for handling user authentication. With this, a number of controllers are available that manage authentication for user login, registration and password recovery \cite{Laravel:Authentication}. By executing the \texttt{php artisan make:auth} command, all views and controllers related to user authentication are generated. This command also generates the routes required to navigate to the views, and access controller functionality.
+Laravel provides built-in functionality for handling user authentication. With this, a number of controllers are available that manage authentication for user login, registration and password recovery \cite{Laravel:Authentication}. By executing the \textit{php artisan make:auth} command, all views and controllers related to user authentication are generated. This command also generates the routes required to navigate to the views, and access controller functionality.
 
 \subsubsection{Registration}
 The registration page, shown in Figure \ref{fig:RegisterPage}, collects the users' name, email address, username, date of birth, password, and also asks the user to agree with the Fidelis terms of service. If the user provides all the required fields, they are re-directed to the home page. The post-authentication redirection location can be modified in the \textit{RegisterController}.
@@ -69,7 +69,7 @@ The registration page, shown in Figure \ref{fig:RegisterPage}, collects the user
 \label{fig:RegisterPage}
 \end{figure}
 
-In addition to the redirection location, the \textit{RegisterController} contains \textit{validator()} and \textit{create()} functions. Before the user is redirected to the home page on successful authentication, the controller first applies a set of validation rules specified in the validator (Figure \ref{fig:RegValidation}) which must be verified before the user is authenticated. If validation is correct, the new user is created with the \texttt{create()} function and authenticated (Figure \ref{fig:register-controller}), leading to successful redirection.
+In addition to the redirection location, the \textit{RegisterController} contains \texttt{validator()} and \texttt{create()} functions. Before the user is redirected to the home page on successful authentication, the controller first applies a set of validation rules specified in the validator (Figure \ref{fig:RegValidation}) which must be verified before the user is authenticated. If validation is correct, the new user is created with the \texttt{create()} function and authenticated (Figure \ref{fig:register-controller}), leading to successful redirection.
 
 \begin{figure}[H]
 \centering
@@ -79,7 +79,7 @@ In addition to the redirection location, the \textit{RegisterController} contain
 \end{figure}
 
 \subsubsection{Login}
-The login page, shown in Figure \ref{fig:LoginPage}, requests the users' email address and password. Similary to registration, users who are successfully authenticated are redirected to the home page. All authentication functionality is handled by the pre-built \textit{LoginController}. If incorrect account credentials are provided, authentication is unsuccessful.
+The login page, shown in Figure \ref{fig:LoginPage}, requests the users' email address and password. Similarly to registration, users who are successfully authenticated are redirected to the home page. All authentication functionality is handled by the pre-built \textit{LoginController}. If incorrect account credentials are provided, authentication is unsuccessful.
 
 \begin{figure}[H]
 \centering
@@ -101,6 +101,30 @@ The password reset page, shown in Figure \ref{fig:PasswordReset} allows users to
 \subsection{Home}
 \subsection{Discover}
 \subsection{Notifications}
+Figure \ref{fig:NotificationsPage} shows the implemented notifications page. Users receive a notification whenever they receive a new follow, are mentioned in a post by another user, or one of their posts is commented or voted on. The page provides users with information on the notification type, and if relevant the content of the notification (for example, the comment made on their post). The counter, seen next to the bell icon on the navigation bar, indicates to the user how many unread notifications they have. The notification page only fetches unread notifications, which reduces the amount of data that is retrieved from the database. This speeds up the load time of the page. When the user visits the notifications page, all unread notifications are marked as read. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/Implementation/NotificationsPage}
+\caption{Notifications Page}
+\label{fig:NotificationsPage}
+\end{figure}
+
+Laravel provides support for integrating a notification system with your application \cite{Laravel:Notifications}. With this, it is possible to create different notification types, and have these related to a user by using the \texttt{Notification} facade. Using this facade means that whenever an interaction happens with a user or with their posts, they can be notified of this using the \textit{notify()} function:
+
+\begin{lstlisting}[language=bash]
+	$user->notify(new NameOfNotification($notification)
+\end{lstlisting}
+
+ It is also possible to queue notifications. Creating a queue of notifications can speed up application response time as there can be delays when delivering notifications to the user \cite{Laravel:Notifications, Laravel:Queues}. Queueing can be enabled by adding the \textit{Queueable} trait to the notification class, and starting a queue worker by configuring the queue in \textit{config/queue.php}. Figure \ref{fig:CommentNotification} shows the notification class created for comments. The \texttt{toArray()} function contains an array that represents information carried by the notification. In the array we have a 'regarding' entry, which represents the item the notification is related to, a 'to' entry which represents who the notification is meant for, and a 'text' field which contains information displayed to the user receiving the notification.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/Implementation/CommentNotification}
+\caption{Custom notification for comments}
+\label{fig:CommentNotification}
+\end{figure}
+
 \subsection{Profile}
 \subsection{Settings}
 \subsection{Static Pages}
