@@ -40,11 +40,28 @@ The function in figure \ref{fig:AbuseDetection-ProcessComments} processes the en
 The next step involved cleansing the data by removing any duplicate comments in the training set. The function in figure \ref{fig:AbuseDetection-Deduplicate} takes a set of comments and their labels to filter out duplicated comments, returning only unique comments with their associated labels. The first part of this process computes the hash of every comment. This will result in the same hash for two comments that are identical, due to the nature of the hashing process. Next, we take the indices of all the unique hashes, which returns bins containing the indices corresponding to every hash value. As a result, if a hash appears twice then it will contains two indices in its bin. The indices of the hashes are then used to find the duplicates where the bin has more than indices in it. Given all the duplicates, we can generate a mask, lines 5-8, which only returns one instance of every duplicate comment. Finally, the mask is used to access all the unique comments and their associated labels.
 
 \subsubsection{Feature Engineering}
-In order to achieve a reasonable accuracy, the features of the dataset must be transformed into something meaningful.
+In order to achieve a reasonable accuracy, the features of the dataset must be transformed into something meaningful. 
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{Images/Implementation/DataProcessing/AbuseDetection/BadWordCounter}
+	\caption{Function that cleans a post}
+	\label{fig:AbuseDetection-BadWordCounter}
+\end{figure}
+
+\paragraph{Bad Word Counter} This feature engineering technique takes advantage of a list of the commonly used ``inappropriate'' words. The list was originally developed by Google for their ``What do you love'' project \cite{GitHub:GoogleBadWordList}. It contains 451 words which Google considered inappropriate and banned from being displayed on the project. The transformer was implemented using a new class which implements the BaseEstimator interface, more specifically, the fit and transform methods of the BaseEstimator. As applying this transformation results in a completely new set of features which are independent for every sample, the fit method is not necessary and is therefore not actually implemented. There are currently eleven unique features generated, some more important than others but this is up to the classifier to decide. All the features returned are numerical (either integer or float).
+
+The class starts by loading the Bad Words List (BWL), in the constructor, when the class is instantiated. The transform function accepts a list of documents (comments) and returns a two dimensional array with $|documents| \times |features|$ elements. Lines 27, 28, 29 compute the number of words, characters and uppercase words in each comment. Lines 31 and 32 then proceed to compute the length of the longest word and the average word length for each comment. These features are pretty generic and don't necessarily indicate any abusive comments but the model may find a pattern so we can include them for safety. The next features generated are the number of bad words based on the BWL and the number of exclamation marks in each comment. These two features are quite indicative of an abusive comment. Next we compute a few more generic features including the number of mentions (users) and the number of spaces. Lastly, we compute the caps to non-caps ratio and the bad to normal words ratio and represent them as floats to indicate the severity of post. Finally, we combine all these features and return a 2D matrix.
+
+\paragraph{TFIDF Vectoriser}
+
+\subparagraph{Words}
+\subparagraph{Characters}
 
 \subsubsection{Modelling}
 
-\subsubsection{}
+\subsubsection{Predicting}
 
 SVC Accuracy: 0.767661708092
 
