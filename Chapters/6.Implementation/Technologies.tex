@@ -14,7 +14,7 @@ It was mentioned in Chapter \ref{Chapter:Design} that it would not be feasible t
 * * * * * command/to/run
 \end{lstlisting}
 
-\noindent Each asterix represents a time-and-date field, and from left to right these correspond to minute, hour, day, month and weekday \cite{Ubuntu:Cron}. 
+Each asterix represents a time-and-date field, and from left to right these correspond to minute, hour, day, month and weekday \cite{Ubuntu:Cron}. 
 
 Laravel contains a task scheduler which simplifies the process of executing tasks at a given interval. With the scheduler, only the following entry needs to be added to the \textit{crontab} file:
 
@@ -22,7 +22,7 @@ Laravel contains a task scheduler which simplifies the process of executing task
 * * * * * php /path-to-your-project/artisan schedule:run >> /dev/null 2>&1
 \end{lstlisting}
 
-\noindent This entry calls the Laravel task scheduler every minute \cite{Laravel:Scheduling}. Laravel's task scheduler provides a number of schedule frequency options, including daily, weekly or even as a custom cron entry \cite{Laravel:Scheduling}. Tasks can be added to the \texttt{schedule()} method in \textit{app/Console/Kernel}. In the method, it is possible to schedule Artisan commands, which can be made by the user, or OS commands. Custom user commands can be defined using the following command:
+This entry calls the Laravel task scheduler every minute \cite{Laravel:Scheduling}. Laravel's task scheduler provides a number of schedule frequency options, including daily, weekly or even as a custom cron entry \cite{Laravel:Scheduling}. Tasks can be added to the \texttt{schedule()} method in \textit{app/Console/Kernel}. In the method, it is possible to schedule Artisan commands, which can be made by the user, or OS commands. Custom user commands can be defined using the following command:
 
 \begin{lstlisting}[language=bash]
 php artisan make:command CommandName --command=commandsignature
