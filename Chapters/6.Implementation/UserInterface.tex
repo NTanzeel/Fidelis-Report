@@ -127,6 +127,33 @@ Laravel provides support for integrating a notification system with your applica
 
 \subsection{Profile}
 \subsection{Settings}
+Figure \ref{fig:SettingsImplementation} shows the settings page that allows the user to toggle user account settings. The user is able to modify profile and privacy \& safety settings. In addition to this, they can also manage tags they are subscribed to, and user accounts they have blocked.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/Implementation/SettingsPage}
+\caption{Profile settings from the settings page}
+\label{fig:SettingsImplementation}
+\end{figure}
+
+Each subset of settings is handled by different controllers. The \textit{AccountController} handles any changes made by the user to their name, email address or the privacy of the account. The controller also handles requests made by the user to edit or upload their profile pictures. The \textit{SafetyController}, seen in Figure \ref{fig:SafetyController}, retrieves the users default settings. As mentioned previously, users are able to modify settings related to abuse detection and recommendations. Before a user has had the chance to modify these settings, default settings are are provided for each user. Default settings are retrieved using the query shown in figure \ref{fig:UserDefaultSettings}. This query is added as a function on the model.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/Implementation/SafetyController}
+\caption{Safety Controller}
+\label{fig:SafetyController}
+\end{figure}
+
+The \textit{SubscriptionsController} returns the users subscriptions in a similar fashion to how default settings are retrieved. The \textit{BlockedController} also follows this approach, using a query to retrieve blocked users defined on the user model to return any blocked users.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/Implementation/UserDefaultSettings}
+\caption{Query to retrieve default settings for the user}
+\label{fig:UserDefaultSettings}
+\end{figure}
+
 \subsection{Static Pages}
 \subsubsection{Privacy Policy}
 \subsubsection{Support}
