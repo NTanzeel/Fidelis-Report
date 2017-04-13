@@ -43,7 +43,7 @@ With Laravel, raw SQL statements can be executed using the provided built-in cla
 	$users = DB::select('SELECT * FROM users WHERE id = ?', [1]);
 \end{lstlisting}
 
-\noindent The above query will return an array of objects modelling the user entity in the database. Using this array, it is possible to loop through the array and access the properties of each user as \emph{\$user-$>$property}, where property may be any attribute such as username or email.
+The above query will return an array of objects modelling the user entity in the database. Using this array, it is possible to loop through the array and access the properties of each user as \emph{\$user-$>$property}, where property may be any attribute such as username or email.
 
 \paragraph{Query Builder}
 The database query builder provides a convenient, fluent, and easy-to-use interface for creating and executing database queries \cite{Laravel:QueryBuilder}. The query builder can perform most operations supported by the database driver. One of the main advantages of using the query builder is that it uses PDO parameter bindings to prevent SQL injections, which means there is no need to sanitise user input. Using the query builder, one could retrieve the user with ID 1 by executing the following statement:
@@ -52,7 +52,7 @@ The database query builder provides a convenient, fluent, and easy-to-use interf
 	$user = DB::table('users')->where('id', 1)->first();
 \end{lstlisting}
 
-\noindent The above query would fetch the result where the user ID matches the provided parameter and retrieve the first result. Once again, the result is returned as an object modelling the user entity and the properties can be accessed again as \emph{\$user-$>$property}.
+The above query would fetch the result where the user ID matches the provided parameter and retrieve the first result. Once again, the result is returned as an object modelling the user entity and the properties can be accessed again as \emph{\$user-$>$property}.
 
 \paragraph{Eloquent Object-Relational Mapping}
 The Eloquent ORM included with Laravel provides an simple and elegant active record implementation for working with the database \cite{Laravel:Eloquent}. "Object-relational mapping (ORM) is a mechanism that makes it possible to address, access and manipulate objects without having to consider how those objects relate to their data sources" \cite{TechTarget:ORM}. Each database table has a corresponding "model" associated with it that is used database interactions and more specifically the table corresponding to a given model. Models allow the developer to query, insert, update, and delete records in the corresponding table as well as more complex operations such as joining tables. When querying the database using a model, Eloquent automatically instantiates and maps a model for each row in the result allowing the developer to utilise the models behaviour.
@@ -61,13 +61,13 @@ The Eloquent ORM included with Laravel provides an simple and elegant active rec
 	$ php artisan make:model Models/User
 \end{lstlisting}
 
-\noindent Creating a model is made simple again thanks to the Artisan utility. The command above will generate a User model in the \emph{app/Models} directory. Each Eloquent models extends the \emph{Illuminate/Database/Eloquent/Model} class which utilises the query builder for all interactions \cite{Laravel:Eloquent}. By default, Eloquent assumes that each table has a primary key field named \emph{id} and the \emph{created\_at} and \emph{updated\_at} timestamps but these can all be changed by toggling optional properties in the model. In order to use a model, the developer simply needs to import the model in the controller where it will be used. The user can simple execute the following command in order to retrieve the user with ID=1.
+Creating a model is made simple again thanks to the Artisan utility. The command above will generate a User model in the \emph{app/Models} directory. Each Eloquent models extends the \emph{Illuminate/Database/Eloquent/Model} class which utilises the query builder for all interactions \cite{Laravel:Eloquent}. By default, Eloquent assumes that each table has a primary key field named \emph{id} and the \emph{created\_at} and \emph{updated\_at} timestamps but these can all be changed by toggling optional properties in the model. In order to use a model, the developer simply needs to import the model in the controller where it will be used. The user can simple execute the following command in order to retrieve the user with ID=1.
 
 \begin{lstlisting}[language=php]
 	$user = User::find(1);
 \end{lstlisting}
 
-\noindent The line of code above will return the \emph{User} model. It is again possible to access the model properties as \emph{\$user-$>$property}. The main change to be noticed here is that the user can actually update the properties and save the changes made by executing the following: \emph{\$user-$>$save()} \cite{Laravel:Eloquent}.  The image in figure \ref{fig:UserModel} shows the code for the \emph{User} model. As visible in the image, it is possible to add custom methods to the model which may be called when the model is returned as a result.
+The line of code above will return the \emph{User} model. It is again possible to access the model properties as \emph{\$user-$>$property}. The main change to be noticed here is that the user can actually update the properties and save the changes made by executing the following: \emph{\$user-$>$save()} \cite{Laravel:Eloquent}.  The image in figure \ref{fig:UserModel} shows the code for the \emph{User} model. As visible in the image, it is possible to add custom methods to the model which may be called when the model is returned as a result.
 
 \begin{figure}[H]
 	\centering
