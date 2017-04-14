@@ -90,10 +90,10 @@ Although algorithm \ref{alg:content-filter-pipeline} is sufficient for building 
 \end{algorithm}
 
 \subsubsection{Predicting Topics}
-Once the model is built, it can then be deployed to predict the categories of tags. The tags themselves act as subcategories to the main categories which are displayed on the sidebar in the discover page. For example the tag \textit{\#watfordfc} should be categorised under sport and therefore the posts containing that tag would be displayed in the sport section on the discover page. The algorithm in \ref{alg:content-filter-predict} is run at regular intervals to predict the categories of recently made tags. Although the model is trained on entire posts, taqs are sufficiently informative to categorise them.
+Once the model is built, it can then be deployed to predict the categories of tags. The tags themselves act as subcategories to the main categories which are displayed on the sidebar in the discover page. For example the tag \textit{\#watfordfc} should be categorised under sport and therefore the posts containing that tag would be displayed in the sport section on the discover page. The algorithm in \ref{alg:content-filter-predict} is run at regular intervals to predict the categories of recently made tags and adds them to the category-tag table. Although the model is trained on entire posts, taqs are sufficiently informative to categorise them.
 
 \begin{algorithm}
-\caption{Content filter prediction}
+\caption{Content filter tag prediction}
 \label{alg:content-filter-predict}
 \begin{algorithmic}[1]
 \Function{predict}{Model $model$, Tags $tags$}
@@ -103,6 +103,23 @@ Once the model is built, it can then be deployed to predict the categories of ta
 	\ForAll{Row $tag \in tags$}
 		\State Add $(Row[tag],Row[topic])$ to Category-Tag table
 	\EndFor
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+In addition, the post itself is categorised, so that posts without tags can be assigned to a category in the discover page. Algorithm \ref{alg:post-predict} shows how the post-tag table is updated to include the post category as assigned to it by the model prediction. In addition, it allows the user to update the topic of the post in case the post is incorrectly categorised or if the post should not belong to any category. These post categorisations can then be used to train the model in the future so that the model is kept up-to-date. Depending on how quickly the model is able to categorise a post, the user may be prompted to change the category. If the prediction is quick, the user can be prompted to confirm the chosen category is correct, which will help ensure the model is trained on reliable data in the future. However, if the prediction is slow, the user can not wait to be prompted to confirm the category of the post. For the data to all be assigned a correct category, the user would have to change the category without prompt, which could effect the integrity of the data when training future models.   
+
+\begin{algorithm}
+\caption{Content filter post prediction and update}
+\label{alg:post-predict}
+\begin{algorithmic}[1]
+\Function{predict}{Model $model$, Post $post$}
+	\State $topic\gets model.predict(post)$
+	\State Add $(Row[tag],Row[topic])$ to Post-Tag table
+	\If{$topic$ is changed by user}
+		Delete original $topic$ from Post-Tag table
+		Add new $topic$ to Post-Tag table
+	\EndIf
 \EndFunction
 \end{algorithmic}
 \end{algorithm}
