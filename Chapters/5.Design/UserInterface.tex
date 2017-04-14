@@ -213,28 +213,48 @@ Widgets are a convenient way of modularising key application functionalities tha
 This section will discuss the design of each of these widgets in more detail.
 
 \subsubsection{Profile}
+The profile widget is responsible for displaying basic profile information for a user. The widget was designed in the form a of a profile card. It shows the users cover photo at the top along with their profile photo, much like the actual profile page. Additionally, basic information like name and username along with number of posts, followers, and following is also displayed. When displaying another users profile, interactive relationship toggles are also provided. The design is consistent across the two different versions of the widget and can be seen in \ref{fig:ProfileWidget}.
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[b]{0.5\linewidth}
+		\includegraphics[width=1\textwidth]{Images/Design/UI/Widgets/Profile_Self}
+		\caption{Self Profile}
+		\label{fig:ProfileWidget_Self}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.4\linewidth}
+		\includegraphics[width=1\textwidth]{Images/Design/UI/Widgets/Profile_Other}
+		\caption{Others Profile}
+		\label{fig:ProfileWidget_Other}
+	\end{subfigure}
+	\caption{The profile widget when display your own and someone else's profile.}
+	\label{fig:ProfileWidget}
+\end{figure}
+
 
 \subsubsection{Trending} \label{sec:design-trending}
 The widget shown in figure \ref{fig:trending} displays the top trending tags. The tags are displayed in descending order of how common they were in the last half an hour period. Each trending tag is then a link to the corresponding tag's feed in the discover page, allowing the user to find content relevant to that tag. The design of the widget is similar to the trending widget in Twitter (see figure \ref{fig:trending-twitter}), so that the user is familiar with the functionality it provides.
 
 \begin{figure}[H]
-\centering
-\includegraphics[width=0.5\textwidth]{Images/Design/trending-widget}
-\caption{Trending widget}
-\label{fig:trending}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.3\textwidth]{Images/Design/trending-twitter}
-\caption{Trending on Twitter}
-\label{fig:trending-twitter}
+	\centering
+	\begin{subfigure}[b]{0.4\linewidth}
+		\includegraphics[width=1\textwidth]{Images/Design/trending-widget}
+		\caption{Trending widget}
+		\label{fig:trending}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.4\linewidth}
+		\includegraphics[width=1\textwidth]{Images/Design/trending-twitter}
+		\caption{Trending on Twitter}
+		\label{fig:trending-twitter}
+	\end{subfigure}
+	\caption{Trending widget on Fidelis and Twitter.}
+	\label{fig:TrendingWidgets}
 \end{figure}
 
 \subsubsection{Recommendations}
 User recommendations that will be generated as discussed earlier in Chapter \ref{sec:ContentRecommendation} will need to be displayed to the user. Figure \ref{fig:RecommendationsWidgetDesign} shows the design for the user recommendations widget. The widget will show the user any new recommendations that have been generated for them, or old recommendations they have not interacted with. The widget will allow users to navigate to the profile of the recommendation, and will also have buttons which will enable the user to accept or reject the recommendations they have been provided with.
 
-\begin{figure}
+\begin{figure}[H]
 \centering
 \includegraphics[height=1.5in]{Images/Design/RecommendationsWidgetDesign}
 \caption{Design for the recommendations widget}
