@@ -114,6 +114,8 @@ If a user is not logged in to the website, they will see a display shown in Figu
 \subsubsection{Home Page}
 Once a user has logged in to their account, the will be directed to the home page, showing in Figure \ref{fig:home_authorised}. The page features the nav bar so the user can navigate to other pages, search for tags/users etc. The most prominent feature of this page is the central post feed. A user can create new posts including text and images as well as interacting with other posts. This includes upvoting or downvoting a post, commenting on a post and reporting posts. The posts displayed in this feed are selected by the system to match the user's interests.
 
+When creating a post, a tagging system is used similar to Twitter which allows users to mention other users (using the @ symbol) and also to tag topics (using the \# symbol). These tag topics are used to create specific topic feeds in the discover page and to calculate the trending topics \ref{sec:design-trending}. Any topic tags which exist in a post are added to the post\_tags table. In addition to tags allocated to a post using the \# symbol, tags are also added to a post if the post contains a word which already exists in the tags table. This allows for content which hasn't been explicitly tagged to be available in the discover page.
+
 Other than the post feed there are a number of widgets the user can interact with. The user profile widget on the left shows information about the user. This widget links to the user's profile page as well as lists showing the user's posts, the user's followers or other accounts following the user. Also on the left of the page is a widget displaying suggestions for other accounts that the user can follow to expand their network. Again, these suggestions are bespoke for the current user. On the right side of the page is another widget showing the tags that are currently trending across the entire platform. This is another way that the user can find new content rather than seeing just the posts in their feed.
 
 \begin{figure}[H]
@@ -194,8 +196,8 @@ The styling for the terms page is the same as the support page, using bullet poi
 
 \subsubsection{Profile}
 
-\subsubsection{Trending}
-The widget shown in figure \ref{fig:trending} displays the top trending tags, as calculated by the algorithm \ref{alg:trending}. The tags are displayed in descending order of how common they were in the last half an hour period. Each trending tag is then a link to the corresponding tag's feed in the discover page, allowing the user to find content relevant to that tag. The design of the widget is similar to the trending widget in Twitter (see figure \ref{fig:trending-twitter}), so that the user is familiar with the functionality it provides.
+\subsubsection{Trending} \label{design-trending}
+The widget shown in figure \ref{fig:trending} displays the top trending tags. The tags are displayed in descending order of how common they were in the last half an hour period. Each trending tag is then a link to the corresponding tag's feed in the discover page, allowing the user to find content relevant to that tag. The design of the widget is similar to the trending widget in Twitter (see figure \ref{fig:trending-twitter}), so that the user is familiar with the functionality it provides.
 
 \begin{figure}[H]
 \centering
