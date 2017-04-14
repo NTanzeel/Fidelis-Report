@@ -101,7 +101,20 @@ The password reset page, shown in Figure \ref{fig:PasswordReset} allows users to
 \end{figure}
 
 \subsection{Widgets}
+Widgets are standalone components which are composed of a class and a view. The class is responsible for all the logic and data for the widget and the view is responsible for displaying this data. Parameters may optionally be passed to widgets and can be accessed in the \textit{run()} function of the class. The entire base functionality is provided by a composer package which was included in the project \cite{Packagist:LaravelWidgets}. The base elements are then extended to create custom widgets. A widget can be displayed in any view using the \textit{@widget()} directive.
+
 \subsubsection{Profile}
+The profile widget is a standalone component that display the profile information for a specified user, passed through as the second argument of the \textit{@widget()} directive. This widget is used on two separate pages, the home page, for displaying the logged in users profile, and the followers/following page, for displaying the profile of other users. These can be seen in figure \ref{fig:ProfileWidget}. The former is relatively simple as it simply uses a view to render the users details. The latter however uses slightly more complex for the following/unfollowing button. This button is rendered as a partial as it is also used on the profile page.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{Images/Implementation/UI/Widgets/Profile_Follow}
+	\caption{The code for switching the interactive button on the profile widget.}
+	\label{fig:Profile_Follow}
+\end{figure}
+
+In order to display the button, we need to first determine the current relationship between the user. This is done using the logic on the first line of figure \ref{fig:Profile_Follow}. The HTML has been collapsed, which hides some of the less important code and PHP logic. Next, if we have an authorised user and this widget is not rendering the same user then we can display the follow or unfollow button based on the relationship. If the dropdown parameter has been defined as true then we add additional options such as block and unblock. If the user is viewing their own profile then we add an edit profile button but this will only occur on the profile page.
+
 \subsubsection{Trending}
 \subsubsection{Recommendations}
 Figure \ref{fig:RecommendationsWidget} shows the implementation of the recommendations widget. The widget allows the user to interact with the recommendations they receive - interactions are limited to accepting or rejecting the recommendation. Additionally, users can navigate to the profile of the recommendation by clicking on their name. For both interaction types, the recommendation is removed from the widget. This ensures that the widget does not become bloated with recommendations the user has interacted with in the past, and the user is only shown recommendations they haven't responded to. Using jQuery it was possible to animate the removal of the recommendations from the widget. This provides the user with a visual cue of a successful interaction. Along with this animation, when a user accepts a recommendation the counter on the profile widget for the number of followers for the user is incremented. This again provides another visual cue to the user that their  interaction has been successful.
