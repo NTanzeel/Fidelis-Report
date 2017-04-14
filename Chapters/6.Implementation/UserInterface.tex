@@ -104,6 +104,32 @@ The password reset page, shown in Figure \ref{fig:PasswordReset} allows users to
 \subsubsection{Profile}
 \subsubsection{Trending}
 \subsubsection{Recommendations}
+Figure \ref{fig:RecommendationsWidget} shows the implementation of the recommendations widget. The widget allows the user to interact with the recommendations they receive - interactions are limited to accepting or rejecting the recommendation. Additionally, users can navigate to the profile of the recommendation by clicking on their name. For both interaction types, the recommendation is removed from the widget. This ensures that the widget does not become bloated with recommendations the user has interacted with in the past, and the user is only shown recommendations they haven't responded to. Using jQuery it was possible to animate the removal of the recommendations from the widget. This provides the user with a visual cue of a successful interaction. Along with this animation, when a user accepts a recommendation the counter on the profile widget for the number of followers for the user is incremented. This again provides another visual cue to the user that their  interaction has been successful.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=3in]{Images/Implementation/RecommendationsWidget}
+\caption{Recommendations widget}
+\label{fig:RecommendationsWidget}
+\end{figure}
+
+In figure \ref{fig:UsersWidget} we can see the class for the users widget. This class is responsible for retrieving the user recommendations generated for the authorised user. Only recommendations the user has not responded to, denoted by a 0 in the database, are retrieved. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{Images/Implementation/UsersWidget}
+\caption{Users widget class}
+\label{fig:UsersWidget}
+\end{figure}
+
+Figure \ref{fig:UserRecommendationsController} shows the controller created for the users widget. The controller handles interactions made with recommendations. The controller extends the \textit{FollowersController}, making it possible to use the custom HTTP request \textit{FollowRequest}, which is used when a request is made to follow a user. By extending this controller, the \texttt{store()} function, which is called when the user accepts a recommendation, can log the follow request using its parents' \texttt{store()} method, and then subsequently update the response to the request. The \texttt{delete()} function is called when the user rejects one of the recommendations provided, and simply updates the response of the recommendation in the database.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{Images/Implementation/UserRecommendationsController}
+\caption{Users widget class}
+\label{fig:UserRecommendationsController}
+\end{figure}
 
 \subsection{Home}
 \subsection{Discover}
