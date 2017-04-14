@@ -188,6 +188,22 @@ The profile widget is a standalone component that display the profile informatio
 In order to display the button, we need to first determine the current relationship between the user. This is done using the logic on the first line of figure \ref{fig:Profile_Follow}. The HTML has been collapsed, which hides some of the less important code and PHP logic. Next, if we have an authorised user and this widget is not rendering the same user then we can display the follow or unfollow button based on the relationship. If the dropdown parameter has been defined as true then we add additional options such as block and unblock. If the user is viewing their own profile then we add an edit profile button but this will only occur on the profile page.
 
 \subsubsection{Trending}
+The gathering of the trending tags which is displayed by the trending widget is handled in the Trending PHP class shown in figure \ref{fig:trending-class}. The trending tags are calculated by a single database query, which selects all the tags from the post\_tags table from the last 24 hours in order of the number of posts that the tag appears within the time frame. The number of tags is then limited to 10, since this is the maximum number of tags which should be displayed in the widget. The Tag models representing these trending tags are then passed to the Blade PHP pages where the trending widget is shown so that these tags can be output to the user, allowing them to explore the tags. Because the \texttt{run()} function is called whenever a user loads a page containing the user widget, the widget will be up-to-date at the point of the user loading the page. Figure \ref{fig:trending-blade} shows the how the Blade PHP files display the tags as links to the relevant discover pages.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{Images/Implementation/UI/Widgets/trending-class}
+	\caption{The PHP class which calculates trending tags for the trending widget.}
+	\label{fig:trending-class}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{Images/Implementation/UI/Widgets/trending-blade}
+	\caption{The Blade PHP file which displays the trending widget.}
+	\label{fig:trending-blade}
+\end{figure}
+
 \subsubsection{Recommendations}
 Figure \ref{fig:RecommendationsWidget} shows the implementation of the recommendations widget. The widget allows the user to interact with the recommendations they receive - interactions are limited to accepting or rejecting the recommendation. Additionally, users can navigate to the profile of the recommendation by clicking on their name. For both interaction types, the recommendation is removed from the widget. This ensures that the widget does not become bloated with recommendations the user has interacted with in the past, and the user is only shown recommendations they haven't responded to. Using jQuery it was possible to animate the removal of the recommendations from the widget. This provides the user with a visual cue of a successful interaction. Along with this animation, when a user accepts a recommendation the counter on the profile widget for the number of followers for the user is incremented. This again provides another visual cue to the user that their  interaction has been successful.
 
