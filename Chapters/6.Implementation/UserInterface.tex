@@ -5,21 +5,22 @@ This section will look at how each of the designed UI aspects were implemented. 
 Figure \ref{fig:NavImplementation} shows the implemented navigation bars for unauthorised and unauthorised users. Users are able to navigate to the pages represented by each of the icons on the navigation bar. 
 
 \begin{figure}[H]
-\centering
-\begin{subfigure}{1\linewidth}
-	\includegraphics[width=1\textwidth]{Images/Design/nav-unauthorised}
-	\caption{}
-	\label{fig:NavUnauth}
-\end{subfigure}
-\begin{subfigure}{1\linewidth}
-	\includegraphics[width=1\textwidth]{Images/Design/nav-authorised}
-	\caption{}
-	\label{fig:NavAuth}
-\end{subfigure}
-\caption{Fidelis navigation bar for (a) unauthorised and (b) authorised users}
-\label{fig:NavImplementation}
+	\centering
+	\begin{subfigure}{1\linewidth}
+		\includegraphics[width=1\textwidth]{Images/Design/nav-unauthorised}
+		\caption{Guest}
+		\label{fig:NavUnauth}
+	\end{subfigure}
+	\begin{subfigure}{1\linewidth}
+		\includegraphics[width=1\textwidth]{Images/Design/nav-authorised}
+		\caption{Authorised User}
+		\label{fig:NavAuth}
+	\end{subfigure}
+	\caption{Fidelis navigation bar for (a) unauthorised and (b) authorised users}
+	\label{fig:NavImplementation}
 \end{figure}
 
+\subsubsection{Links}
 Routes for each of the icons are populated using the \textit{LayoutComposer} class, which is a class method that is called whenever the Layout view is rendered \cite{Laravel:Views}. The navigation bar is rendered in the Layout view. Depending on whether the user is authorised or not, the composer returns the title, icon name, route and CSS properties of the relevant icon. Figure \ref{fig:LayoutComposerNav} shows the navigation options for user and application navigation.
 
 \begin{figure}[H]
@@ -38,6 +39,7 @@ Routes for each of the icons are populated using the \textit{LayoutComposer} cla
 \label{fig:LayoutComposerNav}
 \end{figure}
 
+\subsubsection{Search}
 The search bar allows users to enter a query term, and any user or tag matching this search term is retrieved. Using jQuery and JSON, it is possible to live-update the results from the supplied query term and display them to the user. Doing this removes the need to re-direct the user to a separate page which displays the search results to them. An API call to the \textit{SearchController} is made, in which all users and tags matching the query term are retrieved and returned to the view as a JSON object. Figure \ref{fig:SearchController} shows the retrieval of results that match the search term.
 
 \begin{figure}[H]
@@ -97,6 +99,11 @@ The password reset page, shown in Figure \ref{fig:PasswordReset} allows users to
 \caption{Account recovery page}
 \label{fig:PasswordReset}
 \end{figure}
+
+\subsection{Widgets}
+\subsubsection{Profile}
+\subsubsection{Trending}
+\subsubsection{Recommendations}
 
 \subsection{Home}
 \subsection{Discover}
