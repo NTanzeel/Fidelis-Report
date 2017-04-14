@@ -193,6 +193,24 @@ The styling for the terms page is the same as the support page, using bullet poi
 \end{figure}
 
 \subsection{Widgets}
+Widgets are re-usable ``miniature application views'' that provide specified, limited functionality \cite{AndroidDevelopers:Widgets}. Widgets are extremely popular on mobile devices; in figure \ref{fig:WeatherWidget} we can see a widget for the weather. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=1in]{Images/Design/AppWidget}
+\caption{Weather widget from an Android phone}
+\label{fig:WeatherWidget}
+\end{figure}
+
+Widgets are a convenient way of modularising key application functionalities that can be repeated across multiple web pages. Because of this, widgets will be used on Fidelis to relay information to the user in a consistent manner. Namely, these widgets are:
+
+\begin{itemize}
+\item The profile widget, which will provide a summary of key user information, such as the number of posts they have made
+\item The trending widget, which will provide the user with a list of up-to-date trending topics
+\item The recommendations widget, which will display custom user recommendations to the user
+\end{itemize}
+
+This section will discuss the design of each of these widgets in more detail.
 
 \subsubsection{Profile}
 
@@ -214,3 +232,13 @@ The widget shown in figure \ref{fig:trending} displays the top trending tags. Th
 \end{figure}
 
 \subsubsection{Recommendations}
+User recommendations that will be generated as discussed earlier in Chapter \ref{sec:ContentRecommendation} will need to be displayed to the user. Figure \ref{fig:RecommendationsWidgetDesign} shows the design for the user recommendations widget. The widget will show the user any new recommendations that have been generated for them, or old recommendations they have not interacted with. The widget will allow users to navigate to the profile of the recommendation, and will also have buttons which will enable the user to accept or reject the recommendations they have been provided with.
+
+\begin{figure}
+\centering
+\includegraphics[height=1.5in]{Images/Design/RecommendationsWidgetDesign}
+\caption{Design for the recommendations widget}
+\label{fig:RecommendationsWidgetDesign}
+\end{figure}
+
+By providing recommendations as a widget, this will allow recommendations to be displayed to the user on multiple pages. With this in mind, the recommendations widget will appear for authorised users on the home, notifications and profile page.
