@@ -101,7 +101,19 @@ The password reset page, shown in Figure \ref{fig:PasswordReset} allows users to
 \end{figure}
 
 \subsection{Widgets}
-Widgets are standalone components which are composed of a class and a view. The class is responsible for all the logic and data for the widget and the view is responsible for displaying this data. Parameters may optionally be passed to widgets and can be accessed in the \textit{run()} function of the class. The entire base functionality is provided by a composer package which was included in the project \cite{Packagist:LaravelWidgets}. The base elements are then extended to create custom widgets. A widget can be displayed in any view using the \textit{@widget()} directive.
+A public Github repository created by user \textit{arrilot} provides functionality for integrating widgets with the Laravel framework \cite{Packagist:LaravelWidgets}. The widget service provider available from this is ``a powerful alternative to view composers'', and as such using widgets is very similar to normal Laravel views. Widgets are standalone components which are composed of a class and a view. The class is responsible for all the logic and data for the widget and the view is responsible for displaying this data. To use these widgets, they must first be installed by running the following command:
+
+\begin{lstlisting}[language=php]
+ composer require arrilot/laravel-widgets
+\end{lstlisting}
+
+Once installed, the \textit{app.php} configuration must be updated with the registration of the new service provider. Widgets can be created in a similar fashion to controllers by using the Artisan utility:
+
+\begin{lstlisting}[language=php]
+ php artisan make:widget WidgetName
+\end{lstlisting}
+
+This command creates the relevant view and class for the widget. At this stage, widgets can be treated as a regular view, and can be included in existing views by using the \texttt{@widget(`widget')} directive. Parameters may optionally be passed to widgets and can be accessed in the \texttt{run()} function of the class.
 
 \subsubsection{Profile}
 The profile widget is a standalone component that display the profile information for a specified user, passed through as the second argument of the \textit{@widget()} directive. This widget is used on two separate pages, the home page, for displaying the logged in users profile, and the followers/following page, for displaying the profile of other users. These can be seen in figure \ref{fig:ProfileWidget}. The former is relatively simple as it simply uses a view to render the users details. The latter however uses slightly more complex for the following/unfollowing button. This button is rendered as a partial as it is also used on the profile page.
