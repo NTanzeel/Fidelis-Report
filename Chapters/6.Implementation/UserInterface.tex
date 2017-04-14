@@ -100,62 +100,6 @@ The password reset page, shown in Figure \ref{fig:PasswordReset} allows users to
 \label{fig:PasswordReset}
 \end{figure}
 
-\subsection{Widgets}
-A public Github repository created by user \textit{arrilot} provides functionality for integrating widgets with the Laravel framework \cite{Packagist:LaravelWidgets}. The widget service provider available from this is ``a powerful alternative to view composers'', and as such using widgets is very similar to normal Laravel views. Widgets are standalone components which are composed of a class and a view. The class is responsible for all the logic and data for the widget and the view is responsible for displaying this data. To use these widgets, they must first be installed by running the following command:
-
-\begin{lstlisting}[language=php]
- composer require arrilot/laravel-widgets
-\end{lstlisting}
-
-Once installed, the \textit{app.php} configuration must be updated with the registration of the new service provider. Widgets can be created in a similar fashion to controllers by using the Artisan utility:
-
-\begin{lstlisting}[language=php]
- php artisan make:widget WidgetName
-\end{lstlisting}
-
-This command creates the relevant view and class for the widget. At this stage, widgets can be treated as a regular view, and can be included in existing views by using the \texttt{@widget(`widget')} directive. Parameters may optionally be passed to widgets and can be accessed in the \texttt{run()} function of the class.
-
-\subsubsection{Profile}
-The profile widget is a standalone component that display the profile information for a specified user, passed through as the second argument of the \textit{@widget()} directive. This widget is used on two separate pages, the home page, for displaying the logged in users profile, and the followers/following page, for displaying the profile of other users. These can be seen in figure \ref{fig:ProfileWidget}. The former is relatively simple as it simply uses a view to render the users details. The latter however uses slightly more complex for the following/unfollowing button. This button is rendered as a partial as it is also used on the profile page.
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\textwidth]{Images/Implementation/UI/Widgets/Profile_Follow}
-	\caption{The code for switching the interactive button on the profile widget.}
-	\label{fig:Profile_Follow}
-\end{figure}
-
-In order to display the button, we need to first determine the current relationship between the user. This is done using the logic on the first line of figure \ref{fig:Profile_Follow}. The HTML has been collapsed, which hides some of the less important code and PHP logic. Next, if we have an authorised user and this widget is not rendering the same user then we can display the follow or unfollow button based on the relationship. If the dropdown parameter has been defined as true then we add additional options such as block and unblock. If the user is viewing their own profile then we add an edit profile button but this will only occur on the profile page.
-
-\subsubsection{Trending}
-\subsubsection{Recommendations}
-Figure \ref{fig:RecommendationsWidget} shows the implementation of the recommendations widget. The widget allows the user to interact with the recommendations they receive - interactions are limited to accepting or rejecting the recommendation. Additionally, users can navigate to the profile of the recommendation by clicking on their name. For both interaction types, the recommendation is removed from the widget. This ensures that the widget does not become bloated with recommendations the user has interacted with in the past, and the user is only shown recommendations they haven't responded to. Using jQuery it was possible to animate the removal of the recommendations from the widget. This provides the user with a visual cue of a successful interaction. Along with this animation, when a user accepts a recommendation the counter on the profile widget for the number of followers for the user is incremented. This again provides another visual cue to the user that their  interaction has been successful.
-
-\begin{figure}[H]
-\centering
-\includegraphics[height=3in]{Images/Implementation/RecommendationsWidget}
-\caption{Recommendations widget}
-\label{fig:RecommendationsWidget}
-\end{figure}
-
-In figure \ref{fig:UsersWidget} we can see the class for the users widget. This class is responsible for retrieving the user recommendations generated for the authorised user. Only recommendations the user has not responded to, denoted by a 0 in the database, are retrieved. 
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=1\textwidth]{Images/Implementation/UsersWidget}
-\caption{Users widget class}
-\label{fig:UsersWidget}
-\end{figure}
-
-Figure \ref{fig:UserRecommendationsController} shows the controller created for the users widget. The controller handles interactions made with recommendations. The controller extends the \textit{FollowersController}, making it possible to use the custom HTTP request \textit{FollowRequest}, which is used when a request is made to follow a user. By extending this controller, the \texttt{store()} function, which is called when the user accepts a recommendation, can log the follow request using its parents' \texttt{store()} method, and then subsequently update the response to the request. The \texttt{delete()} function is called when the user rejects one of the recommendations provided, and simply updates the response of the recommendation in the database.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=1\textwidth]{Images/Implementation/UserRecommendationsController}
-\caption{Users widget class}
-\label{fig:UserRecommendationsController}
-\end{figure}
-
 \subsection{Home}
 \subsection{Discover}
 \subsection{Notifications}
@@ -215,3 +159,59 @@ The \textit{SubscriptionsController} returns the users subscriptions in a simila
 \subsection{Static Pages}
 \subsubsection{Privacy Policy}
 \subsubsection{Support}
+
+\subsection{Widgets}
+A public Github repository created by user \textit{arrilot} provides functionality for integrating widgets with the Laravel framework \cite{Packagist:LaravelWidgets}. The widget service provider available from this is ``a powerful alternative to view composers'', and as such using widgets is very similar to normal Laravel views. Widgets are standalone components which are composed of a class and a view. The class is responsible for all the logic and data for the widget and the view is responsible for displaying this data. To use these widgets, they must first be installed by running the following command:
+
+\begin{lstlisting}[language=php]
+ composer require arrilot/laravel-widgets
+\end{lstlisting}
+
+Once installed, the \textit{app.php} configuration must be updated with the registration of the new service provider. Widgets can be created in a similar fashion to controllers by using the Artisan utility:
+
+\begin{lstlisting}[language=php]
+ php artisan make:widget WidgetName
+\end{lstlisting}
+
+This command creates the relevant view and class for the widget. At this stage, widgets can be treated as a regular view, and can be included in existing views by using the \texttt{@widget(`widget')} directive. Parameters may optionally be passed to widgets and can be accessed in the \texttt{run()} function of the class.
+
+\subsubsection{Profile}
+The profile widget is a standalone component that display the profile information for a specified user, passed through as the second argument of the \textit{@widget()} directive. This widget is used on two separate pages, the home page, for displaying the logged in users profile, and the followers/following page, for displaying the profile of other users. These can be seen in figure \ref{fig:ProfileWidget}. The former is relatively simple as it simply uses a view to render the users details. The latter however uses slightly more complex for the following/unfollowing button. This button is rendered as a partial as it is also used on the profile page.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{Images/Implementation/UI/Widgets/Profile_Follow}
+	\caption{The code for switching the interactive button on the profile widget.}
+	\label{fig:Profile_Follow}
+\end{figure}
+
+In order to display the button, we need to first determine the current relationship between the user. This is done using the logic on the first line of figure \ref{fig:Profile_Follow}. The HTML has been collapsed, which hides some of the less important code and PHP logic. Next, if we have an authorised user and this widget is not rendering the same user then we can display the follow or unfollow button based on the relationship. If the dropdown parameter has been defined as true then we add additional options such as block and unblock. If the user is viewing their own profile then we add an edit profile button but this will only occur on the profile page.
+
+\subsubsection{Trending}
+\subsubsection{Recommendations}
+Figure \ref{fig:RecommendationsWidget} shows the implementation of the recommendations widget. The widget allows the user to interact with the recommendations they receive - interactions are limited to accepting or rejecting the recommendation. Additionally, users can navigate to the profile of the recommendation by clicking on their name. For both interaction types, the recommendation is removed from the widget. This ensures that the widget does not become bloated with recommendations the user has interacted with in the past, and the user is only shown recommendations they haven't responded to. Using jQuery it was possible to animate the removal of the recommendations from the widget. This provides the user with a visual cue of a successful interaction. Along with this animation, when a user accepts a recommendation the counter on the profile widget for the number of followers for the user is incremented. This again provides another visual cue to the user that their  interaction has been successful.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=3in]{Images/Implementation/RecommendationsWidget}
+\caption{Recommendations widget}
+\label{fig:RecommendationsWidget}
+\end{figure}
+
+In figure \ref{fig:UsersWidget} we can see the class for the users widget. This class is responsible for retrieving the user recommendations generated for the authorised user. Only recommendations the user has not responded to, denoted by a 0 in the database, are retrieved. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{Images/Implementation/UsersWidget}
+\caption{Users widget class}
+\label{fig:UsersWidget}
+\end{figure}
+
+Figure \ref{fig:UserRecommendationsController} shows the controller created for the users widget. The controller handles interactions made with recommendations. The controller extends the \textit{FollowersController}, making it possible to use the custom HTTP request \textit{FollowRequest}, which is used when a request is made to follow a user. By extending this controller, the \texttt{store()} function, which is called when the user accepts a recommendation, can log the follow request using its parents' \texttt{store()} method, and then subsequently update the response to the request. The \texttt{delete()} function is called when the user rejects one of the recommendations provided, and simply updates the response of the recommendation in the database.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{Images/Implementation/UserRecommendationsController}
+\caption{Users widget class}
+\label{fig:UserRecommendationsController}
+\end{figure}
