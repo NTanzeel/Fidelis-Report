@@ -107,6 +107,86 @@ The password reset page, shown in Figure \ref{fig:PasswordReset} allows users to
 
 \subsection{Home}
 \subsection{Discover}
+The implemented discover page is shown in Figure \ref{fig:DiscoverPage}. This page gives the ability for a user to seek out and find new content, which appeals to them, outside of the content they see from their current network. The user can used this page to find new content from specific categories, see content from tags they have subscribed to (and manage these subscriptions), as well as seeing content recommended for them.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/Implementation/DiscoverPage}
+\caption{Discover Page}
+\label{fig:DiscoverPage}
+\end{figure}
+The banner seen across the top of the page contains the title of the current page. The title that is shown therefore depends on which data is being displayed. For each case a separate view has been created to display the correct title. This is usually the name of the category, however there are exceptions for viewing the user's subscriptions - in which case a button must also be included to link to the Settings page where the user can manage their subscriptions - as well as viewing the user's recommended content. Figure \ref{DiscoverTitle} shows these different views.
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{1\linewidth}
+	\includegraphics[width=\textwidth]{Images/Implementation/CategoryBladePhp}
+	\caption{}
+	\label{fig:CategoryBladePhp}
+\end{subfigure}
+\begin{subfigure}[b]{1\linewidth}
+	\includegraphics[width=\textwidth]{Images/Implementation/IndexBladePhp}
+	\caption{}
+	\label{fig:IndexBladePhp}
+\end{subfigure}
+\begin{subfigure}[b]{1\linewidth}
+	\includegraphics[width=\textwidth]{Images/Implementation/RecommendedBladePhp}
+	\caption{}
+	\label{fig:RecommendedBladePhp}
+\end{subfigure}
+\caption{Different view outputs of Title for (a) Categories, (b) Subscribtions and (c) Recommendations}
+\label{fig:DiscoverTitle}
+\end{figure}
+
+In order to determine which content needs to be loaded to the post feed, the system determines which option is `active', i.e., whether the user has selected to view content they are subscribed to, content recommended for them, or content from a category. For each of these options there is a corresponding route to follow. These routes are shown in Figure \ref{DiscoverRouting}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/Implementation/DiscoverRouting}
+\caption{Discover Routing}
+\label{fig:DiscoverRouting}
+\end{figure}
+
+\subsubsection{Discover Controller Actions}
+Each of these routes followed from the discover page result in a different action being taken by the \(DiscoverController\). Note that routing to the index route (for subscriptions) here requires a check to ensure the user is authorised to take that action (check the user is signed into an account since otherwise they will have no subscriptions). Each of these actions will ultimately return a number of posts (and relevant data regarding those posts) from the database to be handled by the discover page (displaying those posts in the posts feed).
+
+\paragraph{Subscribed Content}
+When the discover page needs to display content the user is subscribed to, the \(index()\) function of the \(DiscoverController\) is called. This function is shown in Figure \ref{DiscoverControllerSubscribed}. This function will retrieve the id of every tag the user is subscribed to. The function then collects every posts which has a tag, where that tag is one that the user is subscribed to. Those of the posts found which are not the user's own posts are then returned to the discover page to be displayed in order from the most recent to the oldest post.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/Implementation/DiscoverControllerSubscribed}
+\caption{Discover Controller action for displaying subscribed content}
+\label{fig:DiscoverControllerSubscribed}
+\end{figure}
+
+\paragraph{Recommended Content}
+When the discover page needs to display content that is recommended for the current user, the \(recommend()\) function of the \(Discover  Controller\) is called. This function is shown in Figure \ref{DiscoverControllerSubscribed}. The function will call the \(recommendedPosts()\) function shown in Figure \ref{RecommendedPosts}. The \(recommendedPosts()\) function simply returns all posts that are recommended to the given user. Those of the posts found which are not the user's own posts are then returned to the discover page to be displayed in order from the most recent to the oldest post.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/Implementation/DiscoverControllerRecommended}
+\caption{Discover Controller action for displaying recommended content }
+\label{fig:DiscoverControllerRecommended}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/Implementation/RecommendedPosts}
+\caption{\(recommendedPosts()\) function}
+\label{fig:RecommendedPosts}
+\end{figure}
+
+\paragraph{Category Content}
+When the discover page needs to display content from a specific category that the user has selected to view, the \(category()\) function of the \(Discover  Controller\) is called. This function is shown in Figure \ref{DiscoverControllerSubscribed}. After performing a few checks including finding if the \(\$category\) variable passed is in fact a category (root tag) or simply a tag belonging to a category. If it is a root category, the function will find the id of every tag within that category and then find every post with a tag that has a matching tag id. Alternatively, if the variable passed is simply a tag belonging to a category, the function will find all posts using that tag. Either way, those of the posts found which are not the user's own posts are then returned to the discover page to be displayed in order from the most recent to the oldest post.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/Implementation/DiscoverControllerCategory}
+\caption{Discover Controller action for displaying content from a category}
+\label{fig:DiscoverControllerCategory}
+\end{figure}
+
 \subsection{Notifications}
 Figure \ref{fig:NotificationsPage} shows the implemented notifications page. Users receive a notification whenever they receive a new follow, are mentioned in a post by another user, or one of their posts is commented or voted on. The page provides users with information on the notification type, and if relevant the content of the notification (for example, the comment made on their post). The counter, seen next to the bell icon on the navigation bar, indicates to the user how many unread notifications they have. The notification page only fetches unread notifications, which reduces the amount of data that is retrieved from the database. This speeds up the load time of the page. When the user visits the notifications page, all unread notifications are marked as read. 
 
@@ -123,7 +203,7 @@ Laravel provides support for integrating a notification system with your applica
 	$user->notify(new NameOfNotification($notification)
 \end{lstlisting}
 
- It is also possible to queue notifications. Creating a queue of notifications can speed up application response time as there can be delays when delivering notifications to the user \cite{Laravel:Notifications, Laravel:Queues}. Queueing can be enabled by adding the \textit{Queueable} trait to the notification class, and starting a queue worker by configuring the queue in \textit{config/queue.php}. Figure \ref{fig:CommentNotification} shows the notification class created for comments. The \texttt{toArray()} function contains an array that represents information carried by the notification. In the array we have a 'regarding' entry, which represents the item the notification is related to, a 'to' entry which represents who the notification is meant for, and a 'text' field which contains information displayed to the user receiving the notification.
+ It is also possible to queue notifications. Creating a queue of notifications can speed up application response time as there can be delays when delivering notifications to the user \cite{Laravel:Notifications, Laravel:Queues}. Queueing can be enabled by adding the \textit{Queueable} trait to the notification class, and starting a queue worker by configuring the queue in \textit{config/queue.php}. Figure \ref{fig:CommentNotification} shows the notification class created for comments. The \texttt{toArray()} function contains an array that represents information carried by the notification. In the array we have a `regarding' entry, which represents the item the notification is related to, a `to' entry which represents who the notification is meant for, and a `text' field which contains information displayed to the user receiving the notification.
 
 \begin{figure}[H]
 \centering
