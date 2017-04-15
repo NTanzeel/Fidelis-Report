@@ -110,7 +110,7 @@ The implemented discover page is shown in Figure \ref{fig:DiscoverPage}. This pa
 \caption{Discover Page}
 \label{fig:DiscoverPage}
 \end{figure}
-The banner seen across the top of the page contains the title of the current page. The title that is shown therefore depends on which data is being displayed. For each case a separate view has been created to display the correct title. This is usually the name of the category, however there are exceptions for viewing the user's subscriptions - in which case a button must also be included to link to the Settings page where the user can manage their subscriptions - as well as viewing the user's recommended content. Figure \ref{DiscoverTitle} shows these different views.
+The banner seen across the top of the page contains the title of the current page. The title that is shown therefore depends on which data is being displayed. For each case a separate view has been created to display the correct title. This is usually the name of the category, however there are exceptions for viewing the user's subscriptions - in which case a button must also be included to link to the Settings page where the user can manage their subscriptions - as well as viewing the user's recommended content. Figure \ref{fig:DiscoverTitle} shows these different views.
 
 \begin{figure}[H]
 \centering
@@ -133,7 +133,7 @@ The banner seen across the top of the page contains the title of the current pag
 \label{fig:DiscoverTitle}
 \end{figure}
 
-In order to determine which content needs to be loaded to the post feed, the system determines which option is `active', i.e., whether the user has selected to view content they are subscribed to, content recommended for them, or content from a category. For each of these options there is a corresponding route to follow. These routes are shown in Figure \ref{DiscoverRouting}.
+In order to determine which content needs to be loaded to the post feed, the system determines which option is `active', i.e., whether the user has selected to view content they are subscribed to, content recommended for them, or content from a category. For each of these options there is a corresponding route to follow. These routes are shown in Figure \ref{fig:DiscoverRouting}.
 
 \begin{figure}[H]
 \centering
@@ -146,7 +146,7 @@ In order to determine which content needs to be loaded to the post feed, the sys
 Each of these routes followed from the discover page result in a different action being taken by the \(DiscoverController\). Note that routing to the index route (for subscriptions) here requires a check to ensure the user is authorised to take that action (check the user is signed into an account since otherwise they will have no subscriptions). Each of these actions will ultimately return a number of posts (and relevant data regarding those posts) from the database to be handled by the discover page (displaying those posts in the posts feed).
 
 \paragraph{Subscribed Content}
-When the discover page needs to display content the user is subscribed to, the \(index()\) function of the \(DiscoverController\) is called. This function is shown in Figure \ref{DiscoverControllerSubscribed}. This function will retrieve the id of every tag the user is subscribed to. The function then collects every posts which has a tag, where that tag is one that the user is subscribed to. Those of the posts found which are not the user's own posts are then returned to the discover page to be displayed in order from the most recent to the oldest post.
+When the discover page needs to display content the user is subscribed to, the \(index()\) function of the \(DiscoverController\) is called. This function is shown in Figure \ref{fig:DiscoverControllerSubscribed}. This function will retrieve the id of every tag the user is subscribed to. The function then collects every posts which has a tag, where that tag is one that the user is subscribed to. Those of the posts found which are not the user's own posts are then returned to the discover page to be displayed in order from the most recent to the oldest post.
 
 \begin{figure}[H]
 \centering
@@ -156,7 +156,7 @@ When the discover page needs to display content the user is subscribed to, the \
 \end{figure}
 
 \paragraph{Recommended Content}
-When the discover page needs to display content that is recommended for the current user, the \(recommend()\) function of the \(Discover  Controller\) is called. This function is shown in Figure \ref{DiscoverControllerSubscribed}. The function will call the \(recommendedPosts()\) function shown in Figure \ref{RecommendedPosts}. The \(recommendedPosts()\) function simply returns all posts that are recommended to the given user. Those of the posts found which are not the user's own posts are then returned to the discover page to be displayed in order from the most recent to the oldest post.
+When the discover page needs to display content that is recommended for the current user, the \(recommend()\) function of the \(Discover  Controller\) is called. This function is shown in Figure \ref{fig:DiscoverControllerSubscribed}. The function will call the \(recommendedPosts()\) function shown in Figure \ref{fig:RecommendedPosts}. The \(recommendedPosts()\) function simply returns all posts that are recommended to the given user. Those of the posts found which are not the user's own posts are then returned to the discover page to be displayed in order from the most recent to the oldest post.
 
 \begin{figure}[H]
 \centering
@@ -173,7 +173,7 @@ When the discover page needs to display content that is recommended for the curr
 \end{figure}
 
 \paragraph{Category Content}
-When the discover page needs to display content from a specific category that the user has selected to view, the \(category()\) function of the \(Discover  Controller\) is called. This function is shown in Figure \ref{DiscoverControllerSubscribed}. After performing a few checks including finding if the \(\$category\) variable passed is in fact a category (root tag) or simply a tag belonging to a category. If it is a root category, the function will find the id of every tag within that category and then find every post with a tag that has a matching tag id. Alternatively, if the variable passed is simply a tag belonging to a category, the function will find all posts using that tag. Either way, those of the posts found which are not the user's own posts are then returned to the discover page to be displayed in order from the most recent to the oldest post.
+When the discover page needs to display content from a specific category that the user has selected to view, the \(category()\) function of the \(Discover  Controller\) is called. This function is shown in Figure \ref{fig:DiscoverControllerSubscribed}. After performing a few checks including finding if the \(\$category\) variable passed is in fact a category (root tag) or simply a tag belonging to a category. If it is a root category, the function will find the id of every tag within that category and then find every post with a tag that has a matching tag id. Alternatively, if the variable passed is simply a tag belonging to a category, the function will find all posts using that tag. Either way, those of the posts found which are not the user's own posts are then returned to the discover page to be displayed in order from the most recent to the oldest post.
 
 \begin{figure}[H]
 \centering
