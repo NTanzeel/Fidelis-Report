@@ -39,7 +39,7 @@ The function in figure \ref{fig:AbuseDetection-ProcessComments} processes the en
 
 The next step involved cleansing the data by removing any duplicate comments in the training set. The function in figure \ref{fig:AbuseDetection-Deduplicate} takes a set of comments and their labels to filter out duplicated comments, returning only unique comments with their associated labels. The first part of this process computes the hash of every comment. This will result in the same hash for two comments that are identical, due to the nature of the hashing process. Next, we take the indices of all the unique hashes, which returns bins containing the indices corresponding to every hash value. As a result, if a hash appears twice then it will contains two indices in its bin. The indices of the hashes are then used to find the duplicates where the bin has more than indices in it. Given all the duplicates, we can generate a mask, lines 5-8, which only returns one instance of every duplicate comment. Finally, the mask is used to access all the unique comments and their associated labels.
 
-\subsubsection{Feature Engineering}
+\subsubsection{Feature Engineering} \label{sec:feature-engineering}
 The raw data, a sequence of symbols, cannot be fed directly to the algorithms themselves as most of them expect numerical feature vectors with a fixed size rather than the raw text documents with variable length \cite{scikit:tfidf}. In order to achieve a reasonable accuracy, the features of the dataset must be transformed into something meaningful.
 
 
@@ -122,7 +122,7 @@ Scikit-Learn provides a utility for exhaustively testing models with a list of v
 	\label{fig:AbuseDetection-Training}
 \end{figure}
 
-\subsubsection{Exporting}
+\subsubsection{Exporting} \label{sec:exporting}
 With the models trained and the best parameters discovered, a single instance of the model fitted to the entire training dataset can be created and saved to a file. This allows the model to be reloaded quickly, with the same settings and information, to make predictions. The function in figure \ref{fig:AbuseDetection-Exporting} generates an instance of the pipeline with a linear regression model. The pipeline is fitted to the training data, evaluated using the test data and the resulting estimator is stored to a file.
 
 \begin{figure}[H]

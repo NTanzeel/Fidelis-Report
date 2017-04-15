@@ -114,6 +114,8 @@ If a user is not logged in to the website, they will see a display shown in Figu
 \subsubsection{Home Page}
 Once a user has logged in to their account, the will be directed to the home page, showing in Figure \ref{fig:home_authorised}. The page features the nav bar so the user can navigate to other pages, search for tags/users etc. The most prominent feature of this page is the central post feed. A user can create new posts including text and images as well as interacting with other posts. This includes upvoting or downvoting a post, commenting on a post and reporting posts. The posts displayed in this feed are selected by the system to match the user's interests.
 
+When creating a post, a tagging system is used similar to Twitter which allows users to mention other users (using the @ symbol) and also to tag topics (using the \# symbol). These tag topics are used to create specific topic feeds in the discover page and to calculate the trending topics (see section \ref{sec:design-trending}). Any topic tags which exist in a post are added to the post\_tags table. In addition to tags allocated to a post using the \# symbol, tags are also added to a post if the post contains a word which already exists in the tags table. This allows for content which hasn't been explicitly tagged to be available in the discover page.
+
 Other than the post feed there are a number of widgets the user can interact with. The user profile widget on the left shows information about the user. This widget links to the user's profile page as well as lists showing the user's posts, the user's followers or other accounts following the user. Also on the left of the page is a widget displaying suggestions for other accounts that the user can follow to expand their network. Again, these suggestions are bespoke for the current user. On the right side of the page is another widget showing the tags that are currently trending across the entire platform. This is another way that the user can find new content rather than seeing just the posts in their feed.
 
 \begin{figure}[H]
@@ -189,3 +191,74 @@ The styling for the terms page is the same as the support page, using bullet poi
 \caption{Design for terms page}
 \label{fig:terms}
 \end{figure}
+
+\subsection{Widgets}
+Widgets are re-usable ``miniature application views'' that provide specified, limited functionality \cite{AndroidDevelopers:Widgets}. Widgets are extremely popular on mobile devices; in figure \ref{fig:WeatherWidget} we can see a widget for the weather. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=1in]{Images/Design/AppWidget}
+\caption{Weather widget from an Android phone}
+\label{fig:WeatherWidget}
+\end{figure}
+
+Widgets are a convenient way of modularising key application functionalities that can be repeated across multiple web pages. Because of this, widgets will be used on Fidelis to relay information to the user in a consistent manner. Namely, these widgets are:
+
+\begin{itemize}
+\item The profile widget, which will provide a summary of key user information, such as the number of posts they have made
+\item The trending widget, which will provide the user with a list of up-to-date trending topics
+\item The recommendations widget, which will display custom user recommendations to the user
+\end{itemize}
+
+This section will discuss the design of each of these widgets in more detail.
+
+\subsubsection{Profile}
+The profile widget is responsible for displaying basic profile information for a user. The widget was designed in the form a of a profile card. It shows the users cover photo at the top along with their profile photo, much like the actual profile page. Additionally, basic information like name and username along with number of posts, followers, and following is also displayed. When displaying another users profile, interactive relationship toggles are also provided. The design is consistent across the two different versions of the widget and can be seen in \ref{fig:ProfileWidget}.
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[b]{0.5\linewidth}
+		\includegraphics[width=1\textwidth]{Images/Design/UI/Widgets/Profile_Self}
+		\caption{Self Profile}
+		\label{fig:ProfileWidget_Self}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.4\linewidth}
+		\includegraphics[width=1\textwidth]{Images/Design/UI/Widgets/Profile_Other}
+		\caption{Others Profile}
+		\label{fig:ProfileWidget_Other}
+	\end{subfigure}
+	\caption{The profile widget when display your own and someone else's profile.}
+	\label{fig:ProfileWidget}
+\end{figure}
+
+
+\subsubsection{Trending} \label{sec:design-trending}
+The widget shown in figure \ref{fig:trending} displays the top trending tags. The tags are displayed in descending order of how common they were in the last half an hour period. Each trending tag is then a link to the corresponding tag's feed in the discover page, allowing the user to find content relevant to that tag. The design of the widget is similar to the trending widget in Twitter (see figure \ref{fig:trending-twitter}), so that the user is familiar with the functionality it provides.
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[b]{0.4\linewidth}
+		\includegraphics[width=1\textwidth]{Images/Design/trending-widget}
+		\caption{Trending widget}
+		\label{fig:trending}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.4\linewidth}
+		\includegraphics[width=1\textwidth]{Images/Design/trending-twitter}
+		\caption{Trending on Twitter}
+		\label{fig:trending-twitter}
+	\end{subfigure}
+	\caption{Trending widget on Fidelis and Twitter.}
+	\label{fig:TrendingWidgets}
+\end{figure}
+
+\subsubsection{Recommendations}
+User recommendations that will be generated as discussed earlier in Chapter \ref{sec:ContentRecommendation} will need to be displayed to the user. Figure \ref{fig:RecommendationsWidgetDesign} shows the design for the user recommendations widget. The widget will show the user any new recommendations that have been generated for them, or old recommendations they have not interacted with. The widget will allow users to navigate to the profile of the recommendation, and will also have buttons which will enable the user to accept or reject the recommendations they have been provided with.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=1.5in]{Images/Design/RecommendationsWidgetDesign}
+\caption{Design for the recommendations widget}
+\label{fig:RecommendationsWidgetDesign}
+\end{figure}
+
+By providing recommendations as a widget, this will allow recommendations to be displayed to the user on multiple pages. With this in mind, the recommendations widget will appear for authorised users on the home, notifications and profile page.
