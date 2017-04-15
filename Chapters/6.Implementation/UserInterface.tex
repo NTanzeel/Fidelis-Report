@@ -101,6 +101,83 @@ The password reset page, shown in Figure \ref{fig:PasswordReset} allows users to
 \end{figure}
 
 \subsection{Home}
+When a user first navigates to the Fidelis platform - either for the first time, or if they are not logged into an account - they will be faced with the landing page shown in Figure \ref{fig:HomeUnauthorised}.  
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/Implementation/home_unauthorised}
+\caption{Landing Page}
+\label{fig:HomeUnauthorised}
+\end{figure}
+
+This landing page is created by the view shown in Figure \ref{fig:LandingView}. We can see that if the user is detected to be a guessed, i.e., not logged into an account, this page will be shown. The view provides two buttons at the top right of the page, one for logging into an existing account, and one for signing up for a new account. In addition, a background wallpaper will be provided randomly from a number of stored image assets. Finally the title of the website, `Fidelis', is displayed along with a quote (and a name of the person to whom the quote is attributed) regarding trust: the central theme of Fidelis.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/Implementation/LandingView}
+\caption{Landing page view}
+\label{fig:LandingView}
+\end{figure}
+
+If, however it is determined that the user is logged in when they navigate to this page, they will be routed from this landing page to the home page shown in Figure \ref{fig:HomeAuthorised}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/Implementation/home_authorised}
+\caption{Home Page}
+\label{fig:HomeAuthorised}
+\end{figure}
+
+Upon the user being directed to the home page, a call will be made to the \(index()\) function of the \(HomeController\) via the routing. Figure \ref{fig:HomeRoutingController} shows this route as well as the \(index\) function. The \(index()\) function will first find the user id of each other account that the user is following. Then it will find all posts belonging to all of these users. The posts found are then returned to the home page to be displayed in order from the most recent post to the oldest post.
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{1\linewidth}
+	\includegraphics[width=\textwidth]{Images/Implementation/HomeRouting}
+	\caption{}
+	\label{fig:HomeRouting}
+\end{subfigure}
+\begin{subfigure}[b]{1\linewidth}
+	\includegraphics[width=1\textwidth]{Images/Implementation/HomeControllerIndexFunction}
+	\caption{}
+	\label{fig:HomeControllerIndexFunction}
+\end{subfigure}
+\caption{(a) Home page routing and (b) \(index()\) function of the \(HomeController\)}
+\label{fig:HomeRoutingController}
+\end{figure}
+
+Once the posts from accounts the user is following have loaded in, the user also has the ability to create and share their own content. The user can type their own text to post as well as being able to upload an image with the post. Figure \ref{fig:HomeNewPostForm} shows the AJAX form involved with creating a new post. The user can type text into the available text area to be submitted with the post.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/Implementation/HomeNewPostForm}
+\caption{AJAX form for creating a new post}
+\label{fig:HomeNewPostForm}
+\end{figure}
+
+In addition, there is an icon which can be clicked to upload a photo with the post. Figure \ref{fig:HomeNewPostAJAX} shows the AJAX code that is used to handle image uploads and form submission. Firstly, this code finds the class involved with uploading a photo and waits for the upload icon to be clicked. Once this happens, the user will choose an image to upload and upon them doing so, the code will attain the filename of the image and display it next to the icon. If the user chooses to upload more than one image, `\(n\) Files' will be displayed instead, where `\(n\)' is the number of files being uploaded.
+
+The rest of the code handles the submission of the form (Once the user hits submit to create the post). At this point, the new post will be automatically categorised using the script \(predict.py\). The URL for this form submission is seen to be the form's `action' attribute. Looking at the first line of \ref{fig:HomeNewPostForm} again we can see that the form is set up to route a post request using the \(store()\) function in the \(PostController\). This function simply stores the new post in the database and then returns the same post to the home page. This post will then appear at the top of the home page for the user.
+
+\begin{figure}[H]
+\ContinuedFloat
+\centering
+\begin{subfigure}[b]{1\linewidth}
+	\includegraphics[width=\textwidth]{Images/Implementation/HomeNewPostJS}
+	\caption{}
+	\label{fig:HomeNewPostJS}
+\end{subfigure}
+\end{figure}
+\begin{figure}[H]\ContinuedFloat
+\begin{subfigure}[b]{1\linewidth}
+	\includegraphics[width=\textwidth]{Images/Implementation/HomeNewPostJS2}
+	\caption{}
+	\label{fig:HomeNewPostJS2}
+\end{subfigure}
+\caption{AJAX function for handling a new post: (a) inserting and image and (b) submitting the form}
+\label{fig:HomeNewPostAJAX}
+\end{figure}
+
 \subsection{Discover}
 The implemented discover page is shown in Figure \ref{fig:DiscoverPage}. This page gives the ability for a user to seek out and find new content, which appeals to them, outside of the content they see from their current network. The user can used this page to find new content from specific categories, see content from tags they have subscribed to (and manage these subscriptions), as well as seeing content recommended for them.
 
@@ -110,6 +187,7 @@ The implemented discover page is shown in Figure \ref{fig:DiscoverPage}. This pa
 \caption{Discover Page}
 \label{fig:DiscoverPage}
 \end{figure}
+
 The banner seen across the top of the page contains the title of the current page. The title that is shown therefore depends on which data is being displayed. For each case a separate view has been created to display the correct title. This is usually the name of the category, however there are exceptions for viewing the user's subscriptions - in which case a button must also be included to link to the Settings page where the user can manage their subscriptions - as well as viewing the user's recommended content. Figure \ref{fig:DiscoverTitle} shows these different views.
 
 \begin{figure}[H]
@@ -146,7 +224,7 @@ In order to determine which content needs to be loaded to the post feed, the sys
 Each of these routes followed from the discover page result in a different action being taken by the \(DiscoverController\). Note that routing to the index route (for subscriptions) here requires a check to ensure the user is authorised to take that action (check the user is signed into an account since otherwise they will have no subscriptions). Each of these actions will ultimately return a number of posts (and relevant data regarding those posts) from the database to be handled by the discover page (displaying those posts in the posts feed).
 
 \paragraph{Subscribed Content}
-When the discover page needs to display content the user is subscribed to, the \(index()\) function of the \(DiscoverController\) is called. This function is shown in Figure \ref{fig:DiscoverControllerSubscribed}. This function will retrieve the id of every tag the user is subscribed to. The function then collects every posts which has a tag, where that tag is one that the user is subscribed to. Those of the posts found which are not the user's own posts are then returned to the discover page to be displayed in order from the most recent to the oldest post.
+When the discover page needs to display content the user is subscribed to, the \(index()\) function of the \(DiscoverController\) is called. This function is shown in Figure \ref{fig:DiscoverControllerSubscribed}. This function will retrieve the id of every tag the user is subscribed to. The function then collects every posts which has a tag, where that tag is one that the user is subscribed to. These posts are then returned to the discover page to be displayed in order from the most recent to the oldest post.
 
 \begin{figure}[H]
 \centering
@@ -156,7 +234,7 @@ When the discover page needs to display content the user is subscribed to, the \
 \end{figure}
 
 \paragraph{Recommended Content}
-When the discover page needs to display content that is recommended for the current user, the \(recommend()\) function of the \(Discover  Controller\) is called. This function is shown in Figure \ref{fig:DiscoverControllerSubscribed}. The function will call the \(recommendedPosts()\) function shown in Figure \ref{fig:RecommendedPosts}. The \(recommendedPosts()\) function simply returns all posts that are recommended to the given user. Those of the posts found which are not the user's own posts are then returned to the discover page to be displayed in order from the most recent to the oldest post.
+When the discover page needs to display content that is recommended for the current user, the \(recommend()\) function of the \(Discover  Controller\) is called. This function is shown in Figure \ref{fig:DiscoverControllerSubscribed}. The function will call the \(recommendedPosts()\) function shown in Figure \ref{fig:RecommendedPosts}. The \(recommendedPosts()\) function simply returns all posts that are recommended to the given user. These posts are then returned to the discover page to be displayed in order from the most recent to the oldest post.
 
 \begin{figure}[H]
 \centering
@@ -173,7 +251,7 @@ When the discover page needs to display content that is recommended for the curr
 \end{figure}
 
 \paragraph{Category Content}
-When the discover page needs to display content from a specific category that the user has selected to view, the \(category()\) function of the \(Discover  Controller\) is called. This function is shown in Figure \ref{fig:DiscoverControllerSubscribed}. After performing a few checks including finding if the \(\$category\) variable passed is in fact a category (root tag) or simply a tag belonging to a category. If it is a root category, the function will find the id of every tag within that category and then find every post with a tag that has a matching tag id. Alternatively, if the variable passed is simply a tag belonging to a category, the function will find all posts using that tag. Either way, those of the posts found which are not the user's own posts are then returned to the discover page to be displayed in order from the most recent to the oldest post.
+When the discover page needs to display content from a specific category that the user has selected to view, the \(category()\) function of the \(Discover  Controller\) is called. This function is shown in Figure \ref{fig:DiscoverControllerSubscribed}. After performing a few checks including finding if the \(\$category\) variable passed is in fact a category (root tag) or simply a tag belonging to a category. This is because this function is also accessed when the user is routed to the discover page from a trending tag. If it is a root category, the function will find the id of every tag within that category and then find every post with a tag that has a matching tag id. Alternatively, if the variable passed is simply a tag belonging to a category, the function will find all posts using that tag. Either way, these posts are then returned to the discover page to be displayed in order from the most recent to the oldest post.
 
 \begin{figure}[H]
 \centering
