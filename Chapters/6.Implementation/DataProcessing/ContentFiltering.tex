@@ -52,23 +52,48 @@ However, as well as building the model using the entire dataset, cross-validatio
 \end{figure}
 
 \subsubsection{Predicting Topics}
-The categories of the tag are predicted every 15 minutes by the execution of a scheduled program. This Python script, which is in figure \textbf{fig:predict-tag} collects all the tags from the tags table where the categorised attribute is set to 0. These uncategorised tags are then passed to the imported classification model, which predicts which category the tag belongs to. Finally, the database is updated and the category-tag pairs are added to the category\_tags table so that they can be used by the discover page. Interactions with the database are handled using a MySQL cursor from the MySQL package. The cursor is open throughout the execution of the script until is closed at the end of the prediction process. All of the tags which are collected from the database are stored in a Pandas dataframe so that it can be passed to the machine learning model. In addition, the category.csv file is imported, which contains the mappings from the integer values representing the categories in the trained model and the actual name of the category.
+The categories of the tag are predicted every 15 minutes by the execution of a scheduled program. This Python script, which is in figure \ref{fig:predict-tag} collects all the tags from the tags table where the categorised attribute is set to 0. These uncategorised tags are then passed to the imported classification model, which predicts which category the tag belongs to. Finally, the database is updated and the category-tag pairs are added to the category\_tags table so that they can be used by the discover page. Interactions with the database are handled using a MySQL cursor from the MySQL package. The cursor is open throughout the execution of the script until is closed at the end of the prediction process. All of the tags which are collected from the database are stored in a Pandas dataframe so that it can be passed to the machine learning model. In addition, the category.csv file is imported, which contains the mappings from the integer values representing the categories in the trained model and the actual name of the category.
 
-Post categories are predicted using the API, which makes a call to the PostController function \texttt{predict()} after a post has been made. As shown in figure \textbf{fig:predict-api}, the function attaches the post to the tag which represents the category. Because the model used to predict the post is a Python script, the PostController uses the $Process$ object to run the script and retrieve the predicted category which is output by the script. After attaching the post to the tag, and thus adding the post-tag pair to the post\_tag table, the API returns the post's category so that JavaScript can be used to update the category on the user's display. The code in figure \ref{fig:predict-post} shows Python script which is used to predict the category of the post. As with figure \textbf{fig:predict-tag}, the code is stored in the predict.py file, but the two sections are distinguished by whether a post ID argument is passed when executing the script or not. This part of the script does not use MySQL cursors because any processing involved with the database is handled in the PostController. 
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/Implementation/predict-tag}
+\caption{Predicting the tag's category}
+\label{fig:predict-tag}
+\end{figure}
+
+Post categories are predicted using the API, which makes a call to the PostController function \texttt{predict()} after a post has been made. As shown in figure \ref{fig:predict-api}, the function attaches the post to the tag which represents the category. Because the model used to predict the post is a Python script, the PostController uses the $Process$ object to run the script and retrieve the predicted category which is output by the script. After attaching the post to the tag, and thus adding the post-tag pair to the post\_tag table, the API returns the post's category so that JavaScript can be used to update the category on the user's display. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/Implementation/predict-api}
+\caption{API controller for predicting a post}
+\label{fig:predict-api}
+\end{figure}
+
+The code in figure \ref{fig:predict-post} shows Python script which is used to predict the category of the post. As with figure \ref{fig:predict-tag}, the code is stored in the predict.py file, but the two sections are distinguished by whether a post ID argument is passed when executing the script or not. This part of the script does not use MySQL cursors because any processing involved with the database is handled in the PostController. 
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{Images/Implementation/predict-post}
-\caption{Predicting the post's category}
+\caption{Predicting a post's category}
 \label{fig:predict-post}
 \end{figure}
 
-Once the post has been categorised, the user would then be able to change this category in the event that the post has been misclassified. This may be the case when the post does not belong to a category, because the model will always predict that the post belongs to one of the 13 categories even if it is miscellaneous (unless the preprocessed post contains less than 20 characters). The updating of the category is performed by the API once the user has selected a new category using the Bootstrap modal shown in figure \ref{fig:category-modal}. The API request passes the relevant post and (new) category IDs to the \texttt{editCategory()} function in the PostController, which is shown in figure \textbf{fig:edit-category}. This function removes the old category from the post\_tags table and replaces it with the new one. The API then returns the new category name to the application front end so that the changes can be reflected in the user interface. 
+Once the post has been categorised, the user would then be able to change this category in the event that the post has been misclassified. This may be the case when the post does not belong to a category, because the model will always predict that the post belongs to one of the 13 categories even if it is miscellaneous (unless the preprocessed post contains less than 20 characters). The updating of the category is performed by the API once the user has selected a new category using the Bootstrap modal shown in figure \ref{fig:category-modal}. 
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{Images/Implementation/category-modal}
 \caption{Modal to edit post category}
 \label{fig:category-modal}
+\end{figure}
+
+The API request passes the relevant post and (new) category IDs to the \texttt{editCategory()} function in the PostController, which is shown in figure \ref{fig:edit-category}. This function removes the old category from the post\_tags table and replaces it with the new one. The API then returns the new category name to the application front end so that the changes can be reflected in the user interface. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/Implementation/edit-category}
+\caption{API controller for changing a post's category}
+\label{fig:edit-category}
 \end{figure}
 
