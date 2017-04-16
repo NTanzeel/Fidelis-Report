@@ -276,7 +276,7 @@ Laravel provides support for integrating a notification system with your applica
 	$user->notify(new NameOfNotification($notification)
 \end{lstlisting}
 
- It is also possible to queue notifications. Creating a queue of notifications can speed up application response time as there can be delays when delivering notifications to the user \cite{Laravel:Notifications, Laravel:Queues}. Queueing can be enabled by adding the \textit{Queueable} trait to the notification class, and starting a queue worker by configuring the queue in \textit{config/queue.php}. Figure \ref{fig:CommentNotification} shows the notification class created for comments. The \texttt{toArray()} function contains an array that represents information carried by the notification. In the array we have a `regarding' entry, which represents the item the notification is related to, a `to' entry which represents who the notification is meant for, and a `text' field which contains information displayed to the user receiving the notification.
+It is also possible to queue notifications. Creating a queue of notifications can speed up application response time as there can be delays when delivering notifications to the user \cite{Laravel:Notifications, Laravel:Queues}. Queueing can be enabled by adding the \textit{Queueable} trait to the notification class, and starting a queue worker by configuring the queue in \textit{config/queue.php}. Figure \ref{fig:CommentNotification} shows the notification class created for comments. The \texttt{toArray()} function contains an array that represents information carried by the notification. In the array we have a `regarding' entry, which represents the item the notification is related to, a `to' entry which represents who the notification is meant for, and a `text' field which contains information displayed to the user receiving the notification.
 
 \begin{figure}[H]
 \centering
@@ -286,6 +286,64 @@ Laravel provides support for integrating a notification system with your applica
 \end{figure}
 
 \subsection{Profile}
+The user profile page, shown in Figure \ref{fig:ProfilePage}, allows the user to see all their activity and public information related to their account (Name, bio etc.), as well as reviewing their posts, followers and so on. A user can also view the profiles of other users which creates yet another avenue for discovering new content, as well as nurturing user-to-user interactions across the platform. Upon loading a user's profile page, their cover photo and profile picture will be loaded from the database. On the right of the page we also have the ability to Follow/Unfollow the user, as well as the option to block that user. There is also a widget on the right of the page displaying trending topics.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/Implementation/ProfilePage}
+\caption{User profile page}
+\label{fig:ProfilePage}
+\end{figure}
+
+\subsubsection{User activity}
+The main feature of this page is the ability to view the activity of this user. This can be done using the 4 tabs in the centre of the page: Posts, Followers, Following and Rated. Each one routes to its own page, each calling upon a different function from the \(ProfileController\). These routes can be seen in Figure \ref{fig:ProfileRouting}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/Implementation/ProfileRouting}
+\caption{Routes for the user profile page}
+\label{fig:ProfileRouting}
+\end{figure}
+
+The posts tab (Figure \ref{fig:ProfilePosts}) calls upon the \(view()\) function from the \(ProfileController\). This function, as with each of the functions called by routes on this page, begins by calling the \(preRoute()\) function, which assesses whether the current user is authorised to view this data (e.g. ensuring the user is logged in, not blocked etc.). Once this is confirmed, the \(view()\) function will find all of the posts from the user who's page is being viewed and return them in order from the most recent post to the oldest post by this user.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/Implementation/ProfilePosts}
+\caption{Posts tab on the user profile page}
+\label{fig:ProfilePosts}
+\end{figure}
+
+The followers tab (Figure \ref{fig:ProfileFollowers}) calls upon the \(followers()\) function from the \(ProfileController\). This function firstly uses the \(preRoute()\) function, to assess whether the current user is authorised to view this data. Once this is confirmed, the \(followers()\) function will find and return all of the users who follow the user in question. These will then be displayed as a series of user widgets, one for each user following the user to whom the profile belongs. The posts are displayed in a post feed.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/Implementation/ProfileFollowers}
+\caption{Followers tab on the user profile page}
+\label{fig:ProfileFollowers}
+\end{figure}
+
+In much the same way, the following tab (Figure \ref{fig:ProfileFollowing}) calls upon the \(following()\) function from the \(ProfileController\). This function firstly uses the \(preRoute()\) function, to assess whether the current user is authorised to view this data. Once this is confirmed, the \(following()\) function will find and return all of the users who are followed by the user in question. These will then be displayed as a series of user widgets, one for each user that the user to whom the profile belongs follows.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/Implementation/ProfileFollowing}
+\caption{Following tab on the user profile page}
+\label{fig:ProfileFollowing}
+\end{figure}
+
+The rated tab (Figure \ref{fig:ProfileRated}) calls upon the \(rated()\) function from the \(ProfileController\). This function firstly uses the \(preRoute()\) function, to assess whether the current user is authorised to view this data. Once this is confirmed, the \(rated()\) function will find and return all of the posts which the user in question has rated, i.e., has either voted up or voted down. These posts are returned in order from the most recent post to the oldest post by this user. The posts are displayed in a post feed.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/Implementation/ProfileRated}
+\caption{Rated tab on the user profile page}
+\label{fig:ProfileRated}
+\end{figure}
+
+\subsubsection{Photos Widget}
+The photos widget can be seen on the left hand side of a user's profile page. This widget displays photos that a user has uploaded to the Fidelis Platform. Upon the page being loaded, this widget will be populated with the user's photos, retrieved from the database. The images not only appear in the widget, but upon clicking one of the photos, a modal lightbox will popup over the page. The user can use this to look through all of the photos that the user has uploaded.
+
 \subsection{Settings}
 Figure \ref{fig:SettingsImplementation} shows the settings page that allows the user to toggle user account settings. The user is able to modify profile and privacy \& safety settings. In addition to this, they can also manage tags they are subscribed to, and user accounts they have blocked.
 
