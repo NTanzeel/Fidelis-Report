@@ -1,9 +1,11 @@
 \chapter{System Requirements}
 \label{Chapter:SystemRequirements}
-No system can be developed without a direction. The requirements for a project guide the developer through the development process and ensure that core functionality is provided. These requirements are split into functional and non-functional requirements. Additionally, the requirements allow for a thorough testing plan to be implemented which can then later be used to evaluate the final product. 
+No system can be developed without a clear vision and direction. The requirements for a project guide the developer through the development process and ensure that core functionality is provided. These requirements are split into functional and non-functional requirements. Additionally, the requirements allow for a thorough testing plan to be implemented which can then later be used to evaluate the final product. 
 
 \section{Requirement Refinement}
-``Any project requirements need to be well thought out, balanced and clearly understood by all involved, but perhaps of most importance is that they are not dropped or compromised halfway through the project'' \cite{ReQTest:Requirements}. As the design and development of the project progressed, it became clear that some of the existing requirements, as defined in the project specification, would have to be refined as they were not sufficient to provide clear guidelines for development. Additionally, some of the requirements laid out in the specification were either optimistic or redundant and hence also required modification. As a result of this, several requirements were altered throughout development, some of which were changed numerous times. Throughout the refinement process the stakeholders of the project were consulted before any of the requirements were altered, added or removed. Fortunately, due to previous research, the requirements were reasonably accurate and did not require any major changes. The changing requirements could easily be integrated due to the agile development methodology, which provides opportunities to assess the direction of a project throughout the development lifecycle and make any changes through prototyping \cite{Agile:Home}.
+``Any project requirements need to be well thought out, balanced and clearly understood by all involved, but perhaps of most importance is that they are not dropped or compromised halfway through the project'' \cite{ReQTest:Requirements}. As the design and development of the project progressed, it became clear that some of the existing requirements, as defined in the project specification, would have to be refined as they were not sufficient to provide clear guidelines for development. Additionally, some of the requirements laid out in the specification were either optimistic or redundant and hence also required modification. As a result of this, several requirements were altered throughout development, some of which were changed numerous times. Only the final requirements are discussed here.
+
+Throughout the refinement process the stakeholders of the project were consulted before any requirements were altered, added or removed. Fortunately, due to previous research, the requirements were reasonably accurate and did not require any major changes. The changing requirements could easily be integrated due to the agile development methodology, which provided opportunities to assess the direction of the project throughout the development lifecycle and make any changes through prototyping \cite{Agile:Home}.
 
 \section{Functional Requirements}
 The functional requirements will guide the development of all aspects of the system. These requirements will ensure that the system provides the necessary functionality, the implementation details of which are entirely up to the developer and may change during the development process.
@@ -14,7 +16,7 @@ The functional requirements will guide the development of all aspects of the sys
 		\end{enumerate}
 	\item Users must be able to register and log into the system.
 	\begin{enumerate}
-		\item Registration may be done through manually entering all the required details or by using a third party service which provides oAuth 2.0 capabilities, such as but not limited to Facebook and Twitter.
+		\item Registration must be done through manually entering all the required details.
 		\item These credentials should be stored, in an encrypted format, so that they can later be used for authentication.
 		\item Users should be able to recover their account in the case that they have forgotten their password or their account has been compromised.
 		\item A user maintains the right to be able to delete their account publicly, however this data may still be retained privately.
@@ -45,12 +47,12 @@ The functional requirements will guide the development of all aspects of the sys
 		\end{enumerate}
 	\item A user must be able to post new content to the system.
 		\begin{enumerate}
-			\item A post may include text, images or videos. Additionally an image or video post may also contain text.
+			\item A post may include text or images. Additionally an image post may also contain text.
 			\item When posting content, users may optionally tag the post or leave it untagged.
 			\item When the user tags a post with a popular topic, e.g. \#Brexit, the post should automatically be assigned to the correct category, e.g. Politics in the aforementioned case, using a bucket of keywords per category.
-			\item If a tag is mentioned and the post cannot be categorised automatically then the user may be prompted to assign one of the predefined categories so that the system can learn and adapt for the future. Additional processes may be used to verify that tags are correctly classified.
+			\item If a tag is mentioned and the post cannot be categorised automatically then the user should be allowed to assign one of the predefined categories so that the system can learn and adapt for the future. Additional processes may be used to verify that tags are correctly classified.
 		\end{enumerate}
-	\item Users can view any text, photo or video posts made by public accounts or by private accounts which they follow.
+	\item Users can view any posts made by public accounts or by private accounts which they follow.
 		\begin{enumerate}
 			\item Viewing media content should open up in a popup or similar so users can view the post and comment on it.
 		\end{enumerate}
@@ -58,7 +60,7 @@ The functional requirements will guide the development of all aspects of the sys
 		\begin{enumerate}
 			\item If the user has made their account private then only users following the author of the post may comment on or see the post.
 		\end{enumerate}
-	\item Users may interact with content they come across by liking, disliking or sharing it. Each of these actions will impact the reputation of the content.
+	\item Users may interact with content they come across by liking or disliking it. Each of these actions will impact the reputation of the content.
 		\begin{enumerate}
 			\item The user should also be able to reverse their interaction, e.g. un-liking a liked post.
 		\end{enumerate}
@@ -70,13 +72,22 @@ The functional requirements will guide the development of all aspects of the sys
 	\item The system will also calculate a reputation for each user posted content to represent the quality of content.
 		\begin{enumerate}
 			\item As other users react to the content by liking, disliking or sharing it, the reputation of the post will change which in turn impacts the author's reputation.
-			\item Highly scored posts will be more likely to be recommended to other users on the `Discover' or `Categories' pages.
+			\item Highly scored posts will be more likely to be provided to other users on the `Discover' or `Categories' pages.
 		\end{enumerate}
-	\item Each user will be able to choose how the reputation is calculated and how the notion of trust is implemented.
+	\item Each user will be able to choose how the notion of trust is implemented.
 		\begin{enumerate}
-			\item This feature will be available through the settings menu. Each algorithm will use different properties of a user and posts to compute the score.
+			\item This feature will be available through the settings menu. 
 			\item Additionally, the user will be able to change the sensitivity of the scoring system from mild to strong.
 		\end{enumerate}
+	\item The system will provide recommendations to the user
+	\begin{enumerate}
+		\item Users are provided with a set of user and content recommendations to broaden the content they interact with
+		\item Recommendations incorporate reputation scores to ensure that their quality is maintained	
+	\end{enumerate}
+	\item The system will allow the user to choose how recommendations are generated for them
+	\begin{enumerate}
+		\item The user can adjust settings related to recommendations on the settings page to personalise the recommendations generated for them
+	\end{enumerate}
 	\item The system will incorporate abuse detection to prevent things such as profanity, swearing and nudity amongst other things.
 		\begin{enumerate}
 			\item Each user can adjust the sensitivity of their abuse detection system depending on which content they would like to hide.
@@ -89,7 +100,7 @@ The functional requirements will guide the development of all aspects of the sys
 \end{enumerate}
 
 \section{Non-Functional Requirements}
-In order for the system to be successful and used, it is essential that it is available on-demand, regardless of time and place. This means that the system must support a range of devices varying from desktop to small hand-held machines. The non-functional requirements for this project will not only help to ensure that the systems operates smoothly and provides a responsive and enjoyable user experience, but also ensure that the development of the system is up to a high standard.
+In order for the system to be successful and usable, it is essential that it is available on-demand, regardless of time and place. This means that the system must support a range of devices varying from desktop to small hand-held devices. The non-functional requirements for this project will not only help to ensure that the systems operates smoothly and provides a responsive and enjoyable user experience, but also ensure that the development of the system is up to a high standard.
 \begin{enumerate}[label=\textbf{NF\arabic*}]
 	\item \textit{Compatibility}: The system must be cross-browser compatible and support all devices with a modern browser.
 		\begin{enumerate}
@@ -117,7 +128,7 @@ In order for the system to be successful and used, it is essential that it is av
 		\begin{enumerate}
 			\item User details and credentials, such as email and password must be appropriately secured.
 			\item Any data added by the user or associated with the user must only be available to the user unless explicitly made available to the public.
-			\item Users may not have access to personal information about other users, such as email address and location data.
+			\item Users must not have access to personal information about other users, such as authorisation credentials.
 			\item Any resources uploaded by the user must not be browsable by other users, unless made public by the user.
 		\end{enumerate}
 	\item \textit{Scalability}: The system must be scalable and respond well to growth.
@@ -130,7 +141,7 @@ In order for the system to be successful and used, it is essential that it is av
 		\begin{enumerate}
 			\item The system must be designed modularly, regardless of whether it may need changing or not.
 			\item Design decisions must be made with extensibility and growth in mind and as a result, any component or part of the system must be easily replaceable with an upgrade.
-			\item Each of these components must be independent and operate independently.
+			\item Each of these components must be independent of one another and operate as such.
 		\end{enumerate}
 	\item \textit{Maintainability}: The system must be maintainable.
 		\begin{enumerate}
@@ -180,6 +191,6 @@ As with all systems, there exist constraints which will limit the capability and
 
 As depicted by the table, the deployed VPS has very limited processing power, RAM and disk space. When a web server is installed, the processing power will limit the load time of web pages as the web server will only be allowed a portion of the resources. Additionally, the system relies on disk space for both hosting the database and storing resources uploaded by the users. The disk space will limit the amount of resources that can be stored and the amount of data that may be stored in the database. Fortunately, the data stored in the database is all textual and hence requires very minimal storage space. The one thing that the server is not limited by is the bandwidth, which is a huge 1TB per month.
 
-The VPS currently runs CentOS, a Linux distribution that is stable, predictable, manageable and reproducible, derived from the sources of Red Hat Enterprise Linux (RHEL) \cite{CentOS:Home}. Although CentOS is a relatively light distribution, it will still consume a significant portion of the available resources and hence leaving even less for the system. As a result, this production server is just a starting base provided for demonstration purposes. It is likely that as the system expands, in terms of user base and functionality, maintenance and the hardware requirements will increase drastically and the server(s) will require upgrading. This level of upgrade is beyond the scope of this project but the system will be designed with this in mind.
+The VPS currently runs CentOS, a Linux distribution that is stable, predictable, manageable and reproducible, derived from the sources of Red Hat Enterprise Linux (RHEL) \cite{CentOS:Home}. Although CentOS is a relatively light distribution, it will still consume a significant portion of the available resources and hence leaves even less for the system. As a result, this production server is just a starting base provided for demonstration purposes. It is likely that as the system expands, in terms of user base and functionality, maintenance and the hardware requirements will increase drastically and the server(s) will require upgrading. This level of upgrade is beyond the scope of this project but the system will be designed with this in mind.
 
 Machine learning techniques will be used in order to detect abuse and automatically categorise incoming posts. Because these methods use supervised learning models, the models must initially be trained on known datasets before they can be used. However, this may require large datasets in order to obtain a high performance model, which could mean that the limitations on RAM in the production server may force a limit on the quality of the model.
