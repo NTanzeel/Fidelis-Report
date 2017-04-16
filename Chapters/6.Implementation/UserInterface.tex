@@ -315,8 +315,27 @@ The \textit{SubscriptionsController} returns the users subscriptions in a simila
 \end{figure}
 
 \subsection{Static Pages}
-\subsubsection{Privacy Policy}
+The two static pages aim to address the possible issues discussed in section \ref{Chapter:Issues}, by displaying information about the terms of use for Fidelis and providing support in order to help alleviate any personal issues which can arise through the use of social networking sites. These pages are accessible to both authorised users and guests visiting Fidelis. Both static pages are accessible via links in the footer of every page.
+
 \subsubsection{Support}
+The support page displays details of how to deal with content on the site which may distress the user. Fidelis aims to keep this content to a minimum, through the abuse detection, reputation scoring and terms of service, however, some content may still be posted on the platform which is not prevented via these measures. Therefore, the page lists options of how to remove the content, by reporting it and adjusting abuse detection settings. It also provides contact details to the Samaritans \cite{Samaritans:Home}, who can offer support in case of any social issues which may arise on the network such as cyber-bullying. As seen in figure \ref{fig:SupportPage}, the styling for the page is simplistic, using bullet points in order to break down the information being provided.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=2in]{Images/Design/support-page}
+\caption{Design for support page}
+\label{fig:SupportPage}
+\end{figure}
+
+\subsubsection{Privacy Policy}
+The styling for the terms page is the same as the support page, using bullet points to help make the information more readable, as shown in figure \ref{fig:ToS}. The information provided, however, is regarding the terms of service, to ensure that the user understands what is expected of them when using the site and the service Fidelis is expected to provide. This is to help avoid any legal issues which may arise from the content which is posted on the site by users. The Fidelis terms of service were modelled after the Twitter Private Policy \cite{Twitter:PrivatePolicy} and Terms of Service \cite{Twitter:ToS}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=2in]{Images/Design/terms-page}
+\caption{Design for terms page}
+\label{fig:ToS}
+\end{figure}
 
 \subsection{Widgets}
 A public Github repository created by user \textit{arrilot} provides functionality for integrating widgets with the Laravel framework \cite{Packagist:LaravelWidgets}. The widget service provider available from this is ``a powerful alternative to view composers'', and as such using widgets is very similar to normal Laravel views. Widgets are standalone components which are composed of a class and a view. The class is responsible for all the logic and data for the widget and the view is responsible for displaying this data. To use these widgets, they must first be installed by running the following command:
