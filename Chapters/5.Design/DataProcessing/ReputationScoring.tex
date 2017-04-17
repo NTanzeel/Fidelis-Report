@@ -23,7 +23,7 @@ It seems clear that collaboration events are a popular method of assessing reput
 \end{equation}
 
 \noindent
-In both cases, the weighting function \(w\) gives the weighting of a given collaboration event \(c\). The values of this function could, of course, be changed at any time in an attempt to produce more accurate reputation scoring. Once a reputation score has been calculated for each user/post, these scores will be normalised between 0 and 1. The pseudocode for this process is shown in algorithms \ref{alg:post-reputation} and \ref{alg:user-reputation} for reputation scoring of posts and users respectively.
+In both cases, the weighting function \(w\) gives the weighting of a given collaboration event \(c\). The values of this function could, of course, be changed at any time in an attempt to produce more accurate reputation scoring. Once a reputation score has been calculated for each user and post, these scores will be normalised between 0 and 1. The pseudocode for this process is shown in algorithms \ref{alg:post-reputation} and \ref{alg:user-reputation} for reputation scoring of posts and users respectively.
 
 \begin{algorithm}[H]
 \caption{Post reputation scoring algorithm}
@@ -41,9 +41,9 @@ In both cases, the weighting function \(w\) gives the weighting of a given colla
 \end{algorithm}
 
 \noindent
-Algorithm \ref{alg:post-reputation} begins with getting a set named posts which contains every post in the database. For each one of these posts we then carry out the following steps: for each type of collaboration event, find the number of the collaboration events of that type involving the post and weight this value using the weighting function. The collaboration events considered are: \(upvote\), if the event is an upvote on post \(p\); \(downvote\), if the event is a downvote on post \(p\) and \(comment\), if the event is a comment on post \(p\). These values are then summed and stored as a variable named \(reputation\).
+Algorithm \ref{alg:post-reputation} begins by retrieving all posts made from the database. For each of these we then carry out the following steps: for each type of collaboration event, find the number of the collaboration events of that type involving the post and weight this value using the weighting function. The collaboration events considered are: \(upvote\), if the event is an upvote on post \(p\); \(downvote\), if the event is a downvote on post \(p\) and \(comment\), if the event is a comment on post \(p\). These values are then summed and stored as a variable named \(reputation\).
 
-Once a reputation has been calculated for each member of the \(posts\) set, these reputation scores must be normalised between 0 and 1. The formula for this scaling is shown in equation \ref{eq:reputation_scale_post}, where post\_i refers to a given post in the set \(posts\), \(max(x)\) is the maximum reputation score of any post in the set \(posts\) and min(x) is the minimum reputation score of any post in the set \(posts\).
+Once a reputation has been calculated for each member of the \(posts\) set, these reputation scores must be normalised between 0 and 1. The formula for this scaling is shown in equation \ref{eq:reputation_scale_post}, where $post_i$ refers to a given post \(posts\), \(max(x)\) is the maximum reputation score of any post in the set \(posts\) and $min(x)$ is the minimum reputation score of any post in the set \(posts\).
 
 \begin{equation}
 	\label{eq:reputation_scale_post}
@@ -73,7 +73,7 @@ Once a reputation has been calculated for each member of the \(posts\) set, thes
 \end{algorithm}
 
 \noindent
-Algorithm \ref{alg:user-reputation} begins with getting a set named users which contains every user in the database. For each one of these users we then carry out the following steps: for each type of collaboration event, find the number of the collaboration events of that type involving the user and weight this value using the weighting function. The collaboration events considered are: \(post\_upvote\), if the event is an upvote on any post made by user \(u\); \(post\_downvote\), if the event is a downvote on any post made by user \(u\); \(comment\_upvote\), if the event is an upvote on any comment made by user \(u\); \(comment\_downvote\), if the event is a downvote on any comment made by user \(u\); \(comment\), if the event is a comment on any post made by user \(u\) and \(follower\), if the event is another account following user \(u\). These values are then summed and stored as a variable named \(reputation\).
+Algorithm \ref{alg:user-reputation} first retrieves all Fidelis users. For each user we then carry out the following steps: for each type of collaboration event, find the number of the collaboration events of that type involving the user and weight this value using the weighting function. The collaboration events considered are: \(post\_upvote\), if the event is an upvote on any post made by user \(u\); \(post\_downvote\), if the event is a downvote on any post made by user \(u\); \(comment\_upvote\), if the event is an upvote on any comment made by user \(u\); \(comment\_downvote\), if the event is a downvote on any comment made by user \(u\); \(comment\), if the event is a comment on any post made by user \(u\) and \(follower\), if the event is another account following user \(u\). These values are then summed and stored as a variable named \(reputation\).
 
 Once a reputation has been calculated for each member of the \(users\) set, these reputation scores must be normalised between 0 and 1. The formula for this scaling is shown in equation \ref{eq:reputation_scale_user}, where \(user\) refers to a given post in the set \(users\), \(max(x)\) is the maximum reputation score of any user in the set \(users\) and \(min(x)\) is the minimum reputation score of any user in the set \(users\).
 
