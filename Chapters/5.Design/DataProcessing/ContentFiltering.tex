@@ -1,20 +1,18 @@
 \subsection{Content Filtering}
-The filtering of content allows the users to receive tailored content, which is more likely to be of interest of them and therefore instils trust in the social network. The importance of the performance of this area of the system on the success of the overall project means that three different models will be designed and compared using the techniques: Na\"ive Bayes, SVMs and Stochastic Gradient Descent (SGD). Once the models are able to successfully detect the category of a post, the post category can be updated in the database, which will allow filtered feeds to retrieve the relevant content to be displayed to the user. 
+The filtering of content allows the users to receive tailored content, which is more likely to be of interest of them and therefore instils trust in the social network. To maximise the performance of content filtering and increase the chances of overall project success, three different models are considered: Na\"ive Bayes, SVMs and Stochastic Gradient Descent (SGD). Once the models are able to successfully detect the category of a post, the post category can be updated in the database, which will allow filtered feeds to retrieve the relevant content to be displayed to the user. 
 
-This section will discuss the design decisions made for the content filtering throughout each stage of the process. This includes the preprocessing of the data and the training of the model as well as algorithms for testing the efficacy of the model and using it to predict new posts as they are made on Fidelis. There are similarities between the processing performed in this section and section \ref{sec:abuse-detection}, because they are both machine learning techniques involving NLP, however there are significant differences in how the features are extracted and how the models are built.
+This section will discuss the design decisions made for the content filtering throughout each stage of the process. This includes the preprocessing of the data and the training of the model as well as algorithms for testing the efficacy of the model and using it to predict new posts as they are made on Fidelis. There are similarities between the processing performed in this section and section \ref{sec:abuse-detection} due to similarities in NLP techniques discussed, however there are significant differences in how the features are extracted and how the models are built.
 
 \subsubsection{Data Preprocessing}
-Before being able to train the model, preprocessing must be carried out on the data. This is made up of two parts: data cleaning and feature extraction. Algorithm \ref{alg:content-filter-cleaning} shows how data cleaning is performed, which removes any non-ASCII characters, Twitter entities (such as mentions and URLs), stop words and punctuation because they are not informative of the topic of the post. It also lemmatizes the words so that words with the same stem become the identical. If the overall number of characters in the cleaned post is less than 20, the empty set is returned instead of the cleaned post, because it is deemed to not be informative enough to be used in the training sample.
+Before being able to train the model, preprocessing must be carried out on the data. This is made up of two parts: data cleaning and feature extraction. Algorithm \ref{alg:content-filter-cleaning} shows how data cleaning is performed, which removes any non-ASCII characters, Twitter entities (such as mentions and URLs), stop words and punctuation as these objects aare not informative of the topic of the post. Pre-processing also lemmatizes the words so that words with the same stem become the identical. If the overall number of characters in the cleaned post is less than 20, the empty set is returned instead of the cleaned post, because it is deemed to not be informative enough to be used in the training sample.
 
-\begin{algorithm}
+\begin{algorithm}[H]
 \caption{Content filter cleaning algorithm}
 \label{alg:content-filter-cleaning}
 \begin{algorithmic}[1]
-\Function{clean}{Post $post$}
+\Function{clean}{$post$}
 	\State $clean\gets \emptyset$
-	\State $post\gets post\setminus nonAsciiChars(post)$ 
-	\State $post\gets post\setminus cleanTwitterEntities(post)$
-	\State $post\gets post\setminus removePunc(post)$
+	\State $post\gets post - nonAsciiChars(post) - cleanTwitterEntities(post)- removePunc(post)$
 	\ForAll{$word \in post$}
 		\State $word\gets lemmatize(word)$
 		\If{Word $word \in stopwords$} 
@@ -34,9 +32,9 @@ Before being able to train the model, preprocessing must be carried out on the d
 \end{algorithmic}
 \end{algorithm}
 
-After cleaning the data, features need to be extracted from the cleaned posts, which act as attributes that the machine learning model can learn from. The algorithm for this stage is shown in \ref{alg:content-filter-features}, which takes the dataframe consisting of cleaned post/category pairs in the training set as input ($dataset$) and outputs the new dataframe $tf\_idf$, which contains the tf-idf score of each uni- and bigram in the cleaned posts. Bigrams are used because two consecutive words within a cleaned post may be more representative of a topic than a single word in isolation. The functions $countVectorize()$ takes the dataframe containing ngrams and converts it such that each ngram is an attribute and the value of that attribute for each post is the number of times that particular ngram appears in the post. $tfidfTransform()$ then takes this dataframe and replaces the counts with the tf-idf score.
+After cleaning the data, features need to be extracted from the cleaned posts, which act as attributes that the machine learning model can learn from. The algorithm for this stage is shown in algorithm \ref{alg:content-filter-features}, which takes the data frame consisting of cleaned post-category pairs in the training set as input ($dataset$) and outputs the new dataframe $tf\_idf$, which contains the term frequency-inverse document frequency (TF-IDF) score of each uni- and bigram in the cleaned posts. Bigrams are used because two consecutive words within a cleaned post may be more representative of a topic than a single word in isolation. The functions $countVectorize()$ takes the data frame containing ngrams and converts it such that each ngram is an attribute and the value of that attribute for each post is the number of times that particular ngram appears in the post. $tfidfTransform()$ then takes this data frame and replaces the counts with the TF-IDF score.
 
-\begin{algorithm}
+\begin{algorithm}[H]
 \caption{Content filter feature extraction}
 \label{alg:content-filter-features}
 \begin{algorithmic}[1]
@@ -52,9 +50,9 @@ After cleaning the data, features need to be extracted from the cleaned posts, w
 \end{algorithm}
 
 \subsubsection{Model Building}
-Independent of the type of model being built, the pipeline in algorithm \ref{alg:content-filter-pipeline} demonstrates how the model is built. In the case where the model is being built for the Fidelis site, the entire training set is used initially, because no content exists on the site. However, the model can be retrained on newer posts when enough content exists in the Fidelis database.
+Independent of the type of model chosen for implementation, the pipeline in algorithm \ref{alg:content-filter-pipeline} demonstrates how the model is built. In the case where the model is being built for the Fidelis site, the entire training set is used initially, because no content exists on the site. However, the model can be retrained on newer posts when enough user-created content is available.
 
-\begin{algorithm}
+\begin{algorithm}[H]
 \caption{Content filter model pipeline}
 \label{alg:content-filter-pipeline}
 \begin{algorithmic}[1]
@@ -67,7 +65,7 @@ Independent of the type of model being built, the pipeline in algorithm \ref{alg
 \end{algorithmic}
 \end{algorithm}
 
-Although algorithm \ref{alg:content-filter-pipeline} is sufficient for building the model to be used in the site to predict the topic of new incoming posts, the algorithm needs to be adapted slightly so that the different models can be compared. This new algorithm incorporates cross-validation, where subsets of the training set are used for testing the model to determine how accurate it is. The algorithm used for building the models so that they can be evaluated is shown in \ref{alg:content-filter-cv}. The algorithm uses 10-fold cross-validation and then computes a score for the model based on the mean fraction of samples in the test set which is correctly predicted across each of the folds. The $randomSubsample(data,n)$ function splits the data into $n$ random subsamples, creating an array of test sets. The algorithm can then be repeated for each of the techniques and the scores can be compared.
+Although algorithm \ref{alg:content-filter-pipeline} is sufficient for building a model for topic prediction, the algorithm needs to be adapted slightly so that the different models can be compared. This updated algorithm incorporates cross-validation. The algorithm used for building the models so that they can be evaluated is shown in algorithm \ref{alg:content-filter-cv}. The algorithm uses 10-fold cross-validation and then computes a score for the model based on the mean fraction of samples in the test set which is correctly predicted across each of the folds. The $randomSubsample()$ function splits the data into $n$ random sub-samples, creating an array of test sets. The algorithm can then be repeated for each of the techniques and the scores can be compared.
 
 \begin{algorithm}
 \caption{Content filter model cross-validation}
@@ -90,7 +88,7 @@ Although algorithm \ref{alg:content-filter-pipeline} is sufficient for building 
 \end{algorithm}
 
 \subsubsection{Predicting Topics}
-Once the model is built, it can then be deployed to predict the categories of tags. The tags themselves act as subcategories to the main categories which are displayed on the sidebar in the discover page. For example the tag \textit{\#watfordfc} should be categorised under sport and therefore the posts containing that tag would be displayed in the sport section on the discover page. The algorithm in \ref{alg:content-filter-predict} is run at regular intervals to predict the categories of recently made tags and adds them to the category-tag table. Although the model is trained on entire posts, taqs are sufficiently informative to categorise them.
+Once the model is built, it can then be deployed to predict the categories of tags. The tags themselves act as sub-categories to the main categories which are displayed on the sidebar on the discover page. For example the tag \textit{\#watfordfc} should be categorised under sport and therefore the posts containing that tag would be displayed in the sport section on the discover page. The algorithm in algorithm \ref{alg:content-filter-predict} should run at regular intervals to predict the categories of recently made tags and add them to the category-tag table. Although the model is trained on entire posts, taqs are sufficiently informative to categorise them.
 
 \begin{algorithm}
 \caption{Content filter tag prediction}
@@ -107,7 +105,7 @@ Once the model is built, it can then be deployed to predict the categories of ta
 \end{algorithmic}
 \end{algorithm}
 
-In addition, the post itself is categorised, so that posts without tags can be assigned to a category in the discover page. Algorithm \ref{alg:post-predict} shows how the post-tag table is updated to include the post category as assigned to it by the model prediction. In addition, it allows the user to update the topic of the post in case the post is incorrectly categorised or if the post should not belong to any category. These post categorisations can then be used to train the model in the future so that the model is kept up-to-date. Depending on how quickly the model is able to categorise a post, the user may be prompted to change the category. If the prediction is quick, the user can be prompted to confirm the chosen category is correct, which will help ensure the model is trained on reliable data in the future. However, if the prediction is slow, the user can not wait to be prompted to confirm the category of the post. For the data to all be assigned a correct category, the user would have to change the category without prompt, which could effect the integrity of the data when training future models.   
+Furthermore, the post itself is categorised, so that posts without tags can be assigned to a category on the discover page. Algorithm \ref{alg:post-predict} shows how the post-tag table is updated to include the post category as assigned to it by the model prediction. Moreover, it allows the user to update the topic of the post in case the post is incorrectly categorised or if the post should not belong to any category. These post categorisations can then be used to train the model in the future so that the model is kept up-to-date. Depending on how quickly the model is able to categorise a post, the user may be prompted to change the category. If the prediction is quick, the user can be prompted to confirm the chosen category is correct, which will help ensure the model is trained on reliable data in the future. However, if the prediction is slow, the user can not wait to be prompted to confirm the category of the post. For the data to all be assigned a correct category, the user would have to change the category without prompt, which could affect the integrity of the data when training future models.   
 
 \begin{algorithm}
 \caption{Content filter post prediction and update}
