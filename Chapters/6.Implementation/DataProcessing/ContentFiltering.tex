@@ -30,7 +30,7 @@ The only part of algorithm \ref{alg:content-filter-cleaning} not performed by th
 \label{fig:content-preprocess}
 \end{figure}
 
-The extraction of features from the post is conducted in the training and prediction files, because they are performed on the dataset as a whole rather than on each individual post. The count vectorization and TF-IDF transformations are parsed into the pipeline shown in figure \ref{fig:imp-content-train}, using the scikit-learn objects $CountVectorizer$ and $TfidfTransformer$. The $CountVectorizer$ also creates the uni- and bi-grams which are present in the dataset. Finally, the $SelectPercentile$ object uses the chi-squared test in order to determine the goodness of a feature and removes the feature if it does not perform in the top 15\% of all features.
+The extraction of features from the post is conducted in the training and prediction files, because they are performed on the dataset as a whole rather than on each individual post. The count vectorization and TF-IDF transformations are parsed into the pipeline shown in figure \ref{fig:imp-content-train}, using the scikit-learn objects $CountVectorizer$ and $TfidfTransformer$. The $CountVectorizer$ also creates the uni- and bi-grams which are present in the dataset.
 
 \subsubsection{Model Building}
 Figure \ref{fig:imp-content-train} shows how the Stochastic Gradient Descent model is trained, including the pipeline which extracts features from the dataset. Whereas the pipeline stage creates the model, the \textit{fit()} function is what initiates the training of the model on the training data. As in section \ref{sec:exporting}, the trained models can then be exported so that they are usable for predicting incoming tags and posts.
@@ -49,6 +49,15 @@ However, as well as building the model using the entire dataset, cross-validatio
 \includegraphics[width=\textwidth]{Images/Implementation/content-cv}
 \caption{Cross-validating the model}
 \label{fig:content-cv}
+\end{figure}
+
+The graph in figure \ref{fig:cv-results} shows the accuracy of each model for each iteration of the 10-fold cross-validation. SGD produces the best performing model, with an average accuracy of 0.606 and therefore would be a sensible choice of model for Fidelis. The SVM performs the worst, however, the accuracy of the models could be improved in the future, by fine tuning model parameters. In addition, the cross-validation is performed on full posts, and therefore the accuracy when the model is used for predicting the category of tags can be evaluated separately, when there is a sufficiently large dataset to test.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{Images/Implementation/cv-results}
+\caption{Cross-validation results for each model}
+\label{fig:cv-results}
 \end{figure}
 
 \subsubsection{Predicting Topics}
