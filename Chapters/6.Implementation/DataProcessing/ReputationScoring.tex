@@ -48,7 +48,7 @@ Finally, as shown in Figure \ref{fig:PostRepPython3}, the script runs through ea
 \end{figure}
 
 \subsubsection{Reputation Scoring for Users}
-Once a connection to the database has been established, the database must be queried to return a table with the values required to score the reputation of each user. These values are: the total number of upvotes on all of the user's posts, the total number of downvotes on all of the user's posts, the total number of comments on all of the user's posts, the total number of upvotes on all of the user's comments, the total number of downvotes on all of the user's comments, the number of followers a user has and the number of times the user has been reported. Figure \ref{fig:UserRepQuery} shows the query used to attain these values. The query selects 5 attributes from the various tables, using a number of joins. In total, the query joins together 4 separate subqueries. The first subquery finds the weighted number of upvotes on all of the user's comments and posts as well as the weighted number of downvotes on all of the user's comments. The next subquery will find the weighted number of comments on all of the users posts, where the comment isn't a `root comment' (i.e. a post) and the user id on the comment is not that of the user whose reputation is being scored. This avoids a user potentially creating many comments on their own posts simply to `boost' their reputation score. The third subquery finds the weighted number of other users following the user in question. The final subquery finds all of the posts/comments belonging to the user and sums the number of times each one has been reported by other users.
+Reputation scoring for users works in much the same way as reputation scoring for posts. Again, database is queried to attain several values required to score a user's reputation. This time however, the values retrieved differ. We have: the total number of upvotes on all of the user's posts, the total number of downvotes on all of the user's posts, the total number of comments on all of the user's posts, the total number of upvotes on all of the user's comments, the total number of downvotes on all of the user's comments, the number of followers a user has and the number of times the user has been reported. Figure \ref{fig:UserRepQuery} shows the query used to attain these values. Similarly to post reputation scoring, this query uses a number of joins to select several attributes from the various tables. In total, the query joins together 4 separate subqueries. The first subquery finds the weighted number of upvotes on all of the user's comments and posts as well as the weighted number of downvotes on all of the user's comments. The next subquery will find the weighted number of comments on all of the users posts, where the comment isn't a `root comment' (i.e. a post) and the user id on the comment is not that of the user whose reputation is being scored. This avoids a user potentially creating many comments on their own posts simply to `boost' their reputation score. The third subquery finds the weighted number of other users following the user in question. The final subquery finds all of the posts/comments belonging to the user and performs a weighted count of the number of times each one has been reported by other users.
 
 \begin{figure}[H]
 \centering
@@ -66,20 +66,12 @@ Upon the conclusion of this query, the result will be a table similar to that sh
 \label{fig:UserRepTable}
 \end{figure}
 
-The python script will then iterate through each row of the result of this query. For each row, the script will perform the summation of the weighted values (positive, negative, comments, followers and reports) to get a reputation value. Note that both the `negative' value and `reports' values for each user are subtracted instead of added to comply with the desired weightings. These values are all then inserted into a pandas dataframe \cite{Pandas} along with their respective user id. This is shown in Figure \ref{fig:UserRepPython1}.
+Once again, a python script will then iterate through each row of the result of this query. For each row, the script will perform the summation of the weighted values (positive, negative, comments, followers and reports) to get a reputation value. Note that both the `negative' and `reports' values for each user are subtracted instead of added to comply with the desired weightings. These values are all then inserted into a pandas dataframe \cite{Pandas} along with their respective user id. This is shown in Figure \ref{fig:UserRepPython1}.
+The reputation scores are then normalised between 0 and 1 using the same method outlined for normalising post reputation scores. Once each user has a normalised reputation score, those scores are used to update the users table in the database.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{Images/Implementation/UserRepPython1}
 \caption{Python code for calculating user reputation scores}
 \label{fig:UserRepPython1}
-\end{figure}
-
-The script will now find the maximum and minimum reputation scores of all of the users as shown in, using the same method demonstrated for normalising the reputation scores for posts. On completion of this normalisation, every reputation score will be between 0 and 1. Finally, as shown in Figure \ref{fig:UserRepPython2}, the script runs through each row of the dataframe and updates the reputation score of each user using the final, normalised reputation score and the associated user id. This is done in the form of an SQL update query which is then committed to the database. Once each user has been assigned a new score, the database connection is terminated along with the script.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\linewidth]{Images/Implementation/UserRepPython2}
-\caption{Python code for normalising user reputation scores}
-\label{fig:UserRepPython2}
 \end{figure}
