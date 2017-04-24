@@ -1,33 +1,33 @@
 \subsection{Content Filtering}
 The filtering of content allows the users to receive tailored content, which is more likely to be of interest of them and therefore instils trust in the social network. To maximise the performance of content filtering and increase the chances of overall project success, three different models are considered: Na\"ive Bayes, SVMs and Stochastic Gradient Descent (SGD). Once the models are able to successfully detect the category of a post, the post category can be updated in the database, which will allow filtered feeds to retrieve the relevant content to be displayed to the user. 
 
-This section will discuss the design decisions made for the content filtering throughout each stage of the process. This includes the preprocessing of the data and the training of the model as well as algorithms for testing the efficacy of the model and using it to predict new posts as they are made on Fidelis. There are similarities between the processing performed in this section and section \ref{sec:abuse-detection} due to similarities in NLP techniques discussed, however there are significant differences in how the features are extracted and how the models are built.
+This section will discuss the design decisions made for the content filtering throughout each stage of the process. This includes the preprocessing of the data and the training of the model as well as algorithms for testing the efficacy of the model and using it to predict new posts as they are made on Fidelis. There are similarities between the processing performed in this section and section \ref{sec:abuse-detection} due to similarities in NLP techniques discussed, however, there are significant differences in how the features are extracted and how the models are built.
 
 \subsubsection{Data Preprocessing}
-Before being able to train the model, preprocessing must be carried out on the data. This is made up of two parts: data cleaning and feature extraction. Algorithm \ref{alg:content-filter-cleaning} shows how data cleaning is performed, which removes any non-ASCII characters, Twitter entities (such as mentions and URLs), stop words and punctuation as these objects aare not informative of the topic of the post. Pre-processing also lemmatizes the words so that words with the same stem become the identical. If the overall number of characters in the cleaned post is less than 20, the empty set is returned instead of the cleaned post, because it is deemed to not be informative enough to be used in the training sample.
+Before being able to train the model, preprocessing must be carried out on the data. This is made up of two parts: data cleaning and feature extraction. Algorithm \ref{alg:content-filter-cleaning} shows how data cleaning is performed, which removes any non-ASCII characters, Twitter entities (such as mentions and URLs), stop words and punctuation as these objects are not informative of the topic of the post. Pre-processing also lemmatizes the words so that words with the same stem become identical. If the overall number of characters in the cleaned post is less than 20, the empty set is returned instead of the cleaned post, because it is deemed to not be informative enough to be used in the training sample.
 
 \begin{algorithm}[H]
 \caption{Content filter cleaning algorithm}
 \label{alg:content-filter-cleaning}
 \begin{algorithmic}[1]
 \Function{clean}{$post$}
-	\State $clean\gets \emptyset$
-	\State $post\gets post - nonAsciiChars(post) - cleanTwitterEntities(post)- removePunc(post)$
-	\ForAll{$word \in post$}
-		\State $word\gets lemmatize(word)$
-		\If{Word $word \in stopwords$} 
-			\State \textbf{break} 
-		\EndIf
-		\If{$len(word) < 3$} 
-			\State \textbf{break} 
-		\EndIf
-		\State Add $word$ to $clean$
-	\EndFor
-	\If{$numChars(clean) < 20$}
-		\State \Return{$\emptyset$}
-	\Else
-		\State \Return{$clean$}
-	\EndIf
+    \State $clean\gets \emptyset$
+    \State $post\gets post - nonAsciiChars(post) - cleanTwitterEntities(post)- removePunc(post)$
+    \ForAll{$word \in post$}
+        \State $word\gets lemmatize(word)$
+        \If{Word $word \in stopwords$} 
+            \State \textbf{break} 
+        \EndIf
+        \If{$len(word) < 3$} 
+            \State \textbf{break} 
+        \EndIf
+        \State Add $word$ to $clean$
+    \EndFor
+    \If{$numChars(clean) < 20$}
+        \State \Return{$\emptyset$}
+    \Else
+        \State \Return{$clean$}
+    \EndIf
 \EndFunction
 \end{algorithmic}
 \end{algorithm}
@@ -41,7 +41,7 @@ After cleaning the data, features need to be extracted from the cleaned posts, w
 \Function{featureExtraction}{$dataset$}
 \State $tf\_idf\gets \emptyset$
 \ForAll{Row $row \in dataset$}
-	\State $row[clean\_post]\gets row[clean\_post]\cup getBigrams(row[clean\_post])$
+    \State $row[clean\_post]\gets row[clean\_post]\cup getBigrams(row[clean\_post])$
 \EndFor
 \State $tf\_idf\gets countVectorize(dataset)$
 \State \Return{$tfidfTransform(tf\_idf)$}
@@ -58,7 +58,7 @@ Independent of the type of model chosen for implementation, the pipeline in algo
 \begin{algorithmic}[1]
 \State $data\gets getDataset()$
 \ForAll{Post $data[post]$}
-	\State $data[post]\gets clean(data[post])$
+    \State $data[post]\gets clean(data[post])$
 \EndFor
 \State $data\gets FeatureExtraction(data)$
 \State $model \gets train(data)$
@@ -73,15 +73,15 @@ Although algorithm \ref{alg:content-filter-pipeline} is sufficient for building 
 \begin{algorithmic}[1]
 \State $data\gets getDataset()$
 \ForAll{Post $data[post]$}
-	\State $data[post]\gets clean(data[post])$
+    \State $data[post]\gets clean(data[post])$
 \EndFor
 \State $data\gets featureExtraction(data)$
 \State $testsets\gets randomSubsample(data, 10)$
 \State $score\gets 0$
 \ForAll{$test \in testsets$}
-	\State $training\gets data\setminus test$
-	\State $model\gets train(data)$
-	\State $score\gets score + model.predict(test).score$
+    \State $training\gets data\setminus test$
+    \State $model\gets train(data)$
+    \State $score\gets score + model.predict(test).score$
 \EndFor
 \State $score\gets score/10$
 \end{algorithmic}
@@ -95,12 +95,12 @@ Once the model is built, it can then be deployed to predict the categories of ta
 \label{alg:content-filter-predict}
 \begin{algorithmic}[1]
 \Function{predict}{Model $model$, Tags $tags$}
-	\State $tags\gets uncategorised(tags)$
-	\State $topics\gets model.predict(tags)$
-	\State $tags \gets tags.addColumn(topics)$
-	\ForAll{Row $tag \in tags$}
-		\State Add $(Row[tag],Row[topic])$ to Category-Tag table
-	\EndFor
+    \State $tags\gets uncategorised(tags)$
+    \State $topics\gets model.predict(tags)$
+    \State $tags \gets tags.addColumn(topics)$
+    \ForAll{Row $tag \in tags$}
+        \State Add $(Row[tag],Row[topic])$ to Category-Tag table
+    \EndFor
 \EndFunction
 \end{algorithmic}
 \end{algorithm}
@@ -112,12 +112,12 @@ Furthermore, the post itself is categorised, so that posts without tags can be a
 \label{alg:post-predict}
 \begin{algorithmic}[1]
 \Function{predict}{Model $model$, Post $post$}
-	\State $topic\gets model.predict(post)$
-	\State Add $(Row[tag],Row[topic])$ to Post-Tag table
-	\If{$topic$ is changed by user}
-		Delete original $topic$ from Post-Tag table
-		Add new $topic$ to Post-Tag table
-	\EndIf
+    \State $topic\gets model.predict(post)$
+    \State Add $(Row[tag],Row[topic])$ to Post-Tag table
+    \If{$topic$ is changed by user}
+        Delete original $topic$ from Post-Tag table
+        Add new $topic$ to Post-Tag table
+    \EndIf
 \EndFunction
 \end{algorithmic}
 \end{algorithm}
