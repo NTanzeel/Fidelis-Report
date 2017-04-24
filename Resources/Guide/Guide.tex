@@ -1,0 +1,96 @@
+\documentclass[12pt]{article}
+
+\usepackage{setspace}
+\usepackage{graphicx}
+
+\usepackage[top=1.5in, bottom=1.5in, left=1in, right=1in]{geometry}
+
+\begin{document}
+\begin{spacing}{2}
+	\vspace*{\fill}
+	\begin{center}
+		\includegraphics[scale = 0.2]{Images/Logo}
+	\end{center}
+	\vspace{5mm}
+	
+	\begin{center}
+		\textbf{\large Fidelis}
+	\end{center}
+	
+	\begin{center}
+		\textbf{\large Quick Start Guide}
+	\end{center}
+	\vspace*{\fill}
+\end{spacing}
+
+\newpage
+\tableofcontents
+
+\newpage
+\pagenumbering{arabic}
+
+\section{Prerequisites}
+In order to use the system a web and MySQL server is required. These can be downloaded individually from their appropriate vendors or an all in one package such as XAMPP can be installed. Additionally, composer is required to manage the third part libraries used for development.
+
+\section{Initial Setup}
+This section details how the database and the web application can be setup. A generalised step by step guide is provided based on a UNIX environment but may very depending on the operating system.
+
+\subsection{Composer}
+In order to get the application up and running, it is first necessary to install all the dependencies. The project uses a range of third party libraries such as Laravel, Widgets and others. These are all managed by the composer library. The required libraries can be installed by executing the command \textit{composer install}.
+
+\subsection{Database}
+\begin{enumerate}
+	\item Once a MySQL server has been installed, launch your preferred  database management tool. For this guide, PhpMyAdmin is being used as this is provided in the XAMPP installation.
+	\item Click the create new database link and enter 'Frisk' for the database name, leaving the rest of the settings as default.
+	\item Click create or save to create your new database.
+\end{enumerate}
+
+\section{Configuration}
+Before the application can be run, it is necessary to configure some of the environment variables so that the application can access the database and mail servers. These settings are all stored in a file names \emph{.env}, stored in the project root directory.
+
+\subsection{Database Configuration}
+In order to allow the application to the database, open the directory containing the code for the database and change the following variables.
+\begin{itemize}
+	\item \textbf{DB\_HOST}: This is the IP address of your database server. If your database is hosted on the same machine then this can be set to 127.0.0.1
+	\item \textbf{DB\_DATABASE}: This is the name of the database you created in the previous steps.
+	\item \textbf{DB\_USERNAME}: This is the username for logging into your database. This can be set to the default user root but it is not recommended.
+	\item \textbf{DB\_PASSWORD}: This is the password for the database user. By default, the password for root is empty.
+\end{itemize}
+
+\subsection{Mail Server}
+As the application occasionally needs to send out emails to users, it requires a mail server. If you are using a web hosting company then this can usually be ignored as a default mail server is used. However, if you are hosting the application on a local machine then you may need to configure an SMTP mail server, the details for which will be provided by your mail provider. The following variables must be configured for this.
+\begin{itemize}
+	\item MAIL\_DRIVER=smtp
+	\item MAIL\_HOST
+	\item MAIL\_PORT
+	\item MAIL\_USERNAME
+	\item MAIL\_PASSWORD
+	\item MAIL\_ENCRYPTION
+\end{itemize}
+
+\section{Running the Application}
+There are two ways the application can be accessed, the first is using the installed web server whereas the second uses the web server provided through the artisan command.
+
+\subsection{Via Installed Web Server}
+\begin{enumerate}
+	\item In order to setup the application, simply copy the entire application folder to the base directory of your web server. For XAMPP this is the htdocs folder.
+	\item Startup your MySQL server using the control panel provided your installation or using the command line.
+	\item Startup your web server using the control panel provided with your installation or using the command line.
+	\item Simply navigate to \emph{http://localhost/Frisk} to access the application
+\end{enumerate}
+
+\subsection{Via Artisan}
+This approach assumes that the php command has been installed for the console.
+\begin{enumerate}
+	\item In order to setup the application, simply copy the entire application folder to any location on your machine.
+	\item Startup your MySQL server using the control panel provided your installation or using the command line.
+	\item Startup the web server provided by Laravel using the artisan utility.
+	\begin{enumerate}
+		\item Launch the terminal or console window for your operating system.
+		\item Change to the directory of the project using the \emph{cd} command.
+		\item Run the \emph{php artisan serve} command.
+	\end{enumerate}
+	\item Simply navigate to the link provided after running the web server to access the application. The url is usually of the form \emph{http://localhost:8000}
+\end{enumerate}
+
+\end{document}
