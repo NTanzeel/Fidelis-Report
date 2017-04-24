@@ -1,23 +1,23 @@
 \section{User Interface}
-This section will look at how each of the designed UI aspects were implemented. UI implementation made use of controllers, which were responsible for conducting database interactions and returning relevant views, along with HTML, CSS and Javascript for page structure, design and usability. Implementation for different UI components was identical to the concept designs discussed in Chapter \ref{Chapter:Design}.
+This section will look at how each of the designed UI aspects was implemented. UI implementation made use of controllers, which were responsible for conducting database interactions and returning relevant views, along with HTML, CSS and Javascript for page structure, design and usability. Implementation for different UI components was identical to the concept designs discussed in Chapter \ref{Chapter:Design}.
 
 \subsection{Navigation}
 Figure \ref{fig:NavImplementation} shows the implemented navigation bars for authorised users and guests. Users are able to navigate to the pages represented by each of the icons on the navigation bar. The page the user is currently on is represented by an orange underline under the corresponding icon on the navigation bar.
 
 \begin{figure}[H]
-	\centering
-	\begin{subfigure}{1\linewidth}
-		\includegraphics[width=1\textwidth]{Images/Design/nav-unauthorised}
-		\caption{Guest}
-		\label{fig:NavUnauth}
-	\end{subfigure}
-	\begin{subfigure}{1\linewidth}
-		\includegraphics[width=1\textwidth]{Images/Design/nav-authorised}
-		\caption{Authorised User}
-		\label{fig:NavAuth}
-	\end{subfigure}
-	\caption{Navigation bar for (a) guests and (b) authorised users}
-	\label{fig:NavImplementation}
+    \centering
+    \begin{subfigure}{1\linewidth}
+        \includegraphics[width=1\textwidth]{Images/Design/nav-unauthorised}
+        \caption{Guest}
+        \label{fig:NavUnauth}
+    \end{subfigure}
+    \begin{subfigure}{1\linewidth}
+        \includegraphics[width=1\textwidth]{Images/Design/nav-authorised}
+        \caption{Authorised User}
+        \label{fig:NavAuth}
+    \end{subfigure}
+    \caption{Navigation bar for (a) guests and (b) authorised users}
+    \label{fig:NavImplementation}
 \end{figure}
 
 \subsubsection{Links}
@@ -26,14 +26,14 @@ Routes for each of the icons are populated using the \textit{LayoutComposer} cla
 \begin{figure}[H]
 \centering
 \begin{subfigure}[b]{1\linewidth}
-	\includegraphics[width=1\textwidth]{Images/Implementation/UserNavigation}
-	\caption{User navigation}
-	\label{fig:UserNavigation}
+    \includegraphics[width=1\textwidth]{Images/Implementation/UserNavigation}
+    \caption{User navigation}
+    \label{fig:UserNavigation}
 \end{subfigure}
 \begin{subfigure}[b]{1\linewidth}
-	\includegraphics[width=1\textwidth]{Images/Implementation/AppNavigation}
-	\caption{Application navigation}
-	\label{fig:AppNavigation}
+    \includegraphics[width=1\textwidth]{Images/Implementation/AppNavigation}
+    \caption{Application navigation}
+    \label{fig:AppNavigation}
 \end{subfigure}
 \caption{Rendering options in \emph{LayoutComposer}}
 \label{fig:LayoutComposerNav}
@@ -81,7 +81,7 @@ In addition to the redirection location, the \textit{RegisterController} contain
 \end{figure}
 
 \subsubsection{Login}
-The login page, shown in Figure \ref{fig:LoginPage}, requests the user's email address and password. Similarly to registration, users who are successfully authenticated are redirected to the home page. All authentication functionality is handled by the pre-built \textit{LoginController}. If incorrect account credentials are provided, authentication is unsuccessful. Reasons for unsuccessful authentication are displayed to the user in a similar manner as on the registration page.
+The login page, shown in Figure \ref{fig:LoginPage}, requests the user's email address and password. Similarly to registration, users who are successfully authenticated are redirected to the homepage. All authentication functionality is handled by the pre-built \textit{LoginController}. If incorrect account credentials are provided, authentication is unsuccessful. Reasons for unsuccessful authentication are displayed to the user in a similar manner as on the registration page.
 
 \begin{figure}[H]
 \centering
@@ -104,7 +104,7 @@ The password reset page, shown in Figure \ref{fig:PasswordReset} allows users to
 The Fidelis home is the hub of the entire website. It is the first place a user will typically be directed to and will show one of two pages depending on if the user is logged into an account.
 
 \subsubsection{Landing Page}
-When a user first navigates to the Fidelis platform - either for the first time, or if they are not logged into an account - they will arrive on the landing page shown in figure \ref{fig:HomeUnauthorised}.  
+When a user first navigates to the Fidelis platform - either for the first time or if they are not logged into an account - they will arrive on the landing page shown in figure \ref{fig:HomeUnauthorised}.  
 
 \begin{figure}[H]
 \centering
@@ -132,19 +132,19 @@ If it is determined that the user is logged in when they navigate to the Fidelis
 \label{fig:HomeAuthorised}
 \end{figure}
 
-Upon the user being directed to the home page, a call will be made to the \textit{index()} function of the \textit{HomeController} via the relevant route, as seen in figure \ref{fig:HomeRoutingController}. The \textit{index()} function is responsible for retrieving the posts made by accounts the user follows. These posts are then returned to the home page to be displayed in order from the most recent post to the oldest.
+Upon the user being directed to the homepage, a call will be made to the \textit{index()} function of the \textit{HomeController} via the relevant route, as seen in figure \ref{fig:HomeRoutingController}. The \textit{index()} function is responsible for retrieving the posts made by accounts the user follows. These posts are then returned to the home page to be displayed in order from the most recent post to the oldest.
 
 \begin{figure}[H]
 \centering
 \begin{subfigure}[b]{1\linewidth}
-	\includegraphics[width=\textwidth]{Images/Implementation/HomeRouting}
-	\caption{}
-	\label{fig:HomeRouting}
+    \includegraphics[width=\textwidth]{Images/Implementation/HomeRouting}
+    \caption{}
+    \label{fig:HomeRouting}
 \end{subfigure}
 \begin{subfigure}[b]{1\linewidth}
-	\includegraphics[width=1\textwidth]{Images/Implementation/HomeControllerIndexFunction}
-	\caption{}
-	\label{fig:HomeControllerIndexFunction}
+    \includegraphics[width=1\textwidth]{Images/Implementation/HomeControllerIndexFunction}
+    \caption{}
+    \label{fig:HomeControllerIndexFunction}
 \end{subfigure}
 \caption{(a) Home page routing and (b) $index()$ function of the $HomeController$}
 \label{fig:HomeRoutingController}
@@ -155,14 +155,14 @@ Once the posts from accounts the user is following have loaded in, the user also
 \begin{figure}[H]
 \centering
 \begin{subfigure}[b]{1\linewidth}
-	\includegraphics[width=\textwidth]{Images/Implementation/HomeNewPostJS}
-	\caption{}
-	\label{fig:HomeNewPostJS}
+    \includegraphics[width=\textwidth]{Images/Implementation/HomeNewPostJS}
+    \caption{}
+    \label{fig:HomeNewPostJS}
 \end{subfigure}
 \begin{subfigure}[b]{1\linewidth}
-	\includegraphics[width=\textwidth]{Images/Implementation/HomeNewPostJS2}
-	\caption{}
-	\label{fig:HomeNewPostJS2}
+    \includegraphics[width=\textwidth]{Images/Implementation/HomeNewPostJS2}
+    \caption{}
+    \label{fig:HomeNewPostJS2}
 \end{subfigure}
 \caption{Javascript code for handling a new post: (a) inserting and image and (b) submitting the form}
 \label{fig:HomeNewPostJavascript}
@@ -170,24 +170,24 @@ Once the posts from accounts the user is following have loaded in, the user also
 
 Figure \ref{fig:HomeNewPostJavascript} shows the javascript code that is used to handle image uploads, as well as the code handling the submission of the form (Once the user hits submit to create the post). At this point, the new post will be automatically categorised using the script $predict.py$. Upon submission of the form, the form will route a post request using the $store()$ function in the $PostController$. This function simply stores the new post in the database and then returns the same post to the home page. This post will then appear at the top of the post feed for the user.
 
-In order to represent a post for the $PostContoller$, a php trait named $Post$ was created. This trait features a number of functions defining all of the interactions a post can have on the Fidelis platform. Figure \ref{fig:PostTrait} shows some of these functions, for example the $add()$ function, which will save the post to the database, including any images uploaded with the post and tags on the post. Note that this function is called by the $store()$ function in the $PostController$ to store the post in the database as described previously. Figure \ref{fig:PostTrait} also shows the function $addComment()$ used to add and store a new comment on the current post and the function $notifyUsers()$ which is used to notify a user when a post of theirs is commented on, or when they have been mentioned in a post/comment.
+In order to represent a post for the $PostContoller$, a PHP trait named $Post$ was created. This trait features a number of functions defining all of the interactions a post can have on the Fidelis platform. Figure \ref{fig:PostTrait} shows some of these functions, for example, the $add()$ function, which will save the post to the database, including any images uploaded with the post and tags on the post. Note that this function is called by the $store()$ function in the $PostController$ to store the post in the database as described previously. Figure \ref{fig:PostTrait} also shows the function $addComment()$ used to add and store a new comment on the current post and the function $notifyUsers()$ which is used to notify a user when a post of theirs is commented on, or when they have been mentioned in a post/comment.
 
 \begin{figure}[H]
 \centering
 \begin{subfigure}[b]{1\linewidth}
-	\includegraphics[width=\textwidth]{Images/Implementation/PostTraitAdd}
-	\caption{}
-	\label{fig:PostTraitAdd}
+    \includegraphics[width=\textwidth]{Images/Implementation/PostTraitAdd}
+    \caption{}
+    \label{fig:PostTraitAdd}
 \end{subfigure}
 \begin{subfigure}[b]{1\linewidth}
-	\includegraphics[width=\textwidth]{Images/Implementation/PostTraitAddComment}
-	\caption{}
-	\label{fig:PostTraitAddComment}
+    \includegraphics[width=\textwidth]{Images/Implementation/PostTraitAddComment}
+    \caption{}
+    \label{fig:PostTraitAddComment}
 \end{subfigure}
 \begin{subfigure}[b]{1\linewidth}
-	\includegraphics[width=\textwidth]{Images/Implementation/PostTraitNotifyUsers}
-	\caption{}
-	\label{fig:PostTraitNotifyUsers}
+    \includegraphics[width=\textwidth]{Images/Implementation/PostTraitNotifyUsers}
+    \caption{}
+    \label{fig:PostTraitNotifyUsers}
 \end{subfigure}
 \caption{Post trait example functions: (a) Add this post to database, (b) Add new comment to this post and (c) Notify users about comments on this post}
 \label{fig:PostTrait}
@@ -196,7 +196,7 @@ In order to represent a post for the $PostContoller$, a php trait named $Post$ w
 In addition to the functions show in Figure \ref{fig:PostTrait}, a number of other functions are present in the $Post$ trait, including: $getMentions()$, which returns any users mentioned in a post/comment; $uploadImages()$, which takes any images uploaded on a post and stores them in the database; $getNonTags()$, which generates tags from words in a post; $categorise()$, which will store any tags from a post, or, if non exist, will call the $getNonTags()$ function to generate tags from words in the post, where there an existing a tag in the database for those words; and finally, $getTags()$, which finds any tags on a post.
 
 \subsection{Discover}
-The implemented discover page is shown in Figure \ref{fig:DiscoverPage}. This page gives the ability for a user to seek out and find new content, which appeals to them, outside of the content they see from their current network. The user can used this page to find new content from specific categories, see content from tags they have subscribed to and manage their subscriptions, as well as seeing content recommended for them.
+The implemented discover page is shown in Figure \ref{fig:DiscoverPage}. This page gives the ability for a user to seek out and find new content, which appeals to them, outside of the content they see from their current network. The user can use this page to find new content from specific categories, see content from tags they have subscribed to and manage their subscriptions, as well as seeing content recommended for them.
 
 \begin{figure}[H]
 \centering
@@ -205,30 +205,30 @@ The implemented discover page is shown in Figure \ref{fig:DiscoverPage}. This pa
 \label{fig:DiscoverPage}
 \end{figure}
 
-The banner seen across the top of the page contains the title of the current page. The title that is shown therefore depends on which data is being displayed. For each case a separate view has been created to display the correct title. This is usually the name of the category, however there are exceptions for viewing the user's subscriptions - in which case a button must also be included to link to the Settings page where the user can manage their subscriptions - as well as viewing the user's recommended content. Figure \ref{fig:DiscoverTitle} shows these different views.
+The banner seen across the top of the page contains the title of the current page. The title that is shown therefore depends on which data is being displayed. For each case, a separate view has been created to display the correct title. This is usually the name of the category, however, there are exceptions for viewing the user's subscriptions - in which case a button must also be included to link to the Settings page where the user can manage their subscriptions - as well as viewing the user's recommended content. Figure \ref{fig:DiscoverTitle} shows these different views.
 
 \begin{figure}[H]
 \centering
 \begin{subfigure}[b]{1\linewidth}
-	\includegraphics[width=\textwidth]{Images/Implementation/CategoryBladePhp}
-	\caption{}
-	\label{fig:CategoryBladePhp}
+    \includegraphics[width=\textwidth]{Images/Implementation/CategoryBladePhp}
+    \caption{}
+    \label{fig:CategoryBladePhp}
 \end{subfigure}
 \begin{subfigure}[b]{1\linewidth}
-	\includegraphics[width=\textwidth]{Images/Implementation/IndexBladePhp}
-	\caption{}
-	\label{fig:IndexBladePhp}
+    \includegraphics[width=\textwidth]{Images/Implementation/IndexBladePhp}
+    \caption{}
+    \label{fig:IndexBladePhp}
 \end{subfigure}
 \begin{subfigure}[b]{1\linewidth}
-	\includegraphics[width=\textwidth]{Images/Implementation/RecommendedBladePhp}
-	\caption{}
-	\label{fig:RecommendedBladePhp}
+    \includegraphics[width=\textwidth]{Images/Implementation/RecommendedBladePhp}
+    \caption{}
+    \label{fig:RecommendedBladePhp}
 \end{subfigure}
 \caption{Different view outputs of Title for (a) Categories, (b) Subscribtions and (c) Recommendations}
 \label{fig:DiscoverTitle}
 \end{figure}
 
-In order to determine which content needs to be loaded to the post feed, the system determines which option is `active', i.e., whether the user has selected to view content they are subscribed to, content recommended for them, or content from a category. For each of these options there is a corresponding route to follow. These routes are shown in figure \ref{fig:DiscoverRouting}.
+In order to determine which content needs to be loaded to the post feed, the system determines which option is `active', i.e., whether the user has selected to view content they are subscribed to, content recommended for them, or content from a category. For each of these options, there is a corresponding route to follow. These routes are shown in figure \ref{fig:DiscoverRouting}.
 
 \begin{figure}[H]
 \centering
@@ -241,7 +241,7 @@ In order to determine which content needs to be loaded to the post feed, the sys
 Each of the routes followed from the discover page result in a different action being taken by the \textit{DiscoverController}. Note that routing to the index route for subscriptions here requires a check to ensure the user is authorised to take that action as a guest will have no subscriptions. Each of these actions will ultimately return a number of posts from the database to be handled by the discover page.
 
 \paragraph{Subscribed Content}
-The $index()$ function of the $Discover  Controller$ is shown in figure \ref{fig:DiscoverControllerSubscribed}. This function will call the $subscriptions()$ relation of the $User$ model, showin in Figure \ref{fig:SubscribedPosts}. The $subscriptions()$ relation returns all of the subscriptions a user has. The the id of every tag the user is subscribed to will then be retrieved. The function then collects every post that has a tag, where the user is subscribed to that tag. These posts are then returned to the discover page to be displayed in order from the most recent to the oldest post.
+The $index()$ function of the $Discover  Controller$ is shown in figure \ref{fig:DiscoverControllerSubscribed}. This function will call the $subscriptions()$ relation of the $User$ model, shown in Figure \ref{fig:SubscribedPosts}. The $subscriptions()$ relation returns all of the subscriptions a user has. The id of every tag the user is subscribed to will then be retrieved. The function then collects every post that has a tag, where the user is subscribed to that tag. These posts are then returned to the discover page to be displayed in order from the most recent to the oldest post.
 
 \begin{figure}[H]
 \centering
@@ -275,7 +275,7 @@ The $recommend()$ function of the $Discover  Controller$ is shown in Figure \ref
 \end{figure}
 
 \paragraph{Category Content}
-The $category()$ function of the $Discover  Controller$ is shown in Figure \ref{fig:DiscoverControllerSubscribed}. This function performs a few checks including finding if the $\$category$ variable passed is in fact a category (root tag) or simply a tag belonging to a category. This is because this function is also accessed when the user is routed to the discover page from a trending tag. If it is a root category, the function will find the id of every tag within that category and then find every post with a tag that has a matching tag id. Alternatively, if the variable passed is simply a tag belonging to a category, the function will find all posts using that tag. Either way, these posts are then returned to the discover page to be displayed in order from the most recent to the oldest post.
+The $category()$ function of the $Discover  Controller$ is shown in Figure \ref{fig:DiscoverControllerSubscribed}. This function performs a few checks including finding if the $\$category$ variable passed is, in fact, a category (root tag) or simply a tag belonging to a category. This is because this function is also accessed when the user is routed to the discover page from a trending tag. If it is a root category, the function will find the id of every tag within that category and then find every post with a tag that has a matching tag id. Alternatively, if the variable passed is simply a tag belonging to a category, the function will find all posts using that tag. Either way, these posts are then returned to the discover page to be displayed in order from the most recent to the oldest post.
 
 \begin{figure}[H]
 \centering
@@ -297,10 +297,10 @@ Figure \ref{fig:NotificationsPage} shows the implemented notifications page. Use
 Laravel provides support for integrating a notification system within your application \cite{Laravel:Notifications}. With this, it is possible to create different notification types, and have these related to a user by using the \textit{Notification} facade. Using this facade means that whenever an interaction happens with a user or with their posts, they can be notified of this using the \textit{notify()} function:
 
 \begin{lstlisting}[language=bash]
-	$user->notify(new NameOfNotification($notification)
+    $user->notify(new NameOfNotification($notification)
 \end{lstlisting}
 
-Using this facade, it is also possible to queue notifications. Creating a queue of notifications can speed up application response time as there can be delays when delivering notifications to the user \cite{Laravel:Notifications, Laravel:Queues}. Queueing can be enabled by adding the \textit{Queueable} trait to the notification class, and starting a queue worker by configuring the queue in \textit{config/queue.php}. Figure \ref{fig:CommentNotification} shows the notification class created for comments. The \textit{toArray()} function contains an array that represents information carried by the notification. In the array we have a `regarding' entry, which represents the item the notification is related to, a `to' entry which represents who the notification is meant for, and a `text' field which contains information displayed to the user receiving the notification. The fields included in each array vary depending on the type of notification.
+Using this facade, it is also possible to queue notifications. Creating a queue of notifications can speed up application response time as there can be delays when delivering notifications to the user \cite{Laravel:Notifications, Laravel:Queues}. Queueing can be enabled by adding the \textit{Queueable} trait to the notification class, and starting a queue worker by configuring the queue in \textit{config/queue.php}. Figure \ref{fig:CommentNotification} shows the notification class created for comments. The \textit{toArray()} function contains an array that represents information carried by the notification. In the array, we have a `regarding' entry, which represents the item the notification is related to, a `to' entry which represents who the notification is meant for, and a `text' field which contains information displayed to the user receiving the notification. The fields included in each array vary depending on the type of notification.
 
 \begin{figure}[H]
 \centering
@@ -310,7 +310,7 @@ Using this facade, it is also possible to queue notifications. Creating a queue 
 \end{figure}
 
 \subsection{Profile}
-The user profile page, shown in Figure \ref{fig:ProfilePage}, allows the user to see all their activity and public information related to their account, as well as reviewing their posts, followers and so on. A user can also view the profiles of other users which creates yet another avenue for discovering new content, as well as nurturing user-to-user interactions across the platform. Upon loading a user's profile page, their cover photo and profile picture will be loaded from the database. On the right of the page there is also a button allowing the user to folllow or unfollow the user who's page is being viewed, as well as the option to block that user. There is also a widget to the right of the page displaying trending topics.
+The user profile page, shown in Figure \ref{fig:ProfilePage}, allows the user to see all their activity and public information related to their account, as well as reviewing their posts, followers and so on. A user can also view the profiles of other users which creates yet another avenue for discovering new content, as well as nurturing user-to-user interactions across the platform. Upon loading a user's profile page, their cover photo and profile picture will be loaded from the database. On the right of the page, there is also a button allowing the user to follow or unfollow the user who's page is being viewed, as well as the option to block that user. There is also a widget to the right of the page displaying trending topics.
 
 The Follow/Unfollow button is handled by the $FollowersController$. When the button is clicked the $store()$ function is called, which will update the database to show that either the user is now following the user who owns the page, or that they are no longer than the user who owns the page. The only stipulation on this is if the user who owns the page has their account set to private. In this case, a user can only follow that user if it is a mutual relationship, i.e. they already follow that user back. The database is updated to reflect this change through the $User$ model by updating the $following()$ relation.
 
@@ -323,7 +323,7 @@ Alternatively, the user can decide to block the user who owns the page using the
 \label{fig:ProfilePage}
 \end{figure}
 
-If the page being viewed belongs to the user, rather than having the option to follow/unfollow/block the user, the user is instead given the option to Edit their profile. This simply links to the user's settings page. In addition, when viewing their own page a used can click an icon on their profile/cover picture to upload an image to replace their current picture. This icon is shown in Figure \ref{fig:ProfilePicUpload}. This will open a menu allowing the user to upload an image, which will then be used by the $AccountController$ to update the $User$ model and save the image to the database.
+If the page being viewed belongs to the user, rather than having the option to follow/unfollow/block the user, the user is instead given the option to Edit their profile. This simply links to the user's settings page. In addition, when viewing their own page a user can click an icon on their profile/cover picture to upload an image to replace their current picture. This icon is shown in Figure \ref{fig:ProfilePicUpload}. This will open a menu allowing the user to upload an image, which will then be used by the $AccountController$ to update the $User$ model and save the image to the database.
 
 \begin{figure}[H]
 \centering
@@ -353,7 +353,7 @@ When the followers tab is selected (Figure \ref{fig:ProfileFollowers}), the \(fo
 \label{fig:ProfileFollowers}
 \end{figure}
 
-The following tab works in much the same way as the followers tab, however in this case the users that are followed by this user are shown. The \(following()\) function firstly uses the \(preRoute()\) function, to assess whether the current user is authorised to view this data. Once this is confirmed, the \(following()\) function will find and return all of the users who are followed by the user in question. These will then be displayed as a series of user widgets.
+The following tab works in much the same way as the followers tab, however, in this case, the users that are followed by this user are shown. The \(following()\) function firstly uses the \(preRoute()\) function, to assess whether the current user is authorised to view this data. Once this is confirmed, the \(following()\) function will find and return all of the users who are followed by the user in question. These will then be displayed as a series of user widgets.
 
 \begin{figure}[H]
 \centering
@@ -372,7 +372,7 @@ The Rated tab displays all of the posts which this user has rated. Here `rated' 
 \end{figure}
 
 \subsubsection{Photos Widget}
-The photos widget can be seen on the left hand side of a user's profile page. This widget displays photos that a user has uploaded to the Fidelis Platform. Upon the page being loaded, this widget will be populated with the user's photos, retrieved from the database. The images not only appear in the widget, but upon clicking one of the photos, a modal lightbox will popup over the page. The user can use this to look through all of the photos that the user has uploaded.
+The photos widget can be seen on the left-hand side of a user's profile page. This widget displays photos that a user has uploaded to the Fidelis Platform. Upon the page being loaded, this widget will be populated with the user's photos, retrieved from the database. The images not only appear in the widget but upon clicking one of the photos, a modal lightbox will popup over the page. The user can use this to look through all of the photos that the user has uploaded.
 
 \subsection{Settings}
 Figure \ref{fig:SettingsImplementation} shows the settings page that allows the user to toggle user account settings. The user is able to modify profile and privacy \& safety settings. In addition to this, they can also manage tags they are subscribed to, and user accounts they have blocked.
@@ -384,7 +384,7 @@ Figure \ref{fig:SettingsImplementation} shows the settings page that allows the 
 \label{fig:SettingsImplementation}
 \end{figure}
 
-Each subset of settings is handled by different controllers. The \textit{AccountController} handles any changes made by the user to their name, email address or the privacy of the account. The controller also handles requests made by the user to edit or upload their profile pictures. The \textit{SafetyController}, seen in Figure \ref{fig:SafetyController}, retrieves the users default settings. As mentioned previously, users are able to modify settings related to abuse detection and recommendations. Before a user has had the chance to modify these settings, default settings are are provided for each user. Default settings are retrieved using the query shown in figure \ref{fig:UserDefaultSettings}. The query retrieves default or custom settings by checking whether the user exists in the \emph{settings} table, before returning the relevant set of settings. This query is included as a relation on the \emph{User} model.
+Each subset of settings is handled by different controllers. The \textit{AccountController} handles any changes made by the user to their name, email address or the privacy of the account. The controller also handles requests made by the user to edit or upload their profile pictures. The \textit{SafetyController}, seen in Figure \ref{fig:SafetyController}, retrieves the user's default settings. As mentioned previously, users are able to modify settings related to abuse detection and recommendations. Before a user has had the chance to modify these settings, default settings are provided for each user. Default settings are retrieved using the query shown in figure \ref{fig:UserDefaultSettings}. The query retrieves default or custom settings by checking whether the user exists in the \emph{settings} table, before returning the relevant set of settings. This query is included as a relation on the \emph{User} model.
 
 \begin{figure}[H]
 \centering
@@ -393,7 +393,7 @@ Each subset of settings is handled by different controllers. The \textit{Account
 \label{fig:SafetyController}
 \end{figure}
 
-The \textit{SubscriptionsController} returns the users subscriptions in a similar fashion to how default settings are retrieved. The \textit{BlockedController} also follows this approach, using a defined relation defined on the \emph{User} model to retrieve blocked users.
+The \textit{SubscriptionsController} returns the user's subscriptions in a similar fashion to how default settings are retrieved. The \textit{BlockedController} also follows this approach, using a defined relation defined on the \emph{User} model to retrieve blocked users.
 
 \begin{figure}[H]
 \centering
@@ -435,42 +435,42 @@ A public Github repository created by user \textit{arrilot} provides functionali
 Once installed, the \textit{app.php} configuration must be updated with the registration of the new service provider. Widgets can be created in a similar fashion to controllers by using the Artisan utility:
 
 \begin{lstlisting}[language=php]
- php artisan make:widget WidgetName
+ PHP artisan make:widget WidgetName
 \end{lstlisting}
 
 This command creates the relevant view and class for the widget. At this stage, widgets can be treated as a regular view, and can be included in existing views by using the \textit{@widget(`WidgetName')} directive. Parameters may optionally be passed to widgets and can be accessed in the \textit{run()} function of the class.
 
 \subsubsection{Profile}
-The profile widget is a standalone component that display the profile information for a specified user, passed through as the second argument of the \textit{@widget()} directive. This widget is used on two separate pages: the home page, for displaying the logged in users profile, and the followers/following page, for displaying the profiles of other users. These can be seen in figure \ref{fig:ProfileWidget}. The former is relatively simple as it uses a view to render the user's details. The latter however uses slightly more complex procedures for the following/unfollowing button. This button is rendered as a partial as it is also used on the profile page.
+The profile widget is a standalone component that displays the profile information for a specified user, passed through as the second argument of the \textit{@widget()} directive. This widget is used on two separate pages: the home page, for displaying the logged in user's profile, and the followers/following page, for displaying the profiles of other users. These can be seen in figure \ref{fig:ProfileWidget}. The former is relatively simple as it uses a view to render the user's details. The latter, however, uses slightly more complex procedures for the following/unfollowing button. This button is rendered as a partial as it is also used on the profile page.
 
 \begin{figure}[H]
-	\centering
-	\includegraphics[width=\textwidth]{Images/Implementation/UI/Widgets/Profile_Follow}
-	\caption{Code for switching the interactive button on the profile widget}
-	\label{fig:Profile_Follow}
+    \centering
+    \includegraphics[width=\textwidth]{Images/Implementation/UI/Widgets/Profile_Follow}
+    \caption{Code for switching the interactive button on the profile widget}
+    \label{fig:Profile_Follow}
 \end{figure}
 
 In order to display the button, we need to first determine the current relationship between the users. This is done using the logic on the first line of figure \ref{fig:Profile_Follow}. The HTML has been collapsed, which hides some of the less important code and PHP logic. Next, if we have an authorised user and this widget is not rendering that user then we can display the follow or unfollow button based on the relationship. If the dropdown parameter has been defined as true then we add additional options such as block and unblock. If the user is viewing their own profile then we add an edit profile button but this will only occur on the profile page.
 
 \subsubsection{Trending}
-The gathering of the trending tags which is displayed by the trending widget is handled in the \emph{Trending} class shown in figure \ref{fig:trending-class}. The trending tags are calculated by a single database query, which selects all the tags from the \emph{post\_tags} table from the last 24 hours in order of the number of posts that the tag appears within that time frame. The number of tags is then limited to 10, since this is the maximum number of tags which should be displayed in the widget. The \emph{Tag} models representing these trending tags are then passed to view where the trending widget is shown so that these tags can be output to the user. Because the \textit{run()} function is called whenever a user loads a page containing this widget, the widget will be up-to-date at the point of the user loading the page. Figure \ref{fig:trending-blade} shows the how the view displays the tags as links to the relevant discover pages.
+The gathering of the trending tags which is displayed by the trending widget is handled in the \emph{Trending} class shown in figure \ref{fig:trending-class}. The trending tags are calculated by a single database query, which selects all the tags from the \emph{post\_tags} table from the last 24 hours in order of the number of posts that the tag appears within that time frame. The number of tags is then limited to 10 since this is the maximum number of tags which should be displayed in the widget. The \emph{Tag} models representing these trending tags are then passed to view where the trending widget is shown so that these tags can be output to the user. Because the \textit{run()} function is called whenever a user loads a page containing this widget, the widget will be up-to-date at the point of the user loading the page. Figure \ref{fig:trending-blade} shows the how the view displays the tags as links to the relevant discover pages.
 
 \begin{figure}[H]
-	\centering
-	\includegraphics[width=\textwidth]{Images/Implementation/UI/Widgets/trending-class}
-	\caption{Trending widget class}
-	\label{fig:trending-class}
+    \centering
+    \includegraphics[width=\textwidth]{Images/Implementation/UI/Widgets/trending-class}
+    \caption{Trending widget class}
+    \label{fig:trending-class}
 \end{figure}
 
 \begin{figure}[H]
-	\centering
-	\includegraphics[width=\textwidth]{Images/Implementation/UI/Widgets/trending-blade}
-	\caption{Trending widget view}
-	\label{fig:trending-blade}
+    \centering
+    \includegraphics[width=\textwidth]{Images/Implementation/UI/Widgets/trending-blade}
+    \caption{Trending widget view}
+    \label{fig:trending-blade}
 \end{figure}
 
 \subsubsection{Recommendations}
-Figure \ref{fig:RecommendationsWidget} shows the implementation of the recommendations widget. The widget allows the user to interact with the recommendations they receive. Interactions are limited to accepting or rejecting a recommendation. Additionally, users can navigate to the profile of the recommendation by clicking on their name. For both interaction types, the recommendation is removed from the widget. This ensures that the widget does not become bloated with recommendations the user has interacted with in the past, and the user is only shown recommendations they haven't responded to. Using jQuery it was possible to animate the removal of the recommendations from the widget. This provides the user with a visual cue of a successful interaction. Along with this animation, when a user accepts a recommendation the counter on the profile widget for the number of followers for the user is incremented. This again provides another visual cue to the user that their  interaction has been successful.
+Figure \ref{fig:RecommendationsWidget} shows the implementation of the recommendations widget. The widget allows the user to interact with the recommendations they receive. Interactions are limited to accepting or rejecting a recommendation. Additionally, users can navigate to the profile of the recommendation by clicking on their name. For both interaction types, the recommendation is removed from the widget. This ensures that the widget does not become bloated with recommendations the user has interacted with in the past, and the user is only shown recommendations they haven't responded to. Using jQuery it was possible to animate the removal of the recommendations from the widget. This provides the user with a visual cue of a successful interaction. Along with this animation, when a user accepts a recommendation the counter on the profile widget for the number of followers for the user is incremented. This again provides another visual cue to the user that their interaction has been successful.
 
 \begin{figure}[H]
 \centering
