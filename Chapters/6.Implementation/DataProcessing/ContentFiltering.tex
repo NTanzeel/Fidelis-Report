@@ -1,5 +1,5 @@
 \subsection{Content Filtering}
-The implementation of content filtering constitutes of Python scripts which handle all of the data preprocessing, training of the model and predicting of the post categories. The same Python libraries used for abuse detection are used here. The code is divided between three files, each of which handle a stage of the machine learning process: \emph{preprocess.py}, \emph{train.py} and \emph{predict.py}.
+The implementation of content filtering constitutes of Python scripts which handle all of the data preprocessing, training of the model and predicting of the post categories. The same Python libraries used for abuse detection are used here. The code is divided into three files, each of which handles a stage of the machine learning process: \emph{preprocess.py}, \emph{train.py} and \emph{predict.py}.
 
 \subsubsection{Data Description}
 Although in the future, Fidelis posts will be used to train the model, until there is sufficient data stored a training set from Twitter is used, as discussed in section \ref{sec:training-data}. This training set contains two attributes: tweet text and category. The categories correspond to the default main categories which are used on the discover page, which are: Arts, Business, Education, Games, Health, Home, News, Recreation, Science, Shopping, Society, Sport and Technology. There are 59010 tweets in the dataset. The graph in figure \ref{fig:category-spread} shows the distribution of tweets in each category, with Arts being the most prevalent with 6680 tweets and Shopping the least with 693 tweets.
@@ -30,7 +30,7 @@ The only part of algorithm \ref{alg:content-filter-cleaning} not performed by th
 \label{fig:content-preprocess}
 \end{figure}
 
-The extraction of features from the post is conducted in the training and prediction files, because they are performed on the dataset as a whole rather than on each individual post. The count vectorization and TF-IDF transformations are parsed into the pipeline shown in figure \ref{fig:imp-content-train}, using the scikit-learn objects $CountVectorizer$ and $TfidfTransformer$. The $CountVectorizer$ also creates the uni- and bi-grams which are present in the dataset.
+The extraction of features from the post is conducted in the training and prediction files because they are performed on the dataset as a whole rather than on each individual post. The count vectorization and TF-IDF transformations are parsed into the pipeline shown in figure \ref{fig:imp-content-train}, using the scikit-learn objects $CountVectorizer$ and $TfidfTransformer$. The $CountVectorizer$ also creates the uni- and bi-grams which are present in the dataset.
 
 \subsubsection{Model Building}
 Figure \ref{fig:imp-content-train} shows how the Stochastic Gradient Descent model is trained, including the pipeline which extracts features from the dataset. Whereas the pipeline stage creates the model, the \textit{fit()} function is what initiates the training of the model on the training data. As in section \ref{sec:exporting}, the trained models can then be exported so that they are usable for predicting incoming tags and posts.
@@ -42,7 +42,7 @@ Figure \ref{fig:imp-content-train} shows how the Stochastic Gradient Descent mod
 \label{fig:imp-content-train}
 \end{figure}
 
-However, as well as building the model using the entire dataset, cross-validation is also implemented. Figure \ref{fig:content-cv} shows how cross-validation is performed. This is done alongside the training of the model in \emph{train.py}. The function \textit{cv\_val\_score()} is imported from scikit-learn, and handles the splitting of the dataset, and the training and testing of each model.
+However, as well as building the model using the entire dataset, cross-validation is also implemented. Figure \ref{fig:content-cv} shows how cross-validation is performed. This is done alongside the training of the model in \emph{train.py}. The function \textit{cv\_val\_score()} is imported from scikit-learn and handles the splitting of the dataset and the training and testing of each model.
 
 \begin{figure}[H]
 \centering
@@ -51,7 +51,7 @@ However, as well as building the model using the entire dataset, cross-validatio
 \label{fig:content-cv}
 \end{figure}
 
-The graph in figure \ref{fig:cv-results} shows the accuracy of each model for each iteration of the 10-fold cross-validation. SGD produces the best performing model, with an average accuracy of 0.606 and therefore would be a sensible choice of model for Fidelis. The SVM performs the worst, however, the accuracy of the models could be improved in the future, by fine tuning model parameters. In addition, the cross-validation is performed on full posts, and therefore the accuracy when the model is used for predicting the category of tags can be evaluated separately, when there is a sufficiently large dataset to test.
+The graph in figure \ref{fig:cv-results} shows the accuracy of each model for each iteration of the 10-fold cross-validation. SGD produces the best performing model, with an average accuracy of 0.606 and therefore would be a sensible choice of model for Fidelis. The SVM performs the worst, however, the accuracy of the models could be improved in the future, by fine-tuning model parameters. In addition, the cross-validation is performed on full posts, and therefore the accuracy when the model is used for predicting the category of tags can be evaluated separately, when there is a sufficiently large dataset to test.
 
 \begin{figure}[H]
 \centering
@@ -88,7 +88,7 @@ The code in figure \ref{fig:predict-post} shows the Python script which is used 
 \label{fig:predict-post}
 \end{figure}
 
-Once the post has been categorised, the user would then be able to change this category in the event that the post has been misclassified. This may be the case when the post does not belong to a category, because the model will always predict that the post belongs to one of the 13 categories even if it is miscellaneous (unless the preprocessed post contains less than 20 characters). The updating of the category is performed by the API once the user has selected a new category using the Bootstrap modal shown in figure \ref{fig:category-modal}. 
+Once the post has been categorised, the user would then be able to change this category in the event that the post has been misclassified. This may be the case when the post does not belong to a category because the model will always predict that the post belongs to one of the 13 categories even if it is miscellaneous (unless the preprocessed post contains less than 20 characters). The updating of the category is performed by the API once the user has selected a new category using the Bootstrap modal shown in figure \ref{fig:category-modal}. 
 
 \begin{figure}[H]
 \centering
