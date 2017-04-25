@@ -332,6 +332,25 @@ If the page being viewed belongs to the user, rather than having the option to f
 \label{fig:ProfilePicUpload}
 \end{figure}
 
+The reputation of a given user is visualised on this page in one of two ways, depending on the settings of the user viewing the page. On the settings page a used can choose to set their reputation display to either `Bar' or `Stars' in the network settings section. In order to decide which of these displays to load, the $User$ model is consulted to find the setting that this user has set for reputation display. Figure \ref{fig:ReputationRatings} shows the two displays for user reputation. In order to decide which of these displays to load, the $User$ model is consulted to find the setting that this user has set for reputation display. Firstly we have a bar which displays the user's reputation as a fraction of the highest reputation in the system (100). The bar displayed is a bootstrap component which uses the page user's reputation to set the size of the bar. We also have the star display, which again takes the user's reputation and uses it to generate a star rating out of 5, a fairly universal rating system online today. The star rating is displayed using two images, the first a background row of grey stars which are overlapped by the second image, a row of gold stars. The user reputation is used to determine how many stars are to be displayed. The front image is then cropped accordingly to give the effect that only that number of stars are `filled'. This process is handled using a jquery function when the profile page is first loaded.
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{.4\linewidth}
+	\includegraphics[height=1.5in]{Images/Implementation/RatingBar}
+	\caption{}
+	\label{fig:RatingBar}
+\end{subfigure}
+\begin{subfigure}[b]{.5\linewidth}
+	\centering
+	\includegraphics[height=1.5in]{Images/Implementation/RatingStars}
+	\caption{}
+	\label{fig:RatingStars}
+\end{subfigure}
+\caption{Rating displays: (a) Bar display and (b) Stars display}
+\label{fig:ReputationRatings}
+\end{figure}
+
 \subsubsection{User activity}
 The main feature of this page is the ability to view the activity of this user. This can be done using the 4 tabs in the centre of the page: Posts, Followers, Following and Rated. Each one routes to its own page, each calling upon a different function from the \(ProfileController\).
 
